@@ -43,7 +43,7 @@ Server-klienten MUST bruke Next.js `cookies()`-API for cookie-håndtering. Brows
 
 Smoke-ruten SHALL verifisere at Supabase server-klient kan importeres og instansieres uten å kaste — env-vars (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) er lest, cookies-API er kalt, og klient-konstruktøren returnerer en gyldig instans.
 
-Live PostgREST-verifisering (faktisk request gjennom anon/publishable-laget) er **deferred til første schema-mandat**, der det finnes en reell tabell å treffe. Project-init landes uten live DB-verifisering for å unngå at pooler-host/key-rotasjon i utviklingsmiljø blokkerer et ellers ferdig fundament. `auth.getUser()` SHALL fortsatt ikke brukes som helsesjekk når live-verifisering implementeres (returnerer falsk-positiv ved tom session).
+Live PostgREST-verifisering er **deferred til første schema-mandat**. `auth.getUser()` SHALL fortsatt ikke brukes som helsesjekk når live-verifisering implementeres (returnerer falsk-positiv ved tom session). Smoke-ruten importerer ikke shadcn-komponenter etter E1.
 
 #### Scenario: Supabase-klient instansieres uten feil
 - **WHEN** `/smoke` rendres med korrekt `NEXT_PUBLIC_SUPABASE_URL` og `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` i `.env.local`
@@ -52,6 +52,10 @@ Live PostgREST-verifisering (faktisk request gjennom anon/publishable-laget) er 
 #### Scenario: Manglende env feiler høylytt
 - **WHEN** `/smoke` rendres uten `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - **THEN** klient-fabrikken kaster en eksplisitt feil som navngir variabelen, og smoke-ruten viser `supabaseStatus = "fail: <melding>"` (ikke `"wired"`)
+
+#### Scenario: Ingen shadcn-import
+- **WHEN** `src/app/smoke/page.tsx` leses
+- **THEN** filen importerer ingen ting fra `@/components/ui/` (mappen finnes ikke) og ingen Tailwind-utility-klasser brukes
 
 ### Requirement: Styringsregel — Drizzle for data, Supabase-klient for auth/realtime/storage
 
@@ -70,20 +74,6 @@ Regelen MUST være dokumentert som topp-kommentar i `src/db/index.ts` og i begge
 - **WHEN** en utvikler åpner `app/smoke/page.tsx`
 - **THEN** filen har en kommentar som markerer at PostgREST-kallet bryter styringsregelen bevisst for helsesjekk-formål
 
-### Requirement: shadcn/ui initialisert med Tailwind v4
-
-Prosjektet SHALL ha shadcn/ui initialisert via `shadcn@latest` med Tailwind v4-preset. `components.json` MUST ligge på repo-rot. Minst én testkomponent (`Button`) MUST være lagt til under `src/components/ui/` og importeres i smoke-ruten.
-
-Tailwind v3-spesifikk konfig (f.eks. `tailwind.config.ts` med v3-syntaks) SHALL NOT introduseres.
-
-#### Scenario: components.json finnes med Tailwind v4-konfig
-- **WHEN** repo er initialisert
-- **THEN** `components.json` finnes på rot og refererer til Tailwind v4 og `src/`-aliaser
-
-#### Scenario: Button-komponent rendres i smoke-ruten
-- **WHEN** dev-server kjører og `/smoke` rendres
-- **THEN** `<Button>` fra `src/components/ui/button.tsx` vises uten typescript- eller runtime-feil
-
 ### Requirement: Mappestruktur for db og supabase
 
 Prosjektet SHALL etablere mappestrukturen:
@@ -91,18 +81,17 @@ Prosjektet SHALL etablere mappestrukturen:
 - `src/db/schema.ts` — placeholder for fremtidige tabeller
 - `src/lib/supabase/server.ts` — server-side Supabase-klient
 - `src/lib/supabase/client.ts` — browser-side Supabase-klient
-- `src/components/ui/` — shadcn-komponenter
 - `app/smoke/page.tsx` — slettbar smoke-rute
 
-DB-laget og Supabase-klient-laget MUST være separate (ingen kryssimporter utenfor smoke-ruten).
+DB-laget og Supabase-klient-laget MUST være separate (ingen kryssimporter utenfor smoke-ruten). `src/components/ui/` (shadcn) eksisterer ikke etter E1.
 
 #### Scenario: Mappestruktur eksisterer
 - **WHEN** repo er initialisert
 - **THEN** alle filene over eksisterer med ikke-tomt innhold
 
-#### Scenario: app/page.tsx er urørt
-- **WHEN** initialiseringen er ferdig
-- **THEN** `app/page.tsx` er identisk med utgangstilstanden fra Next.js-scaffold (første feature-mandat eier den ruten)
+#### Scenario: src/components/ui finnes ikke
+- **WHEN** repo er på master etter E1-merge
+- **THEN** `src/components/ui/` eksisterer ikke, og det finnes ingen `shadcn`-relaterte filer (`components.json`) på repo-rot
 
 ### Requirement: drizzle-kit scripts og config
 
@@ -134,13 +123,13 @@ Scriptene er en CLI-helsesjekk som verifiserer at konfigen er gyldig og at drizz
 
 ### Requirement: Dev-server starter rent, forsiden og smoke-ruten laster
 
-Prosjektet SHALL kunne startes med `npm run dev` uten kompileringsfeil eller runtime-feil i den initielle render-syklusen. Forsiden (`/`) SHALL vise en placeholder med "geish v2"-overskrift og en shadcn `<Button>`. Smoke-ruten (`/smoke`) SHALL laste 200 og vise begge "wired"-statuser plus en `<Button>`.
+Prosjektet SHALL kunne startes med `npm run dev` uten kompileringsfeil eller runtime-feil i den initielle render-syklusen. Forsiden (`/`) SHALL vise en minimal placeholder med "geish v2"-overskrift og en henvisning til `/styleguide`. Smoke-ruten (`/smoke`) SHALL laste 200 og vise begge "wired"-statuser. **Ingen shadcn-komponenter brukes**; den faktiske forsiden bygges i `e1-forside`-mandatet.
 
 #### Scenario: forsiden laster
 - **WHEN** `npm run dev` kjøres og HTTP-request sendes til `/`
-- **THEN** ruten returnerer 200 og responsen inneholder "geish v2" og en `<Button>`-komponent
+- **THEN** ruten returnerer 200 og responsen inneholder "geish v2" og en lenke/henvisning til `/styleguide`
 
 #### Scenario: smoke-ruten laster
 - **WHEN** `npm run dev` kjøres med gyldig `.env.local` og HTTP-request sendes til `/smoke`
-- **THEN** ruten returnerer 200 og responsen viser `dbStatus = "wired (live verification deferred to first schema mandate)"`, `supabaseStatus = "wired (live verification deferred to first schema mandate)"`, samt en `<Button>`
+- **THEN** ruten returnerer 200 og responsen viser `dbStatus = "wired (live verification deferred to first schema mandate)"` og `supabaseStatus = "wired (live verification deferred to first schema mandate)"`. Ingen shadcn-`<Button>` rendres.
 
