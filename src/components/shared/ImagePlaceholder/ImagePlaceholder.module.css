@@ -1,0 +1,35 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+  transform: rotate(calc(var(--rotation, 0) * 1deg * var(--chaos, 1)));
+}
+
+.tape {
+  /* Photo-tape: semitransparent gul stripe på toppen av "klippede" elementer. */
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 60px;
+  height: 16px;
+  background: oklch(95% 0.06 80 / 0.7);
+  border: 1px solid oklch(80% 0.06 80 / 0.6);
+  z-index: 2;
+}
+
+.box {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--paper-warm) 0 6px,
+    var(--paper-edge) 6px 7px
+  );
+  border: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  position: relative;
+}

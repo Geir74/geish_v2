@@ -1,0 +1,7 @@
+.svg {
+  display: block;
+}
+
+.svg circle {
+  fill: var(--ink);
+}

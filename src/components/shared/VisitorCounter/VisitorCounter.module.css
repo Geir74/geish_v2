@@ -1,0 +1,44 @@
+.root {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  align-items: flex-start;
+}
+
+.display {
+  /* LED-look: dyp sort med varm oransje siffer. Beholder hex fordi det
+     er en bevisst "LED"-effekt, ikke en del av paper-paletten. */
+  background: #0a0a0a;
+  color: oklch(72% 0.18 55);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  display: inline-block;
+}
+
+.display[data-size="sm"] {
+  font-size: 16px;
+  padding: 4px 8px;
+  letter-spacing: 1px;
+}
+
+.display[data-size="md"] {
+  font-size: 22px;
+  padding: 6px 10px;
+  letter-spacing: 1px;
+}
+
+.display[data-size="lg"] {
+  font-size: 30px;
+  padding: 8px 14px;
+  letter-spacing: 2px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+}

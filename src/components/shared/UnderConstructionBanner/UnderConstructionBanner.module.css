@@ -1,0 +1,42 @@
+.compact {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  /* repeating-linear-gradient med solid stops er tillatt (designet mønster). */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--highlight) 0 10px,
+    transparent 10px 20px
+  );
+  padding: var(--sp-1) 10px;
+  border: 1px solid var(--ink);
+}
+
+.full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--highlight) 0 14px,
+    var(--paper) 14px 28px
+  );
+  border: 2px solid var(--ink);
+  padding: 10px var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.glyph {
+  display: inline-block;
+}

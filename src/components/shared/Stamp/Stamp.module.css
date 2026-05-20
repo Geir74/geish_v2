@@ -1,0 +1,17 @@
+.stamp {
+  display: inline-block;
+  /* --rotation lagres som tall slik at calc multipliserer ren deg.
+     --chaos kan justere global rotasjon (0 = rett, 1 = default). */
+  transform: rotate(calc(var(--rotation, -4) * 1deg * var(--chaos, 1)));
+  border: 3px double var(--stamp);
+  color: var(--stamp);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size, 14px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.82;
+  /* Mikro-uskarphet for "trykt"-følelse. Ikke en drop-shadow blur. */
+  filter: contrast(0.92) blur(0.2px);
+}

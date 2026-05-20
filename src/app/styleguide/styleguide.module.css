@@ -1,0 +1,308 @@
+/* Styleguide-page styling. CSS Modules, scoped til denne ruten. */
+
+.page {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-8) var(--sp-12);
+}
+
+.intro {
+  margin-bottom: var(--sp-10);
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: var(--sp-6);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: var(--t-h1);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--sp-3);
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-h2);
+  line-height: 1.05;
+  margin: var(--sp-10) 0 var(--sp-5);
+  letter-spacing: -0.015em;
+}
+
+.h3 {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  margin: var(--sp-7) 0 var(--sp-3);
+}
+
+.lead {
+  font-family: var(--font-typewriter);
+  font-size: var(--t-lead);
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin: 0 0 var(--sp-4);
+}
+
+.toc {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  display: flex;
+  gap: var(--sp-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-fade);
+}
+
+.section {
+  margin-top: var(--sp-12);
+}
+
+/* ── swatches ──────────────────────────────────────────────── */
+.swatchGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--sp-3);
+}
+
+.swatch {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  border: 1px solid var(--ink);
+  background: var(--paper-warm);
+  padding: var(--sp-2);
+}
+
+.swatchChip {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--ink);
+  flex-shrink: 0;
+}
+
+.swatchMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+}
+
+.swatchName {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.swatchValue {
+  color: var(--ink-soft);
+}
+
+.swatchUse {
+  color: var(--ink-fade);
+  font-style: italic;
+  margin-top: var(--sp-1);
+}
+
+/* ── type-roller ──────────────────────────────────────────── */
+.typeList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.typeList li {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-top: 1px dashed var(--ink-fade);
+}
+
+.typeList code {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--ink-soft);
+}
+
+.typeNote {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--ink-fade);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  grid-column: 2;
+}
+
+/* ── type-skala ───────────────────────────────────────────── */
+.typeScale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  font-family: var(--font-typewriter);
+  background: var(--paper-warm);
+  border: 1px solid var(--ink);
+  padding: var(--sp-5);
+}
+
+.typeScale code {
+  font-family: var(--font-mono);
+  color: var(--ink-fade);
+  font-size: var(--t-meta);
+  margin-right: var(--sp-2);
+}
+
+/* ── spacing-stige ────────────────────────────────────────── */
+.spacingStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  border: 1px solid var(--ink);
+  background: var(--paper-warm);
+  padding: var(--sp-4);
+}
+
+.spacingRow {
+  display: grid;
+  grid-template-columns: 90px 1fr 60px;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+}
+
+.spacingLabel {
+  color: var(--ink-soft);
+}
+
+.spacingBar {
+  height: 10px;
+  background: var(--ink);
+}
+
+.spacingValue {
+  color: var(--ink-fade);
+  text-align: right;
+}
+
+/* ── komponent-demoer ─────────────────────────────────────── */
+.cdesc {
+  font-family: var(--font-typewriter);
+  font-size: var(--t-small);
+  color: var(--ink-soft);
+  margin: 0 0 var(--sp-3);
+  max-width: 70ch;
+}
+
+.cdemo {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+  border: 1px dashed var(--ink-fade);
+  background: var(--paper);
+}
+
+.cstack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+  border: 1px dashed var(--ink-fade);
+  background: var(--paper);
+}
+
+.cVariantLabel {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--ink-fade);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-2);
+}
+
+/* ── mønster-demoer ───────────────────────────────────────── */
+.demo {
+  margin-bottom: var(--sp-5);
+}
+
+.demoLabel {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--ink-fade);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-2);
+}
+
+.demoBox {
+  padding: var(--sp-5);
+  border: 1px dashed var(--ink-fade);
+  background: var(--paper);
+}
+
+.tapeDemoBox {
+  position: relative;
+  display: inline-block;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--ink);
+  padding: var(--sp-5) var(--sp-6);
+}
+
+.tapeDemoTape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 60px;
+  height: 18px;
+  background: oklch(94% 0.08 80 / 0.7);
+  border: 1px solid oklch(80% 0.06 80 / 0.6);
+}
+
+.tapeDemoInner {
+  font-family: var(--font-typewriter);
+  font-size: var(--t-body);
+}
+
+.shadowDemo {
+  display: inline-block;
+  background: var(--paper-warm);
+  border: 2px solid var(--ink);
+  padding: var(--sp-3) var(--sp-5);
+  font-family: var(--font-display);
+  font-size: var(--t-body);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.stripedDemo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 360px;
+  height: 100px;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--paper-warm) 0 6px,
+    var(--paper-edge) 6px 7px
+  );
+  border: 1.5px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.markerDemo {
+  font-family: var(--font-typewriter);
+  font-size: var(--t-body);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.markerSpan {
+  background: oklch(86% 0.16 95 / 0.7);
+  padding: 0 4px;
+}

@@ -3,16 +3,17 @@
 //      client without throwing (no network call).
 //   2. Supabase server client (src/lib/supabase/server) imports and
 //      instantiates without throwing (env vars present, cookies API works).
-//   3. shadcn Button renders.
 //
 // Live DB verification (SELECT 1) and PostgREST verification are deferred to
 // the first real schema mandate, when there's a tested code path against
 // actual tables. The aws-1 pooler host and the publishable-key env name are
 // already noted in .env.local for that future verification.
+//
+// E1 fjernet shadcn-Button — denne sida inneholder ingen UI-bibliotek-import.
 
 import { db, client } from "@/db";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
+import styles from "./smoke.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -48,24 +49,18 @@ export default async function SmokePage() {
   const ok = (s: string) => s.startsWith("wired");
 
   return (
-    <main className="mx-auto flex max-w-2xl flex-col gap-6 p-12 font-mono text-sm">
-      <h1 className="text-2xl font-semibold">project-init smoke</h1>
+    <main className={styles.page}>
+      <h1 className={styles.title}>project-init smoke</h1>
 
-      <dl className="grid grid-cols-[8rem_1fr] gap-y-2">
+      <dl className={styles.grid}>
         <dt>db (Drizzle):</dt>
-        <dd className={ok(dbStatus) ? "text-green-600" : "text-red-600"}>
-          {dbStatus}
-        </dd>
+        <dd className={ok(dbStatus) ? styles.ok : styles.fail}>{dbStatus}</dd>
 
         <dt>supabase:</dt>
-        <dd className={ok(supabaseStatus) ? "text-green-600" : "text-red-600"}>
+        <dd className={ok(supabaseStatus) ? styles.ok : styles.fail}>
           {supabaseStatus}
         </dd>
       </dl>
-
-      <div>
-        <Button>shadcn Button renders</Button>
-      </div>
     </main>
   );
 }

@@ -1,0 +1,75 @@
+/* ── cards-style ──────────────────────────────────────────── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+
+.card {
+  background: var(--paper-warm);
+  border: 1px solid var(--ink);
+  padding: 10px var(--sp-3);
+  font-family: var(--font-typewriter);
+  /* --card-tilt settes inline per kort; --chaos justerer global rotasjon. */
+  transform: rotate(calc(var(--card-tilt, 0.5deg) * var(--chaos, 1)));
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.cardMsg {
+  font-size: var(--t-small);
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.cardMeta {
+  margin-top: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-fade);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── list-style ───────────────────────────────────────────── */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-typewriter);
+}
+
+.listItemFirst {
+  border-top: 1px solid var(--ink);
+  padding: 10px 0;
+}
+
+.listItem {
+  border-top: 1px dashed var(--ink-fade);
+  padding: 10px 0;
+}
+
+.listHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.who {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.when {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-fade);
+}
+
+.listMsg {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  line-height: 1.4;
+}
