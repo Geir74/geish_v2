@@ -1,0 +1,20 @@
+.row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding-top: var(--sp-2);
+}
+
+.left {
+  justify-self: start;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.right {
+  justify-self: end;
+}

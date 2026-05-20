@@ -1,0 +1,86 @@
+.box {
+  padding: 18px 22px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.h3 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  margin: 0;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.sub {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+}
+
+.grid5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.card {
+  position: relative;
+  border: 1.5px solid var(--ink);
+  padding: 10px 12px 12px;
+  background: var(--paper-warm);
+  /* Lenkede cards skal ikke ha underline-arving fra global a-default. */
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Vekslende rotasjon: odd negativ, even positiv. */
+.card[data-idx="0"],
+.card[data-idx="2"],
+.card[data-idx="4"] {
+  transform: rotate(calc(-0.6deg * var(--chaos, 1)));
+}
+
+.card[data-idx="1"],
+.card[data-idx="3"] {
+  transform: rotate(calc(0.6deg * var(--chaos, 1)));
+}
+
+.nm {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ds {
+  font-family: var(--font-typewriter);
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-fade);
+}

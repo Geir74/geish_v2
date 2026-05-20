@@ -1,0 +1,55 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.h3 {
+  font-family: var(--font-poster);
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.note {
+  background: oklch(96% 0.04 80);
+  border: 1.5px solid var(--ink);
+  padding: 10px 12px;
+  font-family: var(--font-typewriter);
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Vekslende rotasjon og fargevariasjon per note. */
+.note[data-idx="0"] {
+  transform: rotate(calc(-1.5deg * var(--chaos, 1)));
+}
+
+.note[data-idx="1"] {
+  transform: rotate(calc(0.9deg * var(--chaos, 1)));
+  background: oklch(94% 0.06 95);
+}
+
+.note[data-idx="2"] {
+  transform: rotate(calc(-0.6deg * var(--chaos, 1)));
+}
+
+.who {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  margin-top: 6px;
+}
+
+.more {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

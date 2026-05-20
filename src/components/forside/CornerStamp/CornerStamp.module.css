@@ -1,0 +1,28 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+  padding: var(--sp-2) var(--sp-1);
+}
+
+.stamp {
+  /* --chaos multipliserer rotasjonen; -7 grader er stempelets default. */
+  transform: rotate(calc(-7deg * var(--chaos, 1)));
+  border: 4px double var(--stamp);
+  padding: 10px 18px 8px;
+  color: var(--stamp);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.88;
+}
+
+.small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  margin-top: 2px;
+}

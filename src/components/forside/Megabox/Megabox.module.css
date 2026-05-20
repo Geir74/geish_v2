@@ -1,0 +1,49 @@
+.box {
+  padding: 28px 32px 24px;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.super {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: oklch(85% 0.1 80);
+  margin-bottom: var(--sp-3);
+}
+
+.h1 {
+  font-family: var(--font-poster);
+  font-size: 124px;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+/* LED-oransje aksent på "CREATE". */
+.acc {
+  color: oklch(72% 0.18 55);
+}
+
+.sub {
+  margin-top: 14px;
+  font-family: var(--font-typewriter);
+  font-size: var(--t-body);
+  max-width: 520px;
+  color: oklch(90% 0.02 80);
+}
+
+/* Halftone som dekor i hjørnet — stikker ut, klippes av overflow: hidden. */
+.deco {
+  position: absolute;
+  right: -16px;
+  bottom: -16px;
+  opacity: 0.6;
+  pointer-events: none;
+}

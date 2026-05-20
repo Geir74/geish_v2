@@ -1,0 +1,34 @@
+.note {
+  padding: 18px 18px 16px;
+  /* Gul lapp-farge — litt mer mettet enn highlight. */
+  background: oklch(96% 0.06 95);
+  border: 2px solid var(--ink);
+  font-family: var(--font-typewriter);
+  font-size: 14px;
+  line-height: 1.55;
+  transform: rotate(calc(1.2deg * var(--chaos, 1)));
+  box-shadow: 4px 4px 0 var(--ink);
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.hello {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.body {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.more {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

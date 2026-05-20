@@ -2,6 +2,7 @@
   display: block;
 }
 
+/* color-prop settes som --halftone-fill; default faller til ink. */
 .svg circle {
-  fill: var(--ink);
+  fill: var(--halftone-fill, var(--ink));
 }
