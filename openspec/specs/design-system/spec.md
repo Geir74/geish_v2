@@ -61,13 +61,13 @@ Prosjektet SHALL ha følgende komponenter under `src/components/shared/`, hver i
 5. **`StatusBadge`** — props: `status: "live" | "wip" | "idea"`. Tekst-label (`LIVE` / `WIP` / `IDÉ`), aldri emoji.
 6. **`Stamp`** — props: `rotate?: number` (grader), `size?: number` (font-size px), `children: ReactNode`. Rødt gummistempel-look.
 7. **`ImagePlaceholder`** — props: `label?: string`, `w?: string | number`, `h?: number`, `tape?: boolean`, `rotate?: number`. Stripet placeholder med klammeparentes-label.
-8. **`HalftoneBlock`** — props: `w?: number`, `h?: number`, `density?: number` (0..1). SVG-prikkmønster som dekor.
+8. **`HalftoneBlock`** — props: `w?: number`, `h?: number`, `density?: number` (0..1), `color?: string` (CSS-fargestreng for prikkene; default `var(--ink)`). SVG-prikkmønster som dekor.
 
 Alle komponenter MUST:
 - Eksportere et navngitt TypeScript-interface for props.
-- Bruke CSS Modules for all styling (ingen inline `style`-attributt utenom å sette CSS-variabler som `--rotation`).
+- Bruke CSS Modules for all styling (ingen inline `style`-attributt utenom å sette CSS-variabler som `--rotation`, `--halftone-fill`).
 - Bruke `var(--chaos, 1)` for rotasjons-multiplikatorer.
-- Følge forbudslisten i `01-DESIGN-SYSTEM.md` §8: ingen gradient-bakgrunner, rounded corners, blur-skygger, emoji som ikoner, sans-serif system-font for brødtekst.
+- Følge forbudslisten i `01-DESIGN-SYSTEM.md` §8.
 
 En barrel-eksport `src/components/shared/index.ts` MUST re-eksportere alle 8 komponenter.
 
@@ -78,6 +78,14 @@ En barrel-eksport `src/components/shared/index.ts` MUST re-eksportere alle 8 kom
 #### Scenario: barrel-eksport fungerer
 - **WHEN** en fil importerer `import { Stamp, StatusBadge } from "@/components/shared"`
 - **THEN** TypeScript kompilerer uten feil og begge komponenter er tilgjengelige
+
+#### Scenario: HalftoneBlock med color-prop overstyrer default-fill
+- **WHEN** `<HalftoneBlock color="oklch(85% 0.08 80)" />` rendres
+- **THEN** SVG-prikkene har `fill` lik den oppgitte fargen, ikke `var(--ink)`
+
+#### Scenario: HalftoneBlock uten color-prop bruker default
+- **WHEN** `<HalftoneBlock />` rendres uten `color`
+- **THEN** SVG-prikkene har `fill: var(--ink)` (default fra modulen)
 
 #### Scenario: ingen Tailwind-utility-klasser i komponentene
 - **WHEN** `grep -r "className=\"[a-z]*-[a-z]*-[a-z]*\"" src/components/shared/` kjøres
