@@ -8,23 +8,23 @@ TBD - created by archiving change e1-forside. Update Purpose after archive.
 Prosjektet SHALL ha et content-modul i `src/content/` som eksponerer alle copy-strenger gjennom en typed `t()`-funksjon:
 
 - `src/content/i18n.ts` MUST eksportere `t()`, `locales`, `Locale`-typen, `defaultLocale = "no"`, og `Dictionary`-typen som tilsvarer formen til NO-locale-objektet.
-- `src/content/locales/no.ts` MUST eksportere `no` som et `as const`-objekt med alle slicene som forsiden bruker: `brand`, `hero` (inkludert `credo_lines`), `manifest_pullquotes`, `homepage_pullquote`, `projects` (hvert element MUST ha `href: string | null` i tillegg til feltene fra `content.js`), `about` (inkludert `photos`), `til`, `lab`, `changelog`, `guestbook`, `stua.week_question`, `stua.threads`, `blog_posts`, `meta`, `webring`.
+- `src/content/locales/no.ts` MUST eksportere `no` som et `as const`-objekt med slicene som forsiden bruker: `brand`, `hero` (inkludert `credo_lines`), `manifest_pullquotes`, `homepage_pullquote`, `projects` (hvert element MUST ha `href: string | null` i tillegg til feltene fra `content.js`), `about` (inkludert `photos`), `til`, `lab`, `changelog`, `guestbook`, `stua.week_question`, `stua.threads`, `meta`, `webring`.
 - `t()` SHALL returnere det aktive locale-objektet. Med kun NO-locale i scope, returnerer `t()` alltid `no`.
 - TypeScript MUST fange en typo i feltnavn på compile time (`as const` + `Dictionary`-typen).
 
-Innhold porteres ordrett (slice-for-slice) fra `references/content.js` for de nevnte feltene. `manifest_excerpt`, `nav`, og andre felt som ikke brukes av forsiden er ikke i scope for dette mandatet, men kan inkluderes hvis det er enklere å porte hele objektet.
+`blog_posts`-feltet fjernes fra content-modulet siden `BlogStrip` nå leser fra `getAllPosts()` (blog-capability). Innhold porteres ordrett (slice-for-slice) fra `references/content.js` for de andre nevnte slicene. `manifest_excerpt`, `nav`, og andre felt som ikke brukes av forsiden er ikke i scope.
 
 #### Scenario: t() returnerer typed dictionary
 - **WHEN** en komponent importerer `import { t } from "@/content/i18n"` og kaller `t().brand.name`
 - **THEN** TypeScript-typen er `string` (litteralt: `"geish.no"`), autocomplete fungerer på alle slicene
 
+#### Scenario: blog_posts er ikke i dictionary
+- **WHEN** en TS-fil prøver å lese `t().blog_posts`
+- **THEN** TypeScript-feilmeldingen identifiserer at `blog_posts` ikke finnes på `Dictionary`
+
 #### Scenario: typo i felt fanges på compile time
 - **WHEN** en komponent skriver `t().brnad.name` (typo)
 - **THEN** TypeScript-feilmeldingen identifiserer at `brnad` ikke finnes på `Dictionary`
-
-#### Scenario: content matcher kilden
-- **WHEN** `src/content/locales/no.ts` sammenlignes med `references/content.js` for de portede slicene
-- **THEN** strengverdier er identiske (kun strukturell omforming fra `window.GEISH_CONTENT.no.X` til eksport av `no.X` er tillatt)
 
 ### Requirement: Forsiden bygger 13 seksjoner i 12-kolonners zine-grid
 
@@ -88,7 +88,7 @@ Prosjektet SHALL ha 12 seksjonskomponenter under `src/components/forside/`, hver
 Hver komponent MUST:
 - Eksportere et navngitt TypeScript-interface for props.
 - Bruke CSS Modules for styling.
-- Hente all copy fra `t()` — ingen hardkodede strenger som vises til bruker.
+- Hente all copy fra `t()` — ingen hardkodede strenger som vises til bruker. **Unntak:** `BlogStrip` henter post-data fra `getAllPosts()` (filbasert MDX-pipeline fra `blog`-capability), ikke fra `t()`. Bare `BlogStrip`-headeren ("Fra bloggen", "→ ALLE POSTER") forblir hardkodet eller fra `t()`.
 - Bruke `var(--chaos, 1)` på alle rotasjoner.
 - Følge forbudslisten i `01-DESIGN-SYSTEM.md` §8.
 
@@ -108,25 +108,27 @@ Konkrete krav per seksjon:
 
 **AboutRow** SHALL i tillegg rendre sine egne photo-placeholders (`.photo` + `.tape` + `.box`) inline i stedet for å bruke `<ImagePlaceholder>` for bio-kollasjen. Dette gjøres for å la CSS Module være kilden til alle dimensjons- og posisjons-styling (via CSS-variabler), slik at media queries kan overstyre uten `!important` eller descendant-selektorer inn i shared-komponenter. Resten av AboutRows oppskrift (bio-boks med kicker, h3, lead, tags, links) er uendret.
 
+**BlogStrip** SHALL lese post-data via `await getAllPosts()` fra `@/content/posts` (filbasert MDX-pipeline). Den viser de 3 nyeste non-draft postene; hver clip har dato, tittel (Newsreader), og meta-linje (#tag · readTime). Hver clip lenker til `/blogg/[slug]`. "→ ALLE POSTER"-lenken peker til `/blogg`. Tom-fallback (`<UnderConstructionBanner>`) beholdes hvis ingen poster finnes.
+
+#### Scenario: alle 12 seksjonskomponenter finnes
+- **WHEN** `ls src/components/forside/` kjøres
+- **THEN** mappene Megabox, CornerStamp, IntroNote, ManifestCut, StuaPreview, GuestbookGrid, ProjectsRow, PullquoteBand, AboutRow, Trio, BlogStrip, FooterRow finnes, hver med en `index.tsx` og en `*.module.css`
+
 #### Scenario: AboutRow eier sin egen photo-placeholder-implementasjon
 - **WHEN** `src/components/forside/AboutRow/index.tsx` inspiseres
 - **THEN** filen importerer ikke `ImagePlaceholder` fra `@/components/shared`; bio-kollasjen rendres via lokale `.photo`/`.tape`/`.box`-elementer i AboutRows egen DOM
 
+#### Scenario: BlogStrip leser fra blog-capability
+- **WHEN** `src/components/forside/BlogStrip/index.tsx` inspiseres
+- **THEN** komponenten importerer `getAllPosts` fra `@/content/posts` og bruker resultatet for clip-data. Den importerer ikke `blog_posts` fra `t()`.
+
+#### Scenario: BlogStrip-clips lenker til enkeltposter
+- **WHEN** forsiden rendres og BlogStrip viser poster
+- **THEN** hver clip er en `<Link href="/blogg/<slug>">` som peker på den spesifikke posten
+
 #### Scenario: ingen hardkodet mega-fontstørrelse
 - **WHEN** `grep -E "font-size:\s*(124px|42px|44px|36px|32px|30px)" src/components/forside/` kjøres på alle `*.module.css`-filer
 - **THEN** treff finnes kun som `max`-argumentet inne i `clamp(...)`-uttrykk, ikke som rene px-verdier
-
-#### Scenario: Megabox h1 skalerer
-- **WHEN** `<Megabox>` rendres på 380px viewport
-- **THEN** computed `font-size` på `.h1` er ≤ 56px og ≥ 40px (mindre enn 124px-max)
-
-#### Scenario: PullquoteBand skalerer
-- **WHEN** `<PullquoteBand>` rendres på 480px viewport
-- **THEN** computed `font-size` på `.q` er mindre enn 42px og minst clamp `min` (24px)
-
-#### Scenario: desktop matcher E1
-- **WHEN** `<Megabox>` rendres på ≥1280px viewport
-- **THEN** computed `font-size` på `.h1` er 124px (clamp `max` vinner). Tilsvarende for alle andre konverterte heading-størrelser — desktop pixel-identisk med E1.
 
 ### Requirement: Forsiden gjenbruker shared-komponenter fra design-system
 
