@@ -12,9 +12,17 @@
   box-sizing: border-box;
 }
 
+/* Dempet shadow på mobil — 4px skygger spiser visuell høyremargin på 16px
+   grid-padding. Beholder collage-effekten, men proporsjonalt mindre. */
+@media (max-width: 479.98px) {
+  .note {
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+}
+
 .hello {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: var(--t-h3);
   letter-spacing: -0.01em;
   margin: 0 0 6px;
   text-transform: uppercase;

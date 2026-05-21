@@ -18,3 +18,16 @@
 .right {
   justify-self: end;
 }
+
+/* Tablet/mobil: 3-kol stables vertikalt, alt sentrert. */
+@media (max-width: 767.98px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--sp-4);
+  }
+  .left,
+  .center,
+  .right {
+    justify-self: center;
+  }
+}

@@ -12,6 +12,13 @@
   box-shadow: 5px 5px 0 var(--ink);
 }
 
+/* Dempet shadow på mobil — se ProjectsRow-kommentar. */
+@media (max-width: 479.98px) {
+  .bio {
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+}
+
 .kicker {
   font-family: var(--font-mono);
   font-size: var(--t-meta);
@@ -23,7 +30,7 @@
 
 .h3 {
   font-family: var(--font-display);
-  font-size: 44px;
+  font-size: clamp(28px, 3.9vw, 44px);
   line-height: 1;
   letter-spacing: -0.015em;
   margin: 0 0 14px;
@@ -76,10 +83,96 @@
   font-size: 10px;
 }
 
+/* ── PHOTO-KOLLASJ ────────────────────────────────────────────
+   AboutRow eier sin egen photo-placeholder (stripe + tape + label)
+   i stedet for å bruke shared <ImagePlaceholder>. Da kan CSS-Module
+   styre dimensjoner og posisjon via CSS-variabler, slik at media
+   queries kan overstyre ved breakpoints uten !important eller
+   descendant-selektorer inn i delkomponenten. */
+
 .photos {
   position: relative;
+  height: 100%;
 }
 
 .photo {
-  /* Plasseringen settes inline (posisjon, size, rotate) — derfor tom her. */
+  position: absolute;
+  top: var(--photo-top);
+  left: var(--photo-left);
+  right: var(--photo-right);
+  bottom: var(--photo-bottom);
+  width: var(--photo-w);
+  height: var(--photo-h);
+  /* --rotation er et tall (grader); ganges med --chaos for global skala. */
+  transform: rotate(calc(var(--rotation, 0) * 1deg * var(--chaos, 1)));
+  border: 2px solid var(--ink);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--paper-warm) 0 6px,
+    var(--paper-edge) 6px 7px
+  );
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.tape {
+  /* Photo-tape: semitransparent gul stripe sentrert på toppen, rotert litt. */
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(calc(-3deg * var(--chaos, 1)));
+  width: 50px;
+  height: 14px;
+  background: oklch(94% 0.08 80 / 0.75);
+  border: 1px solid oklch(80% 0.06 80 / 0.6);
+  z-index: 2;
+}
+
+.box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────
+   Tablet og mobil: hele AboutRow stables (bio over photos),
+   og photos forlater absolute-kollasjen og flyter i grid. */
+
+@media (max-width: 767.98px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+    height: auto;
+  }
+
+  .photos {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-3);
+    height: auto;
+    margin-top: var(--sp-4);
+  }
+
+  .photo {
+    position: static;
+    width: 100%;
+    height: 120px;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .photos {
+    grid-template-columns: 1fr;
+  }
+  .photo {
+    height: 100px;
+    /* Dempet shadow for å unngå at full-bredde photos spiser høyremargin. */
+    box-shadow: 2px 2px 0 var(--ink);
+  }
 }

@@ -5,9 +5,15 @@
  *
  * Photo-labels kommer fra content (about.photos). Posisjon/rotasjon er
  * designvalg som hører til komponenten — se PHOTO_LAYOUT under.
+ *
+ * AboutRow eier sin egen photo-placeholder-CSS (.photo + .tape + .box)
+ * i stedet for å bruke shared <ImagePlaceholder>. Da kan CSS Module styre
+ * dimensjoner og posisjon via CSS-variabler, og media queries kan
+ * overstyre ved breakpoints uten !important eller descendant-selektorer
+ * inn i delkomponenten. Stripe-pattern og tape er duplikert (~10 linjer
+ * CSS) — akseptabel kost for full kontroll over kollasje-layouten.
  */
 import type { CSSProperties, ReactElement } from "react";
-import { ImagePlaceholder } from "@/components/shared";
 import { t } from "@/content/i18n";
 import styles from "./AboutRow.module.css";
 
@@ -31,6 +37,13 @@ const PHOTO_LAYOUT: PhotoSlot[] = [
   { bottom: 8, left: 60, width: 160, height: 110, rotate: 1.5 },
   { bottom: 0, right: 32, width: 130, height: 130, rotate: -2 },
 ];
+
+// Konverter et valgfritt px-tall til CSS-string, eller "auto" hvis udefinert.
+// Lar CSS Module være kilden til styling — vi setter kun CSS-variabler
+// her, ikke konkrete CSS-properties som position/top/etc.
+function pxOrAuto(v: number | undefined): string {
+  return v === undefined ? "auto" : `${v}px`;
+}
 
 export function AboutRow(_props: AboutRowProps = {}): ReactElement {
   const C = t();
@@ -72,22 +85,21 @@ export function AboutRow(_props: AboutRowProps = {}): ReactElement {
       <div className={styles.photos}>
         {photos.map((p, i) => {
           const slot = PHOTO_LAYOUT[i];
-          const posStyle: CSSProperties = {
-            position: "absolute",
-            top: slot.top,
-            bottom: slot.bottom,
-            left: slot.left,
-            right: slot.right,
-          };
+          // Alle dimensjons- og posisjons-felt som CSS-variabler.
+          // CSS Module leser dem og overstyrer i media queries uten !important.
+          const photoStyle = {
+            "--photo-top": pxOrAuto(slot.top),
+            "--photo-left": pxOrAuto(slot.left),
+            "--photo-right": pxOrAuto(slot.right),
+            "--photo-bottom": pxOrAuto(slot.bottom),
+            "--photo-w": `${slot.width}px`,
+            "--photo-h": `${slot.height}px`,
+            "--rotation": slot.rotate,
+          } as CSSProperties;
           return (
-            <div key={p.label} className={styles.photo} style={posStyle}>
-              <ImagePlaceholder
-                label={p.label}
-                w={slot.width}
-                h={slot.height}
-                tape
-                rotate={slot.rotate}
-              />
+            <div key={p.label} className={styles.photo} style={photoStyle}>
+              <span className={styles.tape} aria-hidden />
+              <div className={styles.box}>[{p.label}]</div>
             </div>
           );
         })}

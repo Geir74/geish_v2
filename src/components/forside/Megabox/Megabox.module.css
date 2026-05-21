@@ -18,7 +18,11 @@
 
 .h1 {
   font-family: var(--font-poster);
-  font-size: 124px;
+  /* Fluid: min må holde "GROUNDED," (9 tegn Bungee, ubrytelig som ett ord)
+     innenfor megabox.box-content-area selv ved 292px viewport. 40px Bungee
+     er ~180px for det ordet og passer i ~196px content-area (292 viewport
+     - 32 page-padding - 64 megabox-padding). Max = E1 desktop-verdi (124px). */
+  font-size: clamp(40px, 10.5vw, 124px);
   line-height: 0.85;
   letter-spacing: -0.02em;
   margin: 0;

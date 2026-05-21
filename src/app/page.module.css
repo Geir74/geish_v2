@@ -90,3 +90,41 @@
   color: var(--ink-fade);
   margin-top: var(--sp-1);
 }
+
+/* ── responsiv kollaps: 12 → 2 → 1 ───────────────────────────
+   DOM-rekkefølgen i page.tsx (1–13) er leserekkefølge og bevares.
+   Ingen `order`-CSS-property — per src/styles/RESPONSIVE.md. */
+
+/* Tablet/nettbrett (480–767px): 2-kolonners flyt med naturlige pairings.
+   CornerStamp + IntroNote, og StuaPreview + GuestbookGrid, deler en rad. */
+@media (max-width: 767.98px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+  }
+  .megabox       { grid-column: 1 / span 2; grid-row: auto; }
+  .cornerStamp   { grid-column: span 1;     grid-row: auto; }
+  .introNote     { grid-column: span 1;     grid-row: auto; }
+  .manifestCut   { grid-column: 1 / span 2; grid-row: auto; }
+  .stuaPreview   { grid-column: span 1;     grid-row: auto; }
+  .guestbookGrid { grid-column: span 1;     grid-row: auto; }
+  .projectsRow,
+  .pullquoteBand,
+  .aboutRow,
+  .trio,
+  .blogStrip,
+  .footerRow,
+  .copyright     { grid-column: 1 / span 2; grid-row: auto; }
+}
+
+/* Mobil (<480px): 1 kolonne, alle seksjoner stables i DOM-rekkefølge. */
+@media (max-width: 479.98px) {
+  .grid {
+    grid-template-columns: 1fr;
+    padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  }
+  .grid > * {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}

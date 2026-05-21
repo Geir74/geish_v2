@@ -7,6 +7,14 @@
   box-sizing: border-box;
 }
 
+/* Dempet shadow på mobil — 5px-offset på 16px grid-padding spiste hele
+   visuell høyremargin. 2px holder collage-følelsen uten å overskride. */
+@media (max-width: 479.98px) {
+  .box {
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+}
+
 .head {
   display: flex;
   align-items: baseline;
@@ -16,7 +24,7 @@
 
 .h3 {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: clamp(20px, 2.6vw, 30px);
   margin: 0;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -34,6 +42,14 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
+}
+
+/* 5 → 3 → 2 ved tablet og mobil. Cards beholder zine-rotasjon via --chaos. */
+@media (max-width: 767.98px) {
+  .grid5 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 479.98px) {
+  .grid5 { grid-template-columns: repeat(2, 1fr); }
 }
 
 .card {

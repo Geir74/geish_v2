@@ -8,6 +8,13 @@
   box-sizing: border-box;
 }
 
+/* Dempet shadow på mobil — se IntroNote-kommentar. */
+@media (max-width: 479.98px) {
+  .cut {
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+}
+
 /* Photo-tape: semitransparent gul stripe på toppen, varierende rotasjon. */
 .tape {
   position: absolute;
@@ -40,7 +47,7 @@
 
 .h2 {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: clamp(24px, 3.2vw, 36px);
   line-height: 0.95;
   letter-spacing: -0.01em;
   margin: 0 0 14px;

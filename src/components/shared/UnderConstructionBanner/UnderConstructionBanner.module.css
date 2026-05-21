@@ -19,6 +19,9 @@
 
 .full {
   display: flex;
+  /* flex-wrap holder banneret fra å sprenge horisontal scroll på smal skjerm —
+     ved <~310px wrapper teksten + glyfene til ny linje i stedet for å overflow. */
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: var(--sp-4);
