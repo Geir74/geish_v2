@@ -64,6 +64,9 @@
 .bar {
   display: flex;
   align-items: center;
+  /* flex-wrap holder bar-en fra å sprenge horisontal scroll på smal skjerm —
+     på <380px wrapper innholdet til ny linje i stedet. */
+  flex-wrap: wrap;
   gap: 14px;
   font-family: var(--font-mono);
   font-size: 12px;

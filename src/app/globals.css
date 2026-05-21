@@ -9,8 +9,26 @@
 
 :root {
   /* --chaos: rotasjons-multiplikator. Default 1 = full kollasje-energi.
-     Sett til 0 for rette komponenter (screenshots, dempet modus). */
+     Sett til 0 for rette komponenter (screenshots, dempet modus).
+     Skaleres ned på tablet og mobil (se @media-queries under) — alle
+     rotasjoner i shared/ og forside/ bruker var(--chaos, 1), så denne
+     ene knappen demper hele siden. "Roligere, ikke flatere". */
   --chaos: 1;
+}
+
+/* Demp rotasjon på smal skjerm — behold collage-sjelen, demp aggresjonen.
+   Raw px her: CSS-spec tillater ikke var() i @media-conditions. Verdiene
+   matcher --bp-tablet (768px) og --bp-mobile (480px) i tokens.css. */
+@media (max-width: 767.98px) {
+  :root {
+    --chaos: 0.4;
+  }
+}
+
+@media (max-width: 479.98px) {
+  :root {
+    --chaos: 0.15;
+  }
 }
 
 html {

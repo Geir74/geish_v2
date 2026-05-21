@@ -27,15 +27,19 @@
   --font-serif:      'Newsreader', Georgia, serif;                 /* langform */
 
   /* ── TYPE-SKALA ─────────────────────────────────────────────
-     Konsistent fra meta-info til mega-headlines. */
+     Konsistent fra meta-info til mega-headlines.
+     Mega-tier (h3–mega) bruker clamp(min, vw, max) så de skalerer
+     flytende ned på smal skjerm. Max-verdiene er dagens desktop —
+     på ≥1280px viewport vinner max, så ingenting endres der.
+     Body-tier (meta–lead) er faste — 16px brødtekst er minstemålet. */
   --t-meta: 11px;
   --t-small: 13px;
   --t-body: 16px;
   --t-lead: 20px;
-  --t-h3:   28px;
-  --t-h2:   48px;
-  --t-h1:   88px;
-  --t-mega: 144px;
+  --t-h3:   clamp(20px, 2.5vw, 28px);
+  --t-h2:   clamp(28px, 4vw,   48px);
+  --t-h1:   clamp(40px, 7vw,   88px);
+  --t-mega: clamp(56px, 12vw, 144px);
 
   /* ── SPACING ────────────────────────────────────────────────
      4px-grid. Bruk variablene konsekvent. */
@@ -56,6 +60,14 @@
   --border: 1px solid var(--ink);
   --border-soft: 1px solid var(--ink-fade);
   --border-dashed: 1px dashed var(--ink-soft);
+
+  /* ── BREAKPOINTS ────────────────────────────────────────────
+     For dokumentasjon og bruk i clamp()/calc(). Media queries
+     MÅ bruke raw px — CSS-spec tillater ikke var() i @media-
+     conditions. Endrer du her, må du også søke-erstatte rå-verdiene
+     i globals.css og page.module.css. Se src/styles/RESPONSIVE.md. */
+  --bp-tablet: 768px;
+  --bp-mobile: 480px;
 }
 
 /* ──────────────────────────────────────────────────────────────
