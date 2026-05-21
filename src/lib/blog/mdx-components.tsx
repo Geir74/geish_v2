@@ -6,8 +6,7 @@
  * IKKE — de hører ikke hjemme i brødtekst.
  */
 import type { MDXComponents } from "mdx/types";
-import { HalftoneBlock, Stamp } from "@/components/shared";
-import { Pullquote } from "./Pullquote";
+import { HalftoneBlock, Pullquote, Stamp } from "@/components/shared";
 
 export const mdxComponents: MDXComponents = {
   Stamp,

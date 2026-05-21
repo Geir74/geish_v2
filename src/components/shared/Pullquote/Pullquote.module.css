@@ -1,0 +1,45 @@
+/* ── QUIET (default) — blog-bruk ──────────────────────────────
+   Sentrert, svart tekst, symmetrisk double-border. Uendret fra
+   da Pullquote bodde i lib/blog/. */
+.pullquote {
+  font-family: var(--font-display);
+  /* Fluid: max = mockup-mål (26px), min for mobil. */
+  font-size: clamp(20px, 3vw, 26px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  max-width: 600px;
+  margin: var(--sp-8) auto;
+  padding: var(--sp-5) var(--sp-6);
+  border-top: 4px double var(--stamp);
+  border-bottom: 4px double var(--stamp);
+  color: var(--ink);
+  /* Standard blockquote har inset-margin — vi vil ha senterert. */
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+}
+
+/* ── LOUD — manifest-bruk ─────────────────────────────────────
+   Større, stempel-rød tekst, venstrejustert med hard venstre-
+   blokk. Sitatene skal rope — ikke hviske.
+
+   BEVISST DESIGN-AVVIK: 01-DESIGN-SYSTEM.md §6 sier "Pullquotes
+   er Archivo Black, ikke italic. De skal rope." For .loud-varianten
+   i manifestet kombinerer vi BÅDE — Archivo Black + italic + stempel-
+   rød. Det er framlent-energi-i-rop, ikke et brudd ved uhell.
+   Ikke "rett" italic-en uten å diskutere med Geir først. */
+.loud {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: var(--stamp);
+  max-width: 680px;
+  margin: var(--sp-7) 0;
+  padding: var(--sp-2) var(--sp-5);
+  /* Hard venstre-blokk — single-sided border. Ingen rounded corners
+     (forbudslisten §8 — border-radius: 0 er CSS-default, holdes der). */
+  border-left: 10px solid var(--stamp);
+}

@@ -1,0 +1,284 @@
+/*
+ * /manifest-styling. Avis-struktur per 02-PAGES.md Side 2:
+ * splash med double-line border, lesbar body-kolonne, end-blokk med
+ * double-line border, Newsreader 19px brødtekst, drop-cap på første p.
+ *
+ * Manifest-spesifikk prose holdes lokalt i denne fila (ikke gjenbrukt fra
+ * blog/prose.module.css) — fontsize-justering (19px vs 18px) og drop-cap-
+ * tuning gjør at en delt fil ville divergert.
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+/* ── BRØDSMULE ────────────────────────────────────────────── */
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.current {
+  color: var(--ink);
+}
+
+.right {
+  margin-left: auto;
+}
+
+/* ── SPLASH ───────────────────────────────────────────────── */
+.splash {
+  padding: var(--sp-12) var(--sp-10) var(--sp-8);
+  border-bottom: 4px double var(--ink);
+  text-align: center;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  margin-bottom: var(--sp-4);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 92px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.acc {
+  color: var(--stamp);
+}
+
+.deck {
+  margin: var(--sp-4) auto 0;
+  max-width: 720px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(17px, 1.9vw, 22px);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.stamprow {
+  margin-top: var(--sp-5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  justify-content: center;
+}
+
+/* ── BODY-CONTAINER ───────────────────────────────────────── */
+.body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-6);
+}
+
+/* ── TL;DR ────────────────────────────────────────────────── */
+.tldr {
+  background: var(--paper-warm);
+  border: 2px solid var(--ink);
+  padding: 18px 22px;
+  margin: 0 0 var(--sp-8);
+}
+
+.tldrLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  margin-bottom: var(--sp-2);
+}
+
+.tldrList {
+  font-family: var(--font-typewriter);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-left: 18px;
+  margin: 0;
+  color: var(--ink);
+}
+
+.tldrList li {
+  margin-bottom: 4px;
+}
+
+/* ── PROSE (MDX-brødtekst) ────────────────────────────────── */
+.prose {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.prose p {
+  margin: 0 0 var(--sp-4);
+}
+
+/* Drop-cap på første paragraf — Archivo Black, stempel-rød.
+   Bruker :first-of-type så drop-cap hopper til første p hvis MDX starter
+   med <Pullquote> eller annet ikke-p-element. */
+.prose > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 0.85;
+  color: var(--stamp);
+  float: left;
+  padding: 6px 10px 0 0;
+}
+
+.prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.prose a:hover {
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* `---` i markdown → tynn ink-fade-strek mellom seksjoner. */
+.prose hr {
+  border: 0;
+  height: 1px;
+  background: var(--ink-fade);
+  margin: var(--sp-8) 0;
+}
+
+/* Markdown-blockquote-regelen fjernet bevisst i manifestet.
+   Alle blockquotes i manifest.mdx er <Pullquote> (variant="loud") — en
+   .prose blockquote-fallback ville hatt specifisitet (0,1,1) og overstyrt
+   Pullquote-komponentens .loud-klasse (0,1,0), som ga svart tekst i stedet
+   for stempel-rød. Hvis manifestet senere får ren `>`-markdown, legg til
+   en mer presis selektor som ikke matcher .loud/.pullquote. */
+
+/* "Strikethrough" på `~~tekst~~` i markdown (brukes i seksjon 3). */
+.prose del {
+  text-decoration: line-through;
+  color: var(--ink-fade);
+}
+
+/* ── END-BLOKK ────────────────────────────────────────────── */
+.end {
+  text-align: center;
+  padding: var(--sp-10) var(--sp-8) var(--sp-12);
+  border-top: 4px double var(--ink);
+}
+
+.credo {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 48px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.endLead {
+  margin: var(--sp-5) auto 0;
+  max-width: 540px;
+  font-family: var(--font-typewriter);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.cta {
+  margin-top: var(--sp-5);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ctaSep {
+  color: var(--ink-fade);
+}
+
+.signoff {
+  margin-top: var(--sp-7);
+  font-family: var(--font-typewriter);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-fade);
+}
+
+.endRing {
+  margin-top: var(--sp-7);
+  display: flex;
+  justify-content: center;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 767.98px) {
+  .crumb {
+    padding: 10px var(--sp-5);
+  }
+  .splash {
+    padding: var(--sp-8) var(--sp-5) var(--sp-6);
+  }
+  .body {
+    padding: var(--sp-8) var(--sp-4);
+  }
+  .end {
+    padding: var(--sp-8) var(--sp-5) var(--sp-10);
+  }
+}
+
+@media (max-width: 479.98px) {
+  .splash {
+    padding: var(--sp-6) var(--sp-3) var(--sp-5);
+  }
+  .body {
+    padding: var(--sp-6) var(--sp-3);
+  }
+  .end {
+    padding: var(--sp-6) var(--sp-3) var(--sp-8);
+  }
+  .prose {
+    font-size: 18px;
+  }
+  .prose > p:first-of-type::first-letter {
+    font-size: 52px;
+  }
+  .tldrList {
+    font-size: 14px;
+  }
+}
