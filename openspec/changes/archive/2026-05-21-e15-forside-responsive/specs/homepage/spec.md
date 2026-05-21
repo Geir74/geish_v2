@@ -102,6 +102,35 @@ Konkrete krav per seksjon:
 - **WHEN** `<Megabox>` rendres på ≥1280px viewport
 - **THEN** computed `font-size` på `.h1` er 124px (clamp `max` vinner). Tilsvarende for alle andre konverterte heading-størrelser — desktop pixel-identisk med E1.
 
+### Requirement: Forsiden gjenbruker shared-komponenter fra design-system
+
+Forsiden SHALL bruke følgende shared-komponenter (fra `e1-design-system`):
+
+- `HalftoneBlock` — i Megabox (med `color`-prop) og PullquoteBand (med `color`-prop).
+- `Stamp` — i CornerStamp.
+- `StatusBadge` — i ProjectsRow (per prosjekt-card) og Trio's Lab-kolonne.
+- `VisitorCounter` — i FooterRow.
+- `WebringWidget` (`variant="card"`) — i FooterRow.
+- `UnderConstructionBanner` — i FooterRow, og som tom-tilstand-fallback i BlogStrip.
+
+`<ImagePlaceholder>` brukes IKKE lenger i forside-seksjonene. AboutRows bio-kollasj rendrer sine egne photo-placeholders inline (per "AboutRow photo-kollasj"-requirementet) for å la CSS Module ha full kontroll over dimensjoner og posisjon på tvers av breakpoints. `<ImagePlaceholder>` består som shared-komponent og brukes fortsatt i `/styleguide` for å demonstrere mønsteret.
+
+Forsiden SHALL ikke installere nye npm-pakker — alt bygger på det `e1-design-system` allerede leverte.
+
+#### Scenario: forside-seksjoner importerer ikke ImagePlaceholder
+- **WHEN** `grep -rl "ImagePlaceholder" src/components/forside/` kjøres
+- **THEN** ingen treff — ingen forside-komponent bruker ImagePlaceholder
+
+#### Scenario: ImagePlaceholder finnes fortsatt og brukes i styleguide
+- **WHEN** `src/components/shared/ImagePlaceholder/index.tsx` og `src/app/styleguide/page.tsx` inspiseres
+- **THEN** ImagePlaceholder-filen eksisterer uendret; styleguide importerer og rendrer den i komponent-seksjonen
+
+#### Scenario: ingen nye deps
+- **WHEN** `package.json` sammenlignes mellom før og etter dette mandatet
+- **THEN** kun `src/`-filer og openspec-filer endrer seg; `dependencies` og `devDependencies` er identiske
+
+## ADDED Requirements
+
 ### Requirement: AboutRow photo-kollasj fungerer på smal skjerm
 
 `AboutRow` SHALL rendre sine egne photo-placeholders (egen `.photo` + `.tape` + `.box` i AboutRows DOM, ikke via `<ImagePlaceholder>`). Alle dimensjons- og posisjons-felt settes som CSS-variabler på `.photo`-wrapperen via `style`-prop i `index.tsx`; CSS Module (`AboutRow.module.css`) er kilden til styling og leser variablene. Ingen `!important` brukes; ingen descendant-selektor inn i shared-komponenter.
@@ -152,33 +181,6 @@ Rotasjon (via `--rotation`-CSS-variabel og `var(--chaos)`) SHALL bevares ved all
 #### Scenario: AboutRow bruker ikke ImagePlaceholder
 - **WHEN** `grep -l "ImagePlaceholder" src/components/forside/AboutRow/index.tsx` kjøres
 - **THEN** ingen treff — AboutRow eier sin egen photo-placeholder-implementasjon
-
-### Requirement: Forsiden gjenbruker shared-komponenter fra design-system
-
-Forsiden SHALL bruke følgende shared-komponenter (fra `e1-design-system`):
-
-- `HalftoneBlock` — i Megabox (med `color`-prop) og PullquoteBand (med `color`-prop).
-- `Stamp` — i CornerStamp.
-- `StatusBadge` — i ProjectsRow (per prosjekt-card) og Trio's Lab-kolonne.
-- `VisitorCounter` — i FooterRow.
-- `WebringWidget` (`variant="card"`) — i FooterRow.
-- `UnderConstructionBanner` — i FooterRow, og som tom-tilstand-fallback i BlogStrip.
-
-`<ImagePlaceholder>` brukes IKKE lenger i forside-seksjonene. AboutRows bio-kollasj rendrer sine egne photo-placeholders inline (per "AboutRow photo-kollasj"-requirementet) for å la CSS Module ha full kontroll over dimensjoner og posisjon på tvers av breakpoints. `<ImagePlaceholder>` består som shared-komponent og brukes fortsatt i `/styleguide` for å demonstrere mønsteret.
-
-Forsiden SHALL ikke installere nye npm-pakker — alt bygger på det `e1-design-system` allerede leverte.
-
-#### Scenario: forside-seksjoner importerer ikke ImagePlaceholder
-- **WHEN** `grep -rl "ImagePlaceholder" src/components/forside/` kjøres
-- **THEN** ingen treff — ingen forside-komponent bruker ImagePlaceholder
-
-#### Scenario: ImagePlaceholder finnes fortsatt og brukes i styleguide
-- **WHEN** `src/components/shared/ImagePlaceholder/index.tsx` og `src/app/styleguide/page.tsx` inspiseres
-- **THEN** ImagePlaceholder-filen eksisterer uendret; styleguide importerer og rendrer den i komponent-seksjonen
-
-#### Scenario: ingen nye deps
-- **WHEN** `package.json` sammenlignes mellom før og etter dette mandatet
-- **THEN** kun `src/`-filer og openspec-filer endrer seg; `dependencies` og `devDependencies` er identiske
 
 ### Requirement: Internal grids i seksjoner kollapser ved breakpoints
 
