@@ -115,45 +115,9 @@ export const no = {
     },
   ],
 
-  /* ── BLOGG-POSTER (forhåndsvisning) ────────────────────── */
-  blog_posts: [
-    {
-      title: "Hvorfor jeg sluttet å scrolle",
-      date: "18. mai 2026",
-      read: "6 min",
-      tag: "manifest",
-    },
-    {
-      title: "Subdomener uten å miste forstanden",
-      date: "14. mai 2026",
-      read: "11 min",
-      tag: "tech",
-    },
-    {
-      title: "Hundetreningsappen — en postmortem på MVP-en",
-      date: "09. mai 2026",
-      read: "8 min",
-      tag: "prosjekt",
-    },
-    {
-      title: "Brød nummer 47: en surdeigsdagbok",
-      date: "04. mai 2026",
-      read: "4 min",
-      tag: "liv",
-    },
-    {
-      title: "AI-en min holder hammeren. Jeg slår spikeren.",
-      date: "28. apr 2026",
-      read: "7 min",
-      tag: "manifest",
-    },
-    {
-      title: "Elgjakta 2025: alt jeg gjorde feil",
-      date: "12. apr 2026",
-      read: "9 min",
-      tag: "jakt",
-    },
-  ],
+  /* ── BLOGG-POSTER ──────────────────────────────────────────
+     Fjernet i e2-blog-engine. BlogStrip leser nå ekte poster
+     fra MDX-pipelinen (src/content/posts/*.mdx) via getAllPosts(). */
 
   /* ── STUA — diskusjonstråder (forhåndsvisning) ─────────── */
   stua: {

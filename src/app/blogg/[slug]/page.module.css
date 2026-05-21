@@ -1,0 +1,131 @@
+/*
+ * /blogg/[slug]-styling. Enkel leservennlig kolonne. Brødtekst-styling
+ * ligger i prose.module.css (delt med fremtidige langtekstsider).
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.crumbLink {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.crumbLink:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.current {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.article {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-8) var(--sp-12);
+}
+
+.header {
+  margin-bottom: var(--sp-8);
+  padding-bottom: var(--sp-6);
+  border-bottom: 2px solid var(--ink);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  margin-bottom: var(--sp-4);
+}
+
+.tag {
+  color: var(--stamp);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 var(--sp-4);
+}
+
+.deck {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(17px, 1.8vw, 20px);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.stuaLink {
+  max-width: 720px;
+  margin: var(--sp-10) auto 0;
+  padding-top: var(--sp-6);
+  border-top: 4px double var(--ink);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.stuaLink a {
+  color: var(--stamp);
+  text-decoration: none;
+  border-bottom: 2px solid var(--stamp);
+  padding-bottom: 2px;
+}
+
+.stuaLink a:hover {
+  background: var(--stamp);
+  color: var(--paper);
+}
+
+@media (max-width: 767.98px) {
+  .crumb {
+    padding: 10px var(--sp-5);
+  }
+  .article {
+    padding: var(--sp-7) var(--sp-5) var(--sp-10);
+  }
+}
+
+@media (max-width: 479.98px) {
+  .article {
+    padding: var(--sp-6) var(--sp-4) var(--sp-8);
+  }
+  .meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

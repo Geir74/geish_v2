@@ -1,0 +1,154 @@
+/*
+ * Prose-styling for blog-brødtekst. Newsreader 18px lesestørrelse —
+ * "ikke gå mindre" per 02-PAGES.md.
+ * Drop-cap på første paragraf gir avis-følelse.
+ */
+
+.prose {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.prose p {
+  margin: 0 0 var(--sp-5);
+}
+
+/* Drop-cap på første paragraf — Archivo Black, stempel-rød, "trykt"-effekt.
+   Bruker :first-of-type så drop-cap hopper til første p hvis posten starter
+   med <Stamp>/<Pullquote>/h2 eller annen ikke-p-komponent. */
+.prose > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 4.2em;
+  line-height: 0.85;
+  color: var(--stamp);
+  float: left;
+  margin: 0.05em 0.1em 0 0;
+  font-weight: 400;
+}
+
+/* Overskrifter inne i posten. h1 er post-tittelen (ligger utenfor .prose). */
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin: var(--sp-8) 0 var(--sp-4);
+  color: var(--ink);
+}
+
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.15;
+  margin: var(--sp-6) 0 var(--sp-3);
+  color: var(--ink);
+}
+
+.prose h4 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  margin: var(--sp-5) 0 var(--sp-2);
+}
+
+.prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.prose a:hover {
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+/* Vanlig blockquote (`> ...` i Markdown) — italic Newsreader med dashed venstrekant.
+   Pullquote-komponenten er noe annet, mer dramatisk; se Pullquote.module.css. */
+.prose blockquote {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: var(--sp-5) 0;
+  padding-left: var(--sp-4);
+  border-left: 2px dashed var(--ink-fade);
+}
+
+.prose blockquote p {
+  margin: 0 0 var(--sp-3);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--paper-warm);
+  padding: 1px 6px;
+  border: 1px solid var(--ink-fade);
+  color: var(--ink);
+}
+
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--ink);
+  padding: var(--sp-4);
+  overflow-x: auto;
+  margin: var(--sp-5) 0;
+}
+
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--sp-5);
+  padding-left: var(--sp-6);
+}
+
+.prose li {
+  margin-bottom: var(--sp-2);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 2px solid var(--ink);
+  margin: var(--sp-8) 0;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border: 1.5px solid var(--ink);
+  margin: var(--sp-5) 0;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+@media (max-width: 479.98px) {
+  .prose {
+    font-size: 17px;
+  }
+  .prose > p:first-of-type::first-letter {
+    font-size: 3.6em;
+  }
+}
