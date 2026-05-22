@@ -7,9 +7,7 @@ import Link from "next/link";
 import { t } from "@/content/i18n";
 import styles from "./StuaPreview.module.css";
 
-export interface StuaPreviewProps {}
-
-export function StuaPreview(_props: StuaPreviewProps = {}): React.ReactElement | null {
+export function StuaPreview(): React.ReactElement | null {
   const C = t();
   const threads = C.stua.threads.slice(0, 4);
   if (!C.stua.week_question && threads.length === 0) return null;

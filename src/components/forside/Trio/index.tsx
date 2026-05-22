@@ -11,9 +11,7 @@ import { StatusBadge, type Status } from "@/components/shared";
 import { t } from "@/content/i18n";
 import styles from "./Trio.module.css";
 
-export interface TrioProps {}
-
-export function Trio(_props: TrioProps = {}): ReactElement | null {
+export function Trio(): ReactElement | null {
   const C = t();
   // .slice() dropper readonly-tuple-typen fra `as const` slik at .length blir
   // number (ikke en litteral), så tom-sjekken under er meningsfull for TS.

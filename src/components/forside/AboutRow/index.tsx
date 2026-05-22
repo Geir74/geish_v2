@@ -17,8 +17,6 @@ import type { CSSProperties, ReactElement } from "react";
 import { t } from "@/content/i18n";
 import styles from "./AboutRow.module.css";
 
-export interface AboutRowProps {}
-
 interface PhotoSlot {
   top?: number;
   bottom?: number;
@@ -45,7 +43,7 @@ function pxOrAuto(v: number | undefined): string {
   return v === undefined ? "auto" : `${v}px`;
 }
 
-export function AboutRow(_props: AboutRowProps = {}): ReactElement {
+export function AboutRow(): ReactElement {
   const C = t();
   if (
     process.env.NODE_ENV !== "production" &&

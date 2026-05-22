@@ -7,9 +7,7 @@ import { HalftoneBlock } from "@/components/shared";
 import { t } from "@/content/i18n";
 import styles from "./Megabox.module.css";
 
-export interface MegaboxProps {}
-
-export function Megabox(_props: MegaboxProps = {}) {
+export function Megabox() {
   const C = t();
   return (
     <div className={styles.box}>

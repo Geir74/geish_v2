@@ -9,15 +9,13 @@ import { UnderConstructionBanner } from "@/components/shared";
 import { getAllPosts } from "@/content/posts";
 import styles from "./BlogStrip.module.css";
 
-export interface BlogStripProps {}
-
 function formatNorwegianDate(iso: string): string {
   const months = ["jan", "feb", "mars", "apr", "mai", "juni", "juli", "aug", "sep", "okt", "nov", "des"];
   const [year, month, day] = iso.split("-");
   return `${Number(day)}. ${months[Number(month) - 1]} ${year}`;
 }
 
-export async function BlogStrip(_props: BlogStripProps = {}) {
+export async function BlogStrip() {
   const allPosts = await getAllPosts();
   const posts = allPosts.slice(0, 3);
   return (
