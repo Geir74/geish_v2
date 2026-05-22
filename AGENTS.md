@@ -23,6 +23,6 @@ Hver OpenSpec-change kjøres på en feature-branch og lander via pull request �
 **Viktig:**
 - Default branch er **`master`**, ikke `main`. Bruk `master` i alle git-kommandoer og PR-er.
 - Vercel ↔ GitHub git-integration er PÅ; preview-URL-er genereres som `https://geish-v2-git-<branch>-...vercel.app`. Inkluder denne i PR-rapporten hvis tilgjengelig.
-- Ingen branch-beskyttelse eller CI på lett nivå — PR-en er disiplin, ikke tvang. Hvis Code finner seg selv å committe rett på master ved uhell, stopp og lag grenen i ettertid.
+- CI gater hver PR mot `master`: workflow `.github/workflows/ci.yml` kjører `npm ci → lint → build` og sjekken må være grønn før merge tillates. Branch protection på `master` er PÅ (krever `build`-sjekken). Push rett til `master` blokkeres av GitHub; alle endringer går gjennom PR.
 - Ikke åpne PR mot prosess-changes/infra med mindre Geir ber om det (denne fila ble laget på master som et engangs-oppsett).
 <!-- END:pr-workflow -->

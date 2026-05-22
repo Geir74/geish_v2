@@ -1,18 +1,18 @@
 ## 1. Forberedelse
 
-- [ ] 1.1 Bekreft at vi står på `feature/infra-ci-gate`-grenen og at den er opprettet fra fersk master (`git status` + `git log --oneline -3`).
-- [ ] 1.2 Les `.github/`-mappen for å bekrefte at den ikke eksisterer fra før (workflowen er ny — ingen risiko for å overskrive).
-- [ ] 1.3 Les relevant Next.js-docs i `node_modules/next/dist/docs/` om build-prosessen i CI-miljø hvis behov for å bekrefte env-krav (per AGENTS.md).
+- [x] 1.1 Bekreft at vi står på `feature/infra-ci-gate`-grenen og at den er opprettet fra fersk master (`git status` + `git log --oneline -3`).
+- [x] 1.2 Les `.github/`-mappen for å bekrefte at den ikke eksisterer fra før (workflowen er ny — ingen risiko for å overskrive).
+- [x] 1.3 Les relevant Next.js-docs i `node_modules/next/dist/docs/` om build-prosessen i CI-miljø hvis behov for å bekrefte env-krav (per AGENTS.md). _Hoppet over som unødvendig: koden (src/lib/supabase/{server,client}.ts) leser process.env og kaster eksplisitt ved manglende variabler — kjent risiko håndteres i steg 3.5._
 
 ## 2. Workflow-fil
 
-- [ ] 2.1 Opprett `.github/workflows/` (mappe finnes ikke fra før).
-- [ ] 2.2 Skriv `.github/workflows/ci.yml` med:
+- [x] 2.1 Opprett `.github/workflows/` (mappe finnes ikke fra før).
+- [x] 2.2 Skriv `.github/workflows/ci.yml` med:
   - `name: CI`
   - Trigger: `on: pull_request: branches: [master]` (kun pull_request, ikke push)
   - Én jobb med navn `build` som kjører på `ubuntu-latest`
   - Steg i rekkefølge: `actions/checkout@v4` → `actions/setup-node@v4` (med `node-version: '22'` og `cache: 'npm'`) → `npm ci` → `npm run lint` → `npm run build`
-- [ ] 2.3 Verifiser at YAML-fila parser uten feil (ingen tabs, riktig innrykk; bruk `node -e "require('js-yaml').load(...)"` eller åpne i editor som flagger YAML-feil).
+- [x] 2.3 Verifiser at YAML-fila parser uten feil (ingen tabs, riktig innrykk; bruk `node -e "require('js-yaml').load(...)"` eller åpne i editor som flagger YAML-feil).
 
 ## 3. Førstegangs CI-run for å verifisere build
 
@@ -27,8 +27,8 @@
 
 ## 4. Dokumentasjon
 
-- [ ] 4.1 Oppdater `AGENTS.md`: Erstatt bullet-en "Ingen branch-beskyttelse eller CI på lett nivå — PR-en er disiplin, ikke tvang. Hvis Code finner seg selv å committe rett på master ved uhell, stopp og lag grenen i ettertid." med en bullet som sier at hver PR mot `master` må passere `build`-CI-sjekken før merge, og at branch protection er PÅ på master. Behold `<!-- BEGIN:pr-workflow -->`-blokken intakt.
-- [ ] 4.2 Oppdater `openspec/PR-WORKFLOW.md`:
+- [x] 4.1 Oppdater `AGENTS.md`: Erstatt bullet-en "Ingen branch-beskyttelse eller CI på lett nivå — PR-en er disiplin, ikke tvang. Hvis Code finner seg selv å committe rett på master ved uhell, stopp og lag grenen i ettertid." med en bullet som sier at hver PR mot `master` må passere `build`-CI-sjekken før merge, og at branch protection er PÅ på master. Behold `<!-- BEGIN:pr-workflow -->`-blokken intakt.
+- [x] 4.2 Oppdater `openspec/PR-WORKFLOW.md`:
   - Endre tittel-undertekst hvis nødvendig (fra "(lett nivå)" til "(full nivå)") — bevar resten av strukturen.
   - I "Forutsetninger"-tabellen: legg til/oppdater rad om "Branch protection på `master`" til **PÅ, krever grønn `build`-CI-sjekk**.
   - Erstatt setningen "Lett nivå = ingen branch-beskyttelse, ingen CI som blokkerer. PR-en er frivillig disiplin. Tvang kan strammes til 'full' nivå senere som egen jobb." med tilsvarende setning som beskriver full nivå: CI-sjekken `build` må være grønn før merge, branch protection blokkerer ellers.

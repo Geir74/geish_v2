@@ -1,6 +1,6 @@
-# PR-workflow for geish.no v2 (lett nivå)
+# PR-workflow for geish.no v2 (full nivå)
 
-> Kode lander ikke lenger rett på `master`. Hver change går gjennom en feature-branch + pull request, slik at Geir leser diffen og ser Vercel-preview før merge.
+> Kode lander ikke lenger rett på `master`. Hver change går gjennom en feature-branch + pull request. En CI-gate (`build`-sjekken i `.github/workflows/ci.yml`) må være grønn før merge, og branch protection på `master` blokkerer merge-knappen til den er det. Geir leser diffen og ser Vercel-preview parallelt med at gaten kjører.
 
 ## Hvorfor
 
@@ -18,8 +18,12 @@
 | GitHub CLI (`gh`) installert + autentisert | **JA** (v2.92.0, scopes: `repo` + `workflow`) |
 | Repo URL | `https://github.com/Geir74/geish_v2.git` |
 | Default branch | **`master`** (ikke `main`) |
+| CI-workflow | **PÅ** (`.github/workflows/ci.yml` — `build`-jobben kjører `npm ci → lint → build` på hver PR mot `master`) |
+| Branch protection på `master` | **PÅ** (krever grønn `build`-sjekk før merge) |
 
-Lett nivå = ingen branch-beskyttelse, ingen CI som blokkerer. PR-en er frivillig disiplin. Tvang kan strammes til "full" nivå senere som egen jobb.
+Full nivå = CI-gaten må være grønn og branch protection blokkerer merge ellers. Gaten fanger brukne typer, imports og kompileringsfeil — ikke logikk- eller sikkerhetsbugs (de fanges av manuell review + Vercel-preview).
+
+**Rekkefølge-fakta:** Branch protection kan først kreve en sjekk *etter* at workflowen har kjørt minst én gang (sjekken er ellers ikke valgbar i UI-et). `infra-ci-gate`-PR-en var derfor sin egen demo: workflowen kjørte først på den PR-en, og branch protection ble slått på etter merge.
 
 ## Branch-navnekonvensjon
 
@@ -151,4 +155,4 @@ Klikk **Close pull request** (uten å merge). Slett grenen etterpå. Endringene 
 La grenen + PR-en stå åpen. PR-er har ingen tids-frist. Hvis du må bytte til noe annet i mellomtiden: `git checkout master` (eller `git checkout -b feature/<annen-change>`) — den paused grenen blir liggende uberørt med commits og preview-URL intakt. Når du er klar igjen: `git checkout chore/pr-workflow-test`, fortsett å committe og pushe. PR-en plukker opp de nye commitsene automatisk og bygger ny preview. Tips: hvis PR-en er pause-lenge, marker den som **Draft** på GitHub (Convert to draft-knappen) — det signaliserer at den ikke er klar for merge ennå.
 
 **Hva med beskyttelse mot å pushe rett på master ved et uhell?**
-Ingen tvang på lett nivå. Hvis det skjer: ikke noe ille har skjedd ennå, bare et brutt mønster. Branch-beskyttelse + required CI er "full" nivå-jobben senere.
+Branch protection på `master` blokkerer ikke-PR-push. Hvis du prøver `git push origin master` med lokale commits, avviser GitHub pushen med en melding om at grenen er beskyttet. Lag en feature-branch i ettertid (`git checkout -b feature/<navn>`), push den, og åpne PR — CI-sjekken må være grønn før merge tillates.
