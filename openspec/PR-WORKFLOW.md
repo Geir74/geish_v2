@@ -147,5 +147,8 @@ Vercel viser feilmeldingen i PR-kommentaren og i Vercel-dashbordet. Fix på gren
 **Hva hvis jeg vil avbryte en PR?**
 Klikk **Close pull request** (uten å merge). Slett grenen etterpå. Endringene forsvinner ikke fra grenen — den lever videre lokalt og på GitHub til du sletter den manuelt.
 
+**Hva hvis jeg vil pause en PR midt i?**
+La grenen + PR-en stå åpen. PR-er har ingen tids-frist. Hvis du må bytte til noe annet i mellomtiden: `git checkout master` (eller `git checkout -b feature/<annen-change>`) — den paused grenen blir liggende uberørt med commits og preview-URL intakt. Når du er klar igjen: `git checkout chore/pr-workflow-test`, fortsett å committe og pushe. PR-en plukker opp de nye commitsene automatisk og bygger ny preview. Tips: hvis PR-en er pause-lenge, marker den som **Draft** på GitHub (Convert to draft-knappen) — det signaliserer at den ikke er klar for merge ennå.
+
 **Hva med beskyttelse mot å pushe rett på master ved et uhell?**
 Ingen tvang på lett nivå. Hvis det skjer: ikke noe ille har skjedd ennå, bare et brutt mønster. Branch-beskyttelse + required CI er "full" nivå-jobben senere.
