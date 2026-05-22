@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - name: Build
+        env:
+          # Placeholder kun for module-evaluation under build. Bygget kontakter
+          # ALDRI DB-en: Drizzle-import (src/db/index.ts) sjekker kun at strengen
+          # finnes, postgres() er lazy om tilkoblingen, og /smoke er dynamic
+          # (prerenderes ikke). Ikke en ekte hemmelighet — ingen secret nødvendig.
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+        run: npm run build
