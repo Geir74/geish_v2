@@ -10,9 +10,7 @@ import {
 import { t } from "@/content/i18n";
 import styles from "./FooterRow.module.css";
 
-export interface FooterRowProps {}
-
-export function FooterRow(_props: FooterRowProps = {}) {
+export function FooterRow() {
   const C = t();
   return (
     <div className={styles.row}>

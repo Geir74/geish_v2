@@ -5,9 +5,7 @@
  */
 import styles from "./CornerStamp.module.css";
 
-export interface CornerStampProps {}
-
-export function CornerStamp(_props: CornerStampProps = {}) {
+export function CornerStamp() {
   return (
     <div className={styles.wrap}>
       <div className={styles.stamp}>

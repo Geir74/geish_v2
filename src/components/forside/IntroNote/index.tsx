@@ -6,9 +6,7 @@ import Link from "next/link";
 import { t } from "@/content/i18n";
 import styles from "./IntroNote.module.css";
 
-export interface IntroNoteProps {}
-
-export function IntroNote(_props: IntroNoteProps = {}) {
+export function IntroNote() {
   const C = t();
   return (
     <div className={styles.note}>

@@ -7,9 +7,7 @@ import { HalftoneBlock } from "@/components/shared";
 import { t } from "@/content/i18n";
 import styles from "./PullquoteBand.module.css";
 
-export interface PullquoteBandProps {}
-
-export function PullquoteBand(_props: PullquoteBandProps = {}) {
+export function PullquoteBand() {
   const C = t();
   return (
     <div className={styles.band}>

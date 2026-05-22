@@ -12,8 +12,6 @@ import { StatusBadge, type Status } from "@/components/shared";
 import { t } from "@/content/i18n";
 import styles from "./ProjectsRow.module.css";
 
-export interface ProjectsRowProps {}
-
 interface ProjectCardData {
   name: string;
   href: string | null;
@@ -69,7 +67,7 @@ function ProjectCard({
   );
 }
 
-export function ProjectsRow(_props: ProjectsRowProps = {}): ReactElement | null {
+export function ProjectsRow(): ReactElement | null {
   const C = t();
   const projects = C.projects.slice(0, 5);
   if (projects.length === 0) return null;

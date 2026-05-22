@@ -7,9 +7,7 @@ import Link from "next/link";
 import { t } from "@/content/i18n";
 import styles from "./ManifestCut.module.css";
 
-export interface ManifestCutProps {}
-
-export function ManifestCut(_props: ManifestCutProps = {}): React.ReactElement | null {
+export function ManifestCut(): React.ReactElement | null {
   const C = t();
   const quotes = C.manifest_pullquotes.slice(0, 3);
   if (quotes.length === 0) return null;

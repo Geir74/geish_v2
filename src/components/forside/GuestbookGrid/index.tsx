@@ -8,9 +8,7 @@ import Link from "next/link";
 import { t } from "@/content/i18n";
 import styles from "./GuestbookGrid.module.css";
 
-export interface GuestbookGridProps {}
-
-export function GuestbookGrid(_props: GuestbookGridProps = {}): React.ReactElement | null {
+export function GuestbookGrid(): React.ReactElement | null {
   const C = t();
   const items = C.guestbook.slice(0, 3);
   if (items.length === 0) return null;
