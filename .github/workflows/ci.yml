@@ -16,4 +16,11 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
-      - run: npm run build
+      - name: Build
+        env:
+          # Placeholder kun for module-evaluation under build. Bygget kontakter
+          # ALDRI DB-en: Drizzle-import (src/db/index.ts) sjekker kun at strengen
+          # finnes, postgres() er lazy om tilkoblingen, og /smoke er dynamic
+          # (prerenderes ikke). Ikke en ekte hemmelighet — ingen secret nødvendig.
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+        run: npm run build
