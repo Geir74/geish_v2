@@ -87,6 +87,34 @@
   margin: 0;
 }
 
+/* ── Header-cover (16:9, e2-cover-images) ──────────────────── */
+.coverFigure {
+  margin: var(--sp-5) 0 0;
+}
+
+/* aspect-ratio-boks reserverer høyden før bildet laster → ingen CLS. */
+.coverBox {
+  aspect-ratio: 16 / 9;
+  border: 2px solid var(--ink);
+  background: var(--paper-warm);
+  overflow: hidden;
+}
+
+.coverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coverCredit {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+}
+
 .stuaLink {
   max-width: 720px;
   margin: var(--sp-10) auto 0;

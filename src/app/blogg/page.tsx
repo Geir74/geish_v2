@@ -5,11 +5,13 @@
  * Static (force-static). Leser MDX-filer ved build-time.
  */
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { HalftoneBlock, UnderConstructionBanner } from "@/components/shared";
 import { t } from "@/content/i18n";
 import { getAllPosts } from "@/content/posts";
 import { aggregateMonths, aggregateTags } from "@/lib/blog/aggregate";
+import { coverCardSrc, focalToPosition } from "@/lib/blog/cover";
 import styles from "./page.module.css";
 
 export const dynamic = "force-static";
@@ -79,13 +81,26 @@ export default async function BloggListePage() {
                 <article className={styles.heroPost}>
                   <div className={styles.heroCover}>
                     {hero.coverImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={hero.coverImage}
-                        alt={hero.title}
+                      /*
+                       * 16:9-utsnittet (cover-hero.webp). priority: heroen er
+                       * LCP-kandidat på /blogg. Eksplisitt width/height +
+                       * fast containerhøyde → ingen CLS. object-position fra
+                       * focal så crop-fokuset bevares i containeren.
+                       */
+                      <Image
+                        src={hero.coverImage.src}
+                        alt={hero.coverImage.alt}
+                        width={720}
+                        height={405}
+                        priority
+                        sizes="(max-width: 768px) 100vw, 60vw"
                         className={styles.heroImg}
+                        style={{
+                          objectPosition: focalToPosition[hero.coverImage.focal],
+                        }}
                       />
                     ) : (
+                      /* Fallback: HalftoneBlock-dekor, uendret fra før. */
                       <div className={styles.heroHalftone} aria-hidden>
                         <HalftoneBlock w={360} h={260} density={0.45} />
                       </div>
@@ -116,6 +131,28 @@ export default async function BloggListePage() {
                 <div className={styles.archive}>
                   {archive.map((post) => (
                     <article key={post.slug} className={styles.post}>
+                      {post.coverImage ? (
+                        /*
+                         * 1:1-utsnittet (cover-card.webp), lazy — kortene er
+                         * under folden. aspect-ratio-boks i CSS hindrer CLS.
+                         * Poster uten cover rendres nøyaktig som før (tekst).
+                         */
+                        <div className={styles.cardCover}>
+                          <Image
+                            src={coverCardSrc(post.coverImage)}
+                            alt={post.coverImage.alt}
+                            width={600}
+                            height={600}
+                            loading="lazy"
+                            sizes="(max-width: 480px) 100vw, 50vw"
+                            className={styles.cardImg}
+                            style={{
+                              objectPosition:
+                                focalToPosition[post.coverImage.focal],
+                            }}
+                          />
+                        </div>
+                      ) : null}
                       <div className={styles.meta}>
                         <span>
                           {formatNorwegianDate(post.published)} · {post.readTimeMin} min
