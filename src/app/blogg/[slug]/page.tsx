@@ -5,11 +5,13 @@
  * Bunn-blokk lenker til Stua-tråd hvis stua_thread satt.
  */
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { t } from "@/content/i18n";
 import { getAllSlugs, getPostBySlug } from "@/content/posts";
+import { focalToPosition } from "@/lib/blog/cover";
 import { mdxComponents } from "@/lib/blog/mdx-components";
 import prose from "@/lib/blog/prose.module.css";
 import styles from "./page.module.css";
@@ -34,6 +36,19 @@ export async function generateMetadata({
   return {
     title: `${result.post.title} — Bloggen — geish.no`,
     description: result.post.excerpt,
+    // OpenGraph-bilde = 16:9-coveret når posten har cover (e2-cover-images).
+    openGraph: result.post.coverImage
+      ? {
+          images: [
+            {
+              url: result.post.coverImage.src,
+              width: 720,
+              height: 405,
+              alt: result.post.coverImage.alt,
+            },
+          ],
+        }
+      : undefined,
   };
 }
 
@@ -74,6 +89,36 @@ export default async function BlogPostPage({ params }: PageParams) {
           </div>
           <h1 className={styles.h1}>{post.title}</h1>
           <p className={styles.deck}>{post.excerpt}</p>
+          {post.coverImage ? (
+            /*
+             * 16:9-coveret under tittel/ingress — avis-stil: bildet kommer i
+             * TILLEGG til tekst-headeren, aldri i stedet for. priority: dette
+             * er LCP-kandidaten på enkeltposten. aspect-ratio-boksen i CSS
+             * reserverer høyden → ingen CLS. Poster uten cover rendres
+             * nøyaktig som før.
+             */
+            <figure className={styles.coverFigure}>
+              <div className={styles.coverBox}>
+                <Image
+                  src={post.coverImage.src}
+                  alt={post.coverImage.alt}
+                  width={720}
+                  height={405}
+                  priority
+                  sizes="(max-width: 760px) 100vw, 760px"
+                  className={styles.coverImg}
+                  style={{
+                    objectPosition: focalToPosition[post.coverImage.focal],
+                  }}
+                />
+              </div>
+              {post.coverImage.credit ? (
+                <figcaption className={styles.coverCredit}>
+                  FOTO: {post.coverImage.credit}
+                </figcaption>
+              ) : null}
+            </figure>
+          ) : null}
         </header>
 
         <div className={prose.prose}>
