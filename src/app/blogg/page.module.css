@@ -132,6 +132,22 @@
   object-fit: cover;
 }
 
+/* ── Arkiv-kort-cover (1:1, e2-cover-images) ────────────────── */
+/* aspect-ratio-boks reserverer høyden før bildet laster → ingen CLS. */
+.cardCover {
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--ink);
+  background: var(--paper-warm);
+  overflow: hidden;
+  margin-bottom: var(--sp-3);
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .heroHalftone {
   display: flex;
   align-items: center;

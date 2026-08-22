@@ -10,7 +10,13 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { postFrontmatterSchema, type Post } from "@/lib/blog/schema";
+import type { z } from "zod";
+import {
+  postFrontmatterSchema,
+  type CoverImage,
+  type Post,
+  type PostFrontmatter,
+} from "@/lib/blog/schema";
 import { deriveReadTime } from "@/lib/blog/reading-time";
 
 const POSTS_DIR = path.join(process.cwd(), "src/content/posts");
@@ -21,6 +27,46 @@ interface ParsedFile {
   content: string;
 }
 
+/*
+ * Flater ut zod-issues til lesbare linjer. Union-feil (invalid_union) får
+ * grenene sine ekspandert slik at f.eks. «coverImage.alt er påkrevd…»
+ * faktisk vises i byggefeilen — ikke bare et generisk «Invalid input».
+ */
+function formatIssues(
+  issues: z.core.$ZodIssue[],
+  prefix = "",
+): string[] {
+  return issues.flatMap((issue) => {
+    const path = [prefix, ...issue.path].filter(Boolean).join(".");
+    if (issue.code === "invalid_union") {
+      return issue.errors.flatMap((branch) => formatIssues(branch, path));
+    }
+    return [`  - ${path || "(root)"}: ${issue.message}`];
+  });
+}
+
+/*
+ * Normaliserer coverImage fra frontmatter-unionen til intern CoverImage-form.
+ *
+ * - Ren string (gammel form): normaliseres til { src, alt: "", focal: "center" }
+ *   med en byggetids-ADVARSEL om manglende alt — bakoverkompat, ikke feil.
+ * - Objekt: allerede validert av zod (alt påkrevd, focal har default) —
+ *   returneres som den er.
+ */
+function normalizeCover(
+  raw: PostFrontmatter["coverImage"],
+  filename: string,
+): CoverImage | undefined {
+  if (raw == null) return undefined;
+  if (typeof raw === "string") {
+    console.warn(
+      `[blog] src/content/posts/${filename}: coverImage er en ren string uten alt-tekst — bruk objekt { src, alt } for tilgjengelighet.`,
+    );
+    return { src: raw, alt: "", focal: "center" };
+  }
+  return raw;
+}
+
 async function readPostFile(filename: string): Promise<ParsedFile> {
   const filePath = path.join(POSTS_DIR, filename);
   const raw = await fs.readFile(filePath, "utf-8");
@@ -28,9 +74,7 @@ async function readPostFile(filename: string): Promise<ParsedFile> {
 
   const result = postFrontmatterSchema.safeParse(data);
   if (!result.success) {
-    const issues = result.error.issues
-      .map((i) => `  - ${i.path.join(".") || "(root)"}: ${i.message}`)
-      .join("\n");
+    const issues = formatIssues(result.error.issues).join("\n");
     throw new Error(
       `Invalid frontmatter in src/content/posts/${filename}:\n${issues}`,
     );
@@ -38,10 +82,12 @@ async function readPostFile(filename: string): Promise<ParsedFile> {
 
   const slug = filename.replace(/\.mdx$/, "");
   const readTimeMin = result.data.readTimeMin ?? deriveReadTime(content);
+  // Cover normaliseres HER slik at resten av appen aldri ser unionen.
+  const coverImage = normalizeCover(result.data.coverImage, filename);
 
   return {
     filename,
-    post: { ...result.data, slug, readTimeMin },
+    post: { ...result.data, slug, readTimeMin, coverImage },
     content,
   };
 }
