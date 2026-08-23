@@ -1,0 +1,117 @@
+/*
+ * /konto — enkel verifiseringsflate i zine-stil. Ikke en profilside (E4).
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+/* ── Brødsmule ─────────────────────────────────────────────── */
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.current {
+  color: var(--ink);
+}
+
+/* ── Innhold ───────────────────────────────────────────────── */
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-6) var(--sp-12);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 0.92;
+  margin: 0 0 var(--sp-6);
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.acc {
+  color: var(--stamp);
+}
+
+.card {
+  border: var(--border-dashed);
+  padding: var(--sp-5);
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: 0 0 var(--sp-4);
+}
+
+.statusLabel {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.email {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-fade);
+  margin: 0 0 var(--sp-5);
+}
+
+.logout {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  background: none;
+  border: 2px solid var(--stamp);
+  border-radius: 0;
+  padding: var(--sp-2) var(--sp-4);
+  cursor: pointer;
+}
+
+.logout:hover {
+  color: var(--paper);
+  background: var(--stamp);
+}
+
+/* ── Responsivt ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .crumb {
+    padding: 10px var(--sp-4);
+  }
+
+  .wrap {
+    padding: var(--sp-8) var(--sp-4) var(--sp-10);
+  }
+}

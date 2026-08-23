@@ -1,5 +1,5 @@
 /*
- * Barrel — re-eksporterer de 9 shared-komponentene og deres typer.
+ * Barrel — re-eksporterer de 10 shared-komponentene og deres typer.
  * Bruk: `import { Stamp, StatusBadge } from "@/components/shared"`.
  */
 export { VisitorCounter } from "./VisitorCounter";
@@ -11,6 +11,7 @@ export { Stamp } from "./Stamp";
 export { ImagePlaceholder } from "./ImagePlaceholder";
 export { HalftoneBlock } from "./HalftoneBlock";
 export { Pullquote } from "./Pullquote";
+export { AuthNav } from "./AuthNav";
 
 export type {
   VisitorCounterProps,
