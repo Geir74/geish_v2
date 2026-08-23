@@ -1,0 +1,189 @@
+/*
+ * /logg-inn — zine-stil: mono-labels, dashed border, stempel-rød aksent.
+ * "LENKE SENDT"-kvitteringen får stempel-look. Responsiv per RESPONSIVE.md.
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+/* ── Brødsmule (samme mønster som /blogg og /manifest) ─────── */
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.current {
+  color: var(--ink);
+}
+
+/* ── Innhold ───────────────────────────────────────────────── */
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-6) var(--sp-12);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 0.92;
+  margin: 0 0 var(--sp-3);
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.acc {
+  color: var(--stamp);
+}
+
+.deck {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin: 0 0 var(--sp-6);
+}
+
+/* ── Skjema ────────────────────────────────────────────────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  border: var(--border-dashed);
+  padding: var(--sp-5);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.input {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--border);
+  border-radius: 0;
+  padding: var(--sp-3);
+}
+
+.input:focus {
+  outline: 2px solid var(--stamp);
+  outline-offset: 1px;
+}
+
+.submit {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: var(--border);
+  border-radius: 0;
+  padding: var(--sp-3) var(--sp-5);
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--stamp);
+}
+
+.submit:disabled {
+  background: var(--ink-fade);
+  cursor: wait;
+}
+
+/* ── Feil ──────────────────────────────────────────────────── */
+.error {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--stamp);
+  border: 1px dashed var(--stamp);
+  padding: var(--sp-3);
+  margin: 0 0 var(--sp-4);
+}
+
+/* ── Kvittering (lenke sendt) ──────────────────────────────── */
+.receipt {
+  border: var(--border-dashed);
+  padding: var(--sp-6) var(--sp-5);
+}
+
+.stamp {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  border: 2px solid var(--stamp);
+  padding: 4px 10px;
+  transform: rotate(-3deg);
+  margin-bottom: var(--sp-4);
+}
+
+.receiptText {
+  font-family: var(--font-typewriter);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-4);
+}
+
+.receiptEmail {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.resetLink {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  border-bottom: 1px dashed var(--ink-soft);
+  border-radius: 0;
+  padding: 0 0 2px;
+  cursor: pointer;
+}
+
+.resetLink:hover {
+  color: var(--stamp);
+  border-bottom-color: var(--stamp);
+}
+
+/* ── Responsivt ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .crumb {
+    padding: 10px var(--sp-4);
+  }
+
+  .wrap {
+    padding: var(--sp-8) var(--sp-4) var(--sp-10);
+  }
+}

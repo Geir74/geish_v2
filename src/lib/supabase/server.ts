@@ -4,6 +4,7 @@
 
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { authCookieDomain } from "./cookie-domain";
 
 export async function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -18,6 +19,8 @@ export async function createClient() {
   const cookieStore = await cookies();
 
   return createServerClient(url, publishableKey, {
+    // Env-betinget prod-domene via helper, ellers undefined (host-only).
+    cookieOptions: { domain: authCookieDomain() },
     cookies: {
       getAll() {
         return cookieStore.getAll();

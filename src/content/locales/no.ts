@@ -271,4 +271,37 @@ export const no = {
     members: "12 medlemmer",
     join: "Bli med",
   },
+
+  /* ── AUTH — innlogging, konto, nav (E3) ────────────────── */
+  auth: {
+    login: {
+      heading: "Logg inn.",
+      deck: "Ingen passord. Skriv e-posten din, få en lenke, klikk. Ferdig.",
+      emailLabel: "E-postadresse",
+      emailPlaceholder: "deg@eksempel.no",
+      submit: "SEND MEG EN LENKE",
+      submitting: "SENDER …",
+      sentStamp: "LENKE SENDT",
+      sentBefore: "Sjekk innboksen til",
+      sentAfter:
+        "Lenken virker i én time. Åpne den på samme enhet og i samme nettleser som du bestilte den fra.",
+      useAnother: "bruk en annen adresse",
+      errorLink:
+        "Lenken var ugyldig eller utløpt. Be om en ny under.",
+      errorSend:
+        "Fikk ikke sendt lenken. Sjekk adressen og prøv igjen.",
+    },
+    konto: {
+      heading: "Konto.",
+      crumb: "KONTO",
+      loggedInAs: "logget inn som",
+      note: "Mer kommer her etter hvert. Foreløpig: du er deg, og det holder.",
+      logout: "LOGG UT",
+    },
+    nav: {
+      login: "LOGG INN →",
+      konto: "KONTO",
+      logout: "LOGG UT",
+    },
+  },
 } as const;

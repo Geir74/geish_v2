@@ -3,6 +3,7 @@
 // hits PostgREST to verify the anon key + URL actually reach this project.
 
 import { createBrowserClient } from "@supabase/ssr";
+import { authCookieDomain } from "./cookie-domain";
 
 export function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -13,5 +14,8 @@ export function createClient() {
   if (!publishableKey) {
     throw new Error("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is not set.");
   }
-  return createBrowserClient(url, publishableKey);
+  return createBrowserClient(url, publishableKey, {
+    // Env-betinget prod-domene via helper, ellers undefined (host-only).
+    cookieOptions: { domain: authCookieDomain() },
+  });
 }

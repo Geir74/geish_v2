@@ -1,0 +1,68 @@
+/*
+ * AuthNav — "trykt etikett" øverst til høyre. Mono, caps, dashed border,
+ * stempel-rød på hover. Fast min-bredde + høyde reserverer plass mens
+ * useUser() laster (ingen layout-shift, ingen blink).
+ */
+
+.authNav {
+  position: fixed;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 96px;
+  min-height: 30px;
+  justify-content: flex-end;
+  padding: 4px 10px;
+  background: var(--paper);
+  border: var(--border-dashed);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--stamp);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.form {
+  display: inline-flex;
+}
+
+.logout {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logout:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .authNav {
+    top: 0;
+    right: 0;
+    border-top: none;
+    border-right: none;
+  }
+}
