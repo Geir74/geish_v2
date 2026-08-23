@@ -10,6 +10,10 @@ import { createClient } from "@/lib/supabase/server";
 import { LoginForm } from "./LoginForm";
 import styles from "./page.module.css";
 
+// Eksplisitt dynamisk — samme grunn som /konto: prerender uten Supabase-env
+// ville kastet i klientfabrikken før cookies() gjør ruten dynamisk.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Logg inn — geish.no",
   description: "Passordløs innlogging med magisk lenke på e-post.",

@@ -9,6 +9,11 @@ import { t } from "@/content/i18n";
 import { createClient } from "@/lib/supabase/server";
 import styles from "./page.module.css";
 
+// Eksplisitt dynamisk: uten denne prøver Next å prerendre siden ved build,
+// og klientfabrikken kaster på manglende Supabase-env FØR cookies() rekker
+// å markere ruten dynamisk (CI/Vercel bygger uten env-varene).
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Konto — geish.no",
   description: "Din konto på geish.no.",
