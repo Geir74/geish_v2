@@ -6,6 +6,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { t } from "@/content/i18n";
+import { displayNameFor } from "@/lib/profile/display-name";
 import { getProfile } from "@/lib/profile/get-profile";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForm } from "./ProfileForm";
@@ -56,9 +57,11 @@ export default async function KontoPage() {
             <span className={styles.statusLabel}>{C.auth.konto.loggedInAs}</span>
             <span className={styles.email}>{user.email}</span>
           </p>
-          {profile?.displayName ? null : (
-            <p className={styles.note}>{P.noName}</p>
-          )}
+          {profile && !profile.displayName ? (
+            <p className={styles.note}>
+              {P.noName.replace("{name}", displayNameFor(profile))}
+            </p>
+          ) : null}
           <form method="post" action="/auth/logg-ut">
             <button type="submit" className={styles.logout}>
               {C.auth.konto.logout}

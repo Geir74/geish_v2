@@ -261,10 +261,10 @@ export const no = {
    */
   profil: {
     heading: "Profil",
-    // Fallback-navn når en bruker er navnløs. Aldri e-post, aldri avledet.
-    anon: "Anonym",
     // Vises når eget display_name er tomt (NULL) — oppfordring, ingen tvang.
-    noName: "Du har ikke valgt et visningsnavn ennå.",
+    // {name} erstattes med den stabile stormtrooper-fallbacken (f.eks.
+    // «stormtrooper-417»). Aldri e-post, aldri avledet.
+    noName: "Du heter {name} til du velger noe eget.",
     displayNameLabel: "Visningsnavn",
     displayNamePlaceholder: "Hva vil du hete her?",
     displayNameHint: "2–40 tegn. Kan endres når som helst. Trenger ikke være unikt.",
