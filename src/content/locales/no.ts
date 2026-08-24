@@ -255,4 +255,35 @@ export const no = {
       logout: "LOGG UT",
     },
   },
+
+  /* ── PROFIL — vis/rediger egen profil på /konto (E4) ─────
+   * UTKAST: alle disse tekstene skal godkjennes av Geir. Lavmælt zine-tone.
+   */
+  profil: {
+    heading: "Profil",
+    // Vises når eget display_name er tomt (NULL) — oppfordring, ingen tvang.
+    // {name} erstattes med den stabile stormtrooper-fallbacken (f.eks.
+    // «stormtrooper-417»). Aldri e-post, aldri avledet.
+    noName: "Du heter {name} til du velger noe eget.",
+    displayNameLabel: "Visningsnavn",
+    displayNamePlaceholder: "Hva vil du hete her?",
+    displayNameHint: "2–40 tegn. Kan endres når som helst. Trenger ikke være unikt.",
+    bioLabel: "Om deg",
+    bioPlaceholder: "Noen linjer, om du vil. Eller ingen.",
+    // Personvern-merknad ved feltene (Geirs prinsipp — skriv det tydelig).
+    publicNotice:
+      "Visningsnavn og «om deg» er offentlig. Skriv som om hvem som helst kan lese det — for det kan de.",
+    charsLeft: "tegn igjen",
+    save: "LAGRE",
+    saving: "LAGRER …",
+    // Statuslinjer etter lagring.
+    saved: "Lagret.",
+    // D1: ikke-blokkerende advarsel — navnet er brukt av noen andre.
+    nameInUse:
+      "Navnet er allerede i bruk av en annen — du kan likevel bruke det. Lagret.",
+    errorUnauthenticated: "Du er ikke logget inn. Logg inn og prøv igjen.",
+    errorNameTooShort: "Visningsnavnet må være minst 2 tegn (eller la det stå tomt).",
+    errorNameTooLong: "Visningsnavnet kan være høyst 40 tegn.",
+    errorBioTooLong: "«Om deg» kan være høyst 300 tegn.",
+  },
 } as const;
