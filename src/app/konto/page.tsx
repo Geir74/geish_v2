@@ -6,7 +6,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { t } from "@/content/i18n";
+import { getProfile } from "@/lib/profile/get-profile";
 import { createClient } from "@/lib/supabase/server";
+import { ProfileForm } from "./ProfileForm";
 import styles from "./page.module.css";
 
 // Eksplisitt dynamisk: uten denne prøver Next å prerendre siden ved build,
@@ -30,6 +32,11 @@ export default async function KontoPage() {
     redirect("/logg-inn");
   }
 
+  // Profil hentes server-side via Drizzle (design D4/D5). Sikkerhetsnett i
+  // getProfile oppretter raden om triggeren skulle mangle.
+  const profile = await getProfile(user.id);
+  const P = t().profil;
+
   return (
     <main className={`${styles.page} paper`}>
       <div className={styles.crumb}>
@@ -49,12 +56,22 @@ export default async function KontoPage() {
             <span className={styles.statusLabel}>{C.auth.konto.loggedInAs}</span>
             <span className={styles.email}>{user.email}</span>
           </p>
-          <p className={styles.note}>{C.auth.konto.note}</p>
+          {profile?.displayName ? null : (
+            <p className={styles.note}>{P.noName}</p>
+          )}
           <form method="post" action="/auth/logg-ut">
             <button type="submit" className={styles.logout}>
               {C.auth.konto.logout}
             </button>
           </form>
+        </div>
+
+        <div className={styles.card}>
+          <h2 className={styles.h2}>{P.heading}</h2>
+          <ProfileForm
+            displayName={profile?.displayName ?? null}
+            bio={profile?.bio ?? null}
+          />
         </div>
       </div>
     </main>
