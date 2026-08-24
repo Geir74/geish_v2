@@ -35,7 +35,7 @@ export function Trio(): ReactElement | null {
             </div>
           ))}
           <div className={styles.more}>
-            <Link href="/til">→ alle 38 TIL-poster</Link>
+            <Link href="/til">→ alle {C.til.length} TIL-poster</Link>
           </div>
         </section>
       ) : null}
@@ -75,7 +75,13 @@ export function Trio(): ReactElement | null {
             <Link href="/changelog">→ hele historikken</Link>
           </div>
         </section>
-      ) : null}
+      ) : (
+        <section className={styles.col} data-variant="dark">
+          <h4 className={styles.h4}>Endringslogg</h4>
+          <div className={styles.kick}>Hva er nytt · site changelog</div>
+          <div className={styles.row}>{C.changelog_empty}</div>
+        </section>
+      )}
     </div>
   );
 }

@@ -23,6 +23,10 @@ import {
 import { t } from "@/content/i18n";
 import styles from "./page.module.css";
 
+// Daglig ISR slik at dynamisk alder (AboutRow → om Geir) oppdateres etter
+// bursdag ved neste revalidering, uten manuell redigering.
+export const revalidate = 86400;
+
 export default function Home() {
   const C = t();
   return (
