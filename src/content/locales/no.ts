@@ -14,8 +14,11 @@ export const no = {
     name: "geish.no",
     estd: "EST. 2026",
     tagline: "Geirs digitale hjemmebase",
-    location: "Oslo, internett",
+    location: "Skien, internett",
     author: "Geir",
+    // Byen som vises i AboutRow-overskriften (h3). Ligger i content så den
+    // ikke hardkodes i komponenten.
+    city: "SKIEN",
   },
 
   /* ── HERO / FORSIDE-MOTTO ──────────────────────────────── */
@@ -80,10 +83,12 @@ export const no = {
 
   /* ── METADATA / FOOTER ─────────────────────────────────── */
   meta: {
-    visitors: "00 042 117",
-    visitors_label: "BESØKENDE SIDEN 20. MAI 2026",
-    last_updated: "20. MAI 2026",
-    last_updated_what: "la til Stua-tråden om elgjakt",
+    // Ingen ekte analytics ennå — telleren står på null som en bevisst
+    // retro-gimmick, ikke et oppdiktet besøkstall.
+    visitors: "00 000 000",
+    visitors_label: "BESØKENDE · INGEN SPORING",
+    last_updated: "AUGUST 2026",
+    last_updated_what: "ryddet bort placeholder-innhold",
     server: "Vercel · ingen sporing · ingen reklame",
     construction: "UNDER CONSTRUCTION — ALLTID",
     construction_long:
@@ -92,28 +97,10 @@ export const no = {
   },
 
   /* ── GJESTEBOK-utdrag ──────────────────────────────────── */
-  guestbook: [
-    {
-      who: "Eirik",
-      when: "17. mai",
-      msg: "Endelig en grunn til å logge av Facebook. Webringen er inne — sjekk sida mi.",
-    },
-    {
-      who: "Tante Liv",
-      when: "15. mai",
-      msg: "Veldig fint, Geir. Når kommer bildene fra påsken?",
-    },
-    {
-      who: "D&D-Mads",
-      when: "12. mai",
-      msg: "Sesjonsnotater i Stua, nå.",
-    },
-    {
-      who: "Sigrid",
-      when: "11. mai",
-      msg: "Manifestet traff hardt. Kloner starter-kitet i kveld.",
-    },
-  ],
+  // Tømt for fabrikkert seed-innhold. Fylles med ekte innlegg når
+  // gjesteboka (egen epic) er live.
+  guestbook: [] as ReadonlyArray<{ who: string; when: string; msg: string }>,
+  guestbook_empty: "Gjesteboka er tom ennå — bli den første til å skrive noe pent.",
 
   /* ── BLOGG-POSTER ──────────────────────────────────────────
      Fjernet i e2-blog-engine. BlogStrip leser nå ekte poster
@@ -123,52 +110,17 @@ export const no = {
   stua: {
     intro:
       "Stua er der vi snakker sammen. Ingen algoritme, ingen reklame, ingen som ikke vet hva du heter. Invitasjonsbasert.",
-    week_question:
-      "Hva er den dummeste tingen du har lært deg å gjøre — som du faktisk er stolt av?",
-    threads: [
-      {
-        title: "Hva tar dere med på elgjakt i år?",
-        who: "Geir",
-        replies: 14,
-        last: "for 2 timer siden",
-        cat: "jakt",
-      },
-      {
-        title: "Beste 3D-printer under 5000,-",
-        who: "Eirik",
-        replies: 8,
-        last: "i går",
-        cat: "verksted",
-      },
-      {
-        title: "Søndagens D&D — kan vi flytte til lørdag?",
-        who: "Mads",
-        replies: 22,
-        last: "i går",
-        cat: "d&d",
-      },
-      {
-        title: "Ukens spørsmål: dummeste ting du har lært deg å gjøre",
-        who: "Geir",
-        replies: 31,
-        last: "mandag",
-        cat: "ukens",
-      },
-      {
-        title: "Noen som har prøvd Ableton 12?",
-        who: "Sigrid",
-        replies: 5,
-        last: "11. mai",
-        cat: "musikk",
-      },
-      {
-        title: "Bilder fra påska — last opp her",
-        who: "Liv",
-        replies: 17,
-        last: "10. mai",
-        cat: "foto",
-      },
-    ],
+    // Tømt for fabrikkerte tråder/spørsmål. Fylles med ekte data når
+    // Stua-forumet (egen epic) er på plass.
+    week_question: "",
+    threads: [] as ReadonlyArray<{
+      title: string;
+      who: string;
+      replies: number;
+      last: string;
+      cat: string;
+    }>,
+    empty: "Stua åpner snart. Her blir det prat når døra er på plass.",
   },
 
   /* ── MANIFEST-pullquotes (vises på forsiden) ───────────── */
@@ -182,7 +134,9 @@ export const no = {
   /* ── OM GEIR (kort bio på forsiden) ────────────────────── */
   about: {
     heading: "Hvem skriver dette?",
-    lead: "Geir, 38. Bygger ting i Oslo. Skriver kode på dagtid, brød om kvelden, manifest om natten.",
+    // {alder} erstattes ved render av dynamisk alder (src/lib/age.ts).
+    // Resten står ordrett til Geir dikterer ny bio.
+    lead: "Geir, {alder}. Bygger ting i Skien. Skriver kode på dagtid, brød om kvelden, manifest om natten.",
     interests: [
       "#jakt",
       "#hund",
@@ -249,14 +203,10 @@ export const no = {
   ],
 
   /* ── SITE CHANGELOG ────────────────────────────────────── */
-  changelog: [
-    { date: "20 mai", what: "Lagt til Stua-tråden om elgjakt." },
-    { date: "18 mai", what: "Ny blogpost: «Hvorfor jeg sluttet å scrolle»." },
-    { date: "16 mai", what: "Webringen har fått sitt første medlem (Eirik)." },
-    { date: "14 mai", what: "Subdomene-arkitekturen ferdig satt opp." },
-    { date: "12 mai", what: "Manifestet — første utkast publisert." },
-    { date: "10 mai", what: "Siden ble født. Hei." },
-  ],
+  // Tømt for fabrikkerte oppføringer (inkl. referanse til en blogpost som
+  // ikke finnes). Fylles med ekte endringer etter hvert.
+  changelog: [] as ReadonlyArray<{ date: string; what: string }>,
+  changelog_empty: "Endringsloggen fylles etter hvert som ting skjer.",
 
   /* ── PULLQUOTE som vises på forsiden ───────────────────── */
   homepage_pullquote:
@@ -268,7 +218,8 @@ export const no = {
     sub: "Personlige hjemmesider lenker til hverandre. Som i 1999.",
     prev: "← Forrige",
     next: "Neste →",
-    members: "12 medlemmer",
+    // Ringen er under oppstart — ingen oppdiktet medlemsmasse.
+    members: "ingen medlemmer ennå",
     join: "Bli med",
   },
 

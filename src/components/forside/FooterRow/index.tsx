@@ -22,7 +22,15 @@ export function FooterRow() {
         />
       </div>
       <div className={styles.center}>
-        <WebringWidget variant="card" />
+        <WebringWidget
+          variant="card"
+          title={C.webring.title}
+          subtitle={C.webring.sub}
+          members={C.webring.members}
+          prevLabel={C.webring.prev}
+          nextLabel={C.webring.next}
+          joinLabel={C.webring.join}
+        />
       </div>
       <div className={styles.right}>
         <UnderConstructionBanner />

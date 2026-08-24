@@ -1,7 +1,7 @@
 /*
  * StuaPreview — preview av diskusjonsforumet. Rotert -0.8°. Photo-tape
  * sentrert på toppen. Gul ukens-spørsmål-kort, 4 første tråder med › og meta.
- * Returnerer null hvis hverken ukens-spørsmål eller tråder finnes.
+ * Viser en pen tomtilstand når hverken ukens-spørsmål eller tråder finnes.
  */
 import Link from "next/link";
 import { t } from "@/content/i18n";
@@ -10,7 +10,18 @@ import styles from "./StuaPreview.module.css";
 export function StuaPreview(): React.ReactElement | null {
   const C = t();
   const threads = C.stua.threads.slice(0, 4);
-  if (!C.stua.week_question && threads.length === 0) return null;
+  if (!C.stua.week_question && threads.length === 0) {
+    return (
+      <div className={styles.box}>
+        <span className={styles.tape} aria-hidden />
+        <h3 className={styles.h3}>Stua → akkurat nå</h3>
+        <div className={styles.thread}>{C.stua.empty}</div>
+        <div className={styles.more}>
+          <Link href="/stua">→ Logg inn</Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={styles.box}>
       <span className={styles.tape} aria-hidden />
