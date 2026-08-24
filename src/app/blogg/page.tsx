@@ -9,12 +9,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { HalftoneBlock, UnderConstructionBanner } from "@/components/shared";
 import { t } from "@/content/i18n";
+import { geirAgeLabel } from "@/lib/age";
 import { getAllPosts } from "@/content/posts";
 import { aggregateMonths, aggregateTags } from "@/lib/blog/aggregate";
 import { coverCardSrc, focalToPosition } from "@/lib/blog/cover";
 import styles from "./page.module.css";
 
 export const dynamic = "force-static";
+// Daglig ISR slik at dynamisk alder (om Geir) oppdateres etter bursdag.
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "Bloggen — geish.no",
@@ -174,7 +177,7 @@ export default async function BloggListePage() {
         <aside className={styles.side}>
           <div className={styles.about}>
             <strong>Om Geir</strong>
-            {C.about.lead}
+            {C.about.lead.replace("{alder}", geirAgeLabel())}
             <br />
             <br />
             <Link href="/">→ Tilbake til forsiden</Link>

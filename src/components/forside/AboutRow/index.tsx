@@ -15,6 +15,7 @@
  */
 import type { CSSProperties, ReactElement } from "react";
 import { t } from "@/content/i18n";
+import { geirAgeLabel } from "@/lib/age";
 import styles from "./AboutRow.module.css";
 
 interface PhotoSlot {
@@ -60,9 +61,11 @@ export function AboutRow(): ReactElement {
         <div className={styles.kicker}>{C.about.heading}</div>
         <h3 className={styles.h3}>
           {C.brand.author}.<br />
-          OSLO.
+          {C.brand.city}.
         </h3>
-        <p className={styles.lead}>{C.about.lead}</p>
+        <p className={styles.lead}>
+          {C.about.lead.replace("{alder}", geirAgeLabel())}
+        </p>
         <div className={styles.tags}>
           {C.about.interests.map((tg) => (
             <span key={tg} className={styles.tag}>
