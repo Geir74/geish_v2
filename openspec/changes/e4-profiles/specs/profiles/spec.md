@@ -7,8 +7,9 @@ Prosjektet SHALL definere en `profiles`-tabell i `src/db/schema.ts` (Drizzle
 
 - `id uuid` PRIMARY KEY som samtidig er FOREIGN KEY til `auth.users(id)` med
   `ON DELETE CASCADE`.
-- `display_name text NOT NULL` med en lengdebegrensning (2–40 tegn) håndhevet
-  som `CHECK`-constraint i databasen.
+- `display_name text` (NULL tillatt — Geirs D5: ferske profiler er navnløse og
+  navn avledes aldri fra e-post) med en lengdebegrensning (2–40 tegn NÅR satt)
+  håndhevet som `CHECK`-constraint i databasen. IKKE unikt (Geirs D1).
 - `bio text` (NULL tillatt) med en lengdebegrensning (≤ 300 tegn) som `CHECK`.
 - `created_at timestamptz NOT NULL DEFAULT now()`.
 - `updated_at timestamptz NOT NULL DEFAULT now()`.
@@ -39,9 +40,10 @@ Hver ny rad i `auth.users` SHALL føre til at en tilhørende `profiles`-rad
 opprettes automatisk, uansett hvilken inngangsrute innloggingen skjer via. Dette
 SHALL implementeres som en Postgres-trigger (`AFTER INSERT` på `auth.users`) som
 kaller en `SECURITY DEFINER`-funksjon med `search_path = ''`. Funksjonen SHALL
-sette et default `display_name` utledet fra e-postens lokaldel (med en trygg
-fallback når lokaldelen er tom). Trigger- og funksjons-SQL SHALL være håndskrevet
-og committet i repoet (ikke opprettet ved dashboard-klikking).
+sette KUN `id` — `display_name` forblir NULL (Geirs D5: navn avledes ALDRI fra
+e-post; `/konto` oppfordrer brukeren til å velge et visningsnavn). Trigger- og
+funksjons-SQL SHALL være håndskrevet og committet i repoet (ikke opprettet ved
+dashboard-klikking).
 
 Server-hjelperen som leser profil (`getProfile`) SHALL i tillegg ha en defensiv
 `INSERT ... ON CONFLICT DO NOTHING`-opprettelse som sikkerhetsnett dersom
@@ -50,7 +52,8 @@ triggeren mangler i et miljø.
 #### Scenario: ny bruker får profil
 - **WHEN** en bruker fullfører magic link-innlogging for første gang og det
   opprettes en rad i `auth.users`
-- **THEN** finnes det en tilhørende `profiles`-rad med et default `display_name`
+- **THEN** finnes det en tilhørende `profiles`-rad (navnløs — `display_name` NULL,
+  D5), klar til at brukeren velger et visningsnavn
 
 #### Scenario: trigger-funksjonen er sikkert konfigurert
 - **WHEN** trigger-SQL-en inspiseres
