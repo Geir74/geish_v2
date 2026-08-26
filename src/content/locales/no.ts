@@ -242,7 +242,7 @@ export const no = {
       // Supabase-e-postmalen for Magic Link.
       otpLegend: "eller lim inn engangskoden fra e-posten",
       otpLabel: "Engangskode",
-      otpPlaceholder: "123456",
+      otpPlaceholder: "12345678",
       otpSubmit: "LOGG INN MED KODE",
       otpSubmitting: "SJEKKER …",
       errorOtp:
