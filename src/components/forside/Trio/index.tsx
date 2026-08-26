@@ -8,6 +8,7 @@
 import type { ReactElement } from "react";
 import Link from "next/link";
 import { StatusBadge, type Status } from "@/components/shared";
+import { changelog as changelogEntries, formatDateShort } from "@/content/changelog";
 import { t } from "@/content/i18n";
 import styles from "./Trio.module.css";
 
@@ -17,7 +18,10 @@ export function Trio(): ReactElement | null {
   // number (ikke en litteral), så tom-sjekken under er meningsfull for TS.
   const til = C.til.slice(0, 4);
   const lab = C.lab.slice();
-  const changelog = C.changelog.slice(0, 6);
+  // Endringslogg-data bor i src/content/changelog.ts (delt med /endringslogg).
+  const changelog = changelogEntries
+    .slice(0, 6)
+    .map((e) => ({ date: formatDateShort(e.date), what: e.title }));
   if (til.length === 0 && lab.length === 0 && changelog.length === 0) {
     return null;
   }
@@ -72,7 +76,7 @@ export function Trio(): ReactElement | null {
             </div>
           ))}
           <div className={styles.more}>
-            <Link href="/changelog">→ hele historikken</Link>
+            <Link href="/endringslogg">→ hele historikken</Link>
           </div>
         </section>
       ) : (
