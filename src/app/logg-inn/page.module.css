@@ -158,6 +158,24 @@
   color: var(--ink);
 }
 
+/* ── OTP-fallback i kvitteringen ───────────────────────── */
+.otpForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  border-top: var(--border-dashed);
+  padding-top: var(--sp-4);
+  margin: 0 0 var(--sp-4);
+}
+
+.otpLegend {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
 .resetLink {
   font-family: var(--font-mono);
   font-size: var(--t-meta);

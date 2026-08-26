@@ -237,6 +237,16 @@ export const no = {
       sentAfter:
         "Lenken virker i én time. Åpne den på samme enhet og i samme nettleser som du bestilte den fra.",
       useAnother: "bruk en annen adresse",
+      // OTP-fallback (jobb-PC-er med lenkeskannere «bruker opp» magic-linken;
+      // koden fra samme e-post funker alltid). Krever {{ .Token }} i
+      // Supabase-e-postmalen for Magic Link.
+      otpLegend: "eller lim inn engangskoden fra e-posten",
+      otpLabel: "Engangskode",
+      otpPlaceholder: "123456",
+      otpSubmit: "LOGG INN MED KODE",
+      otpSubmitting: "SJEKKER …",
+      errorOtp:
+        "Koden var ugyldig eller utløpt. Be om en ny lenke og prøv igjen.",
       errorLink:
         "Lenken var ugyldig eller utløpt. Be om en ny under.",
       errorSend:
