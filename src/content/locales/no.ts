@@ -205,8 +205,15 @@ export const no = {
   /* ── SITE CHANGELOG ────────────────────────────────────── */
   // Tømt for fabrikkerte oppføringer (inkl. referanse til en blogpost som
   // ikke finnes). Fylles med ekte endringer etter hvert.
-  changelog: [] as ReadonlyArray<{ date: string; what: string }>,
+  /* Selve oppføringene bor i src/content/changelog.ts (typet, med
+     PR-nummer). Her ligger bare sidetekstene. */
   changelog_empty: "Endringsloggen fylles etter hvert som ting skjer.",
+  endringslogg: {
+    crumb: "ENDRINGSLOGG",
+    heading: "Endringslogg.",
+    deck: "Hva som er nytt på geish.no — nyeste øverst. Under construction er en livsstil; her ser du beviset.",
+    prLabel: "PR #",
+  },
 
   /* ── PULLQUOTE som vises på forsiden ───────────────────── */
   homepage_pullquote:
