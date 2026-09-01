@@ -1,0 +1,120 @@
+/*
+ * SiteNav — «avrevne papirlapper» (mandate-global-nav D5).
+ *
+ * Rom-lenker + auth som små utklippede lapper på en rad. Mono/caps,
+ * dashed «tape»-kant, stempel-rød på hover, lett skjev rotasjon for
+ * cut & paste-følelse. Flex-wrap på mobil — ingen hamburger.
+ * Bruker kun eksisterende designtokens (Constraints).
+ */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--paper);
+  border-bottom: var(--border-dashed);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+}
+
+/* Selve papirlappen. */
+.scrap {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--paper);
+  border: var(--border-dashed);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  /* Lett skjevhet — cut & paste. */
+  transform: rotate(-0.6deg);
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+.item:nth-child(even) .scrap {
+  transform: rotate(0.7deg);
+}
+
+.scrap:hover {
+  color: var(--stamp);
+  transform: rotate(0deg);
+}
+
+/* Aktiv rute — «tapet fast»: stempel-farget kant + fylt. */
+.active,
+.active:hover {
+  color: var(--paper);
+  background: var(--stamp);
+  border-color: var(--stamp);
+  transform: rotate(0deg);
+}
+
+/* Auth-cluster til høyre. */
+.auth {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 30px;
+}
+
+/* Reservert plass mens useUser() laster (ingen layout-shift). */
+.authPlaceholder {
+  display: inline-block;
+  min-width: 84px;
+  min-height: 26px;
+}
+
+.logoutForm {
+  display: inline-flex;
+}
+
+.logout {
+  padding: 4px 10px;
+  background: var(--paper);
+  border: var(--border-dashed);
+  color: var(--stamp);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: rotate(0.7deg);
+  transition: transform 0.12s ease, text-decoration 0.12s ease;
+}
+
+.logout:hover {
+  transform: rotate(0deg);
+  text-decoration: underline;
+}
+
+/* Mobil: lappene wrapper, nav-en tar full bredde. */
+@media (max-width: 480px) {
+  .nav {
+    padding: var(--sp-1) var(--sp-2);
+    gap: var(--sp-1);
+  }
+  .links {
+    gap: var(--sp-1);
+  }
+}
