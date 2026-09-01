@@ -273,6 +273,22 @@ export const no = {
     },
   },
 
+  /* ── NAV — global navigasjon (SiteNav) ──────────────────
+   * Rom-lenker: kun rom som faktisk finnes (Geirs beslutning D2).
+   * Stua/Gjestebok legges til når E5/E6 finnes. Auth-etikettene
+   * her brukes av SiteNav; label = Geir-godkjent copy.
+   */
+  nav: {
+    links: [
+      { href: "/", label: "HJEM" },
+      { href: "/blogg", label: "BLOGG" },
+      { href: "/manifest", label: "MANIFEST" },
+    ],
+    login: "LOGG INN",
+    konto: "MIN SIDE",
+    logout: "LOGG UT",
+  },
+
   /* ── PROFIL — vis/rediger egen profil på /konto (E4) ─────
    * UTKAST: alle disse tekstene skal godkjennes av Geir. Lavmælt zine-tone.
    */
