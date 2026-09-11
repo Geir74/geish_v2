@@ -1,0 +1,42 @@
+name: supabase-keepalive
+
+# Holder geish.no sitt Supabase-prosjekt aktivt. Gratis-tier pauser etter
+# 7 dager uten databaseaktivitet. Denne workflowen kjører i GitHub sin sky
+# (uavhengig av lokal maskin) og sender en lett, lesende forespørsel mot
+# PostgREST-endepunktet slik at inaktivitetstelleren nullstilles.
+# Se openspec/changes/supabase-keepalive/ for kontrakten.
+
+on:
+  schedule:
+    # Daglig 06:17 UTC (skjev tid for å unngå trengsel på hele/halve timer).
+    - cron: '17 6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase PostgREST
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_PUBLISHABLE_KEY:-}" ]; then
+            echo "::error::SUPABASE_URL og/eller SUPABASE_PUBLISHABLE_KEY mangler som repository secrets."
+            exit 1
+          fi
+          echo "Pinger ${SUPABASE_URL}/rest/v1/ ..."
+          code=$(curl -sS -o /dev/null -w '%{http_code}' \
+            --retry 3 --retry-delay 5 --max-time 30 \
+            -H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_PUBLISHABLE_KEY}" \
+            "${SUPABASE_URL}/rest/v1/")
+          echo "HTTP ${code}"
+          case "$code" in
+            2*) echo "Keepalive OK – prosjektet er vekket/holdt aktivt." ;;
+            *)  echo "::error::Keepalive feilet med HTTP ${code}."; exit 1 ;;
+          esac
