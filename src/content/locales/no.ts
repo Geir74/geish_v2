@@ -303,4 +303,13 @@ export const no = {
     errorNameTooLong: "Visningsnavnet kan være høyst 40 tegn.",
     errorBioTooLong: "«Om deg» kan være høyst 300 tegn.",
   },
+
+  /* ── ADMIN (E4.5) ─────────────────────────── */
+  // Nesten tomt admin-tak. Fylles på når E5/E6 lander paneler.
+  admin: {
+    crumb: "ADMIN",
+    heading: "ADMIN",
+    lede: "Bakrommet. Her styres det som skal styres — når det finnes noe å styre.",
+    empty: "Ingen paneler ennå. De dukker opp her etter hvert.",
+  },
 } as const;
