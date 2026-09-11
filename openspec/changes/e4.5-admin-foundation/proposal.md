@@ -21,10 +21,11 @@ trenger, uten en moderering-motor vi ikke har brukere for (YAGNI).
   `ADMIN_USER_ID` (Supabase auth-UUID). Ingen role-kolonne, ingen DB-endring
   (D1). Fail closed: mangler env → ingen er admin.
 - **`/admin`-tak.** Beskyttet, `force-dynamic`, guardet med `getUser()` +
-  `isAdmin()`. Ikke-admin nektes uten å lekke innhold. Minimal landingsside;
-  E5/E6 legger paneler under `/admin/*`.
-- **Moderering-mønster** (ikke motor): server actions bak `isAdmin()`, progressiv
-  `<form action>`, `revalidatePath`. Dokumentert for gjenbruk.
+  `isAdmin()`. Ikke-admin → **404** (D3: lekker ikke at området finnes). Nesten
+  tom landingsside i fanzine-stil; E5/E6 legger paneler under `/admin/*`.
+- **Moderering-mønster: UT av E4.5** (gjennomgang B) — et mønster uten faktisk
+  bruker speses i blinde; utledes fra E5s første panel. E4.5 = `isAdmin()` +
+  `/admin`-guard + tom landingsside, punktum.
 - **Copy-slice `admin`** i `no.ts` (utkast, Geir godkjenner): overskrift,
   tom-tilstand, «ikke autorisert».
 - **`.env.example`/dokumentasjon** oppdateres med `ADMIN_USER_ID` (verdien selv

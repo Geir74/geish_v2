@@ -39,8 +39,11 @@ finnes får en litt forvirrende 404. Akseptabelt — det er ett menneske (Geir e
 eneste admin), og personvern/angrepsflate veier tyngre enn den kosmetiske
 forvirringen.
 
-**Alternativ hvis Geir foretrekker:** redirect til forsiden med nøytral tekst.
-Besluttes før 3.1 implementeres.
+**AVGJORT 2026-09-11:** Geir bekreftet 404. Redirect-alternativet forkastet.
+
+**Fanzine 404-side (senere):** Geir har en idé om en retro 404-side à la NRKs
+gamle blå tv-feilmelding. Eget spor i backlog — ikke del av E4.5 (E4.5 bruker
+standard `notFound()`).
 
 ## D4: Guard i server-laget, ikke middleware
 
@@ -54,14 +57,17 @@ der handlingen skjer gjør sikkerheten lesbar og testbar. Konsistent med E3/E4.
 
 ## D5: Tak nå, paneler senere
 
-**Valg:** E4.5 leverer `/admin`-landingsside + guard + mønster. Ingen faktiske
-moderering-paneler (de kommer med E5/E6).
+**Valg:** E4.5 leverer `/admin`-landingsside (nesten tom, fanzine-stil) + guard.
+Ingen faktiske moderering-paneler og INGEN moderering-mønster (utledes fra E5s
+første panel — gjennomgang B, 2026-09-11). De kommer med E5/E6.
 
 **Hvorfor:** Ikke bygg kartet før landskapet. Taket er verdifullt uansett hvilket
 rom som kommer først; panelene speses når flaten de modererer faktisk finnes.
 
-## Åpent for Geir før implementering
+## Avklart i gjennomgang med Geir 2026-09-11
 
-- **D3-bekreftelse:** 404 (anbefalt) vs redirect til forsiden? Standard = 404.
-- **`/admin/layout.tsx`:** bygges nå (felles guard for `/admin/*`) eller vent til
-  E5 legger første underrute? Anbefaling: minimal layout nå, så E5 arver guarden.
+- **D3:** 404 (ikke redirect). AVGJORT.
+- **Landingsside:** nesten tom, fanzine-stil, fylles på etter hvert. AVGJORT (i).
+- **Moderering-mønster:** UT av E4.5, utledes fra E5. AVGJORT (B).
+- **`/admin/layout.tsx`:** minimal layout nå (felles guard), så E5 arver guarden.
+  AVGJORT.

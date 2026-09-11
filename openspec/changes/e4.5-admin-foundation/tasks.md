@@ -19,20 +19,21 @@
 ## 3. /admin-tak + guard
 
 - [ ] 3.1 `src/app/admin/page.tsx`: `force-dynamic`, `getUser()` + `isAdmin()`-
-  guard. Ikke-admin → `notFound()` (404, lekker ikke innhold) — bekreft valg
-  mot design (404 vs redirect).
-- [ ] 3.2 Minimal admin-landingsside (zine-stil, gjenbruk tokens): overskrift +
-  plass for senere paneler (E5/E6). Tom-tilstand-tekst via `t()`.
+  guard. Ikke-admin → `notFound()` (404, lekker ikke innhold). D3 AVGJORT: 404,
+  ikke redirect.
+- [ ] 3.2 Minimal admin-landingsside i FANZINE-stil (Cut & Paste zine-løk,
+  gjenbruk tokens): overskrift + tom-tilstand «ingen paneler ennå» via `t()`.
+  NESTEN TOM — ikke bygg tomme panel-seksjoner for E5/E6 (ikke kart før landskap).
 - [ ] 3.3 `src/app/admin/layout.tsx` (valgfritt hvis flere `/admin/*` ruter
   trengs allerede): felles guard/ramme så E5/E6 slipper å repetere guarden.
 
-## 4. Moderering-mønster (dokumentasjon + minimal referanse)
+## 4. Moderering-mønster — UT AV E4.5 (gjennomgang B, 2026-09-11)
 
-- [ ] 4.1 Kort mønster-notat (i mandat/PR eller `openspec/`): moderering =
-  server action bak `isAdmin()`-guard + progressiv `<form action>` +
-  `revalidatePath`. E5 er første forbruker.
-- [ ] 4.2 Ingen generisk moderering-motor bygges (bevisst — hver flate bringer
-  egen tabell/panel).
+- [x] 4.1 BESLUTNING: moderering-mønsteret er FJERNET fra E4.5. Et mønster uten
+  en faktisk bruker speses i blinde; det utledes fra E5s første faktiske panel.
+  E4.5 leverer kun `isAdmin()` + `/admin`-guard + tom fanzine-landingsside.
+- [x] 4.2 Ingen generisk moderering-motor (bevisst — hver flate bringer egen
+  tabell/panel).
 
 ## 5. Copy
 

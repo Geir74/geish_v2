@@ -44,20 +44,7 @@ for admin med plass til at senere flater (E5/E6) legger sine paneler under.
 - **THEN** nektes tilgang (404 eller redirect), og siden avslører ikke
   admin-innhold
 
-### Requirement: moderering-mønster for gjenbruk
-
-Prosjektet SHALL etablere et dokumentert mønster som E5/E6 kopierer for
-moderering: server actions bak `isAdmin()`-guard, progressiv `<form action>`
-som funker uten JavaScript, og `revalidatePath` etter mutasjon. E4.5 leverer
-mønsteret (ikke en generisk moderering-motor); hver senere flate bringer sin
-egen tabell og sitt eget panel under `/admin`.
-
-#### Scenario: moderering-action er guardet
-- **WHEN** en moderering-server-action (nå eller i E5/E6) kalles
-- **THEN** starter den med `isAdmin()`-guard og avviser ikke-admin før noen
-  mutasjon skjer
-
-#### Scenario: fungerer uten JS
-- **WHEN** et admin-panel rendres uten klient-JavaScript
-- **THEN** kan admin fortsatt utføre handlinger via `<form action={...}>`
-  (progressiv forbedring)
+> Moderering-mønster-kravet er BEVISST UTELATT fra E4.5 (gjennomgang med Geir
+> 2026-09-11, beslutning B): et mønster uten en faktisk bruker speses i blinde.
+> Det utledes fra E5s første faktiske moderering-panel i stedet. E4.5 leverer kun
+> `isAdmin()` + `/admin`-guard + en nesten tom fanzine-landingsside.
