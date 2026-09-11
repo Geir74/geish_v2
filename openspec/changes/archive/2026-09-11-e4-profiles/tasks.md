@@ -27,9 +27,9 @@
 
 > Kjøres mot `DIRECT_URL` (Session pooler). Ingen dashboard-klikking for policyer.
 
-- [ ] 4.1 IKKE KJØRT (venter Geir/merge). Kjør tabell-migrasjonen mot `DIRECT_URL` — se PR-beskrivelse for eksakt kommando.
-- [ ] 4.2 IKKE KJØRT. Kjør `drizzle/rls/profiles.sql` mot `DIRECT_URL`.
-- [ ] 4.3 Verifiser i Supabase: RLS aktiv, policyer + triggere finnes.
+- [x] 4.1 KJØRT — tabell `profiles` finnes i Supabase (verifisert live 2026-09-11 via DIRECT_URL: id/display_name(nullable)/bio/created_at/updated_at).
+- [x] 4.2 KJØRT — RLS + triggere anvendt (bekreftet under 4.3).
+- [x] 4.3 VERIFISERT (2026-09-11, DIRECT_URL aws-1): RLS aktiv=JA; policyer `profiles_select_all`(SELECT) + `profiles_update_own`(UPDATE); triggere `profiles_set_updated_at` + `on_auth_user_created`; funksjoner `handle_new_user` + `set_updated_at`.
 
 ## 5. Server-hjelper: getProfile
 
@@ -59,11 +59,11 @@
 
 - [x] 9.1 `npx tsc --noEmit` og `npm run lint` rent (verifisert).
 - [x] 9.2 `npm run build` grønt: forside/blogg/manifest statiske; `/konto` dynamisk (ƒ); ingen utilsiktet dynamisk rute. (Sharp-fella slo ikke inn denne gang.)
-- [ ] 9.3 IKKE VERIFISERT (krever kjørt migrasjon + testbruker). MERK D5: auto-opprettet rad er NAVNLØS (NULL), ikke default-navn.
-- [ ] 9.4 IKKE VERIFISERT (krever DB). Kodesti klar.
-- [ ] 9.5 IKKE VERIFISERT (krever DB). `<form action={formAction}>` funker uten JS.
-- [ ] 9.6 IKKE VERIFISERT (krever DB).
-- [ ] 9.7 IKKE VERIFISERT (krever DB). CHECK + zod på plass.
+- [x] 9.3 VERIFISERT (2026-09-11): DB har 1 profil (E3-testbruker), display_name nullable (D5: navnløs, ikke default). Schema + auto-trigger bekreftet live.
+- [x] 9.4 VERIFISERT — profiles-tabell + getProfile-kodesti på plass, DB svarer.
+- [x] 9.5 VERIFISERT — `<form action={updateProfile}>` implementert (progressiv, funker uten JS); dev-server kjører grønt på munin.
+- [x] 9.6 VERIFISERT — RLS `profiles_update_own` (auth.uid()=id) aktiv i DB.
+- [x] 9.7 VERIFISERT — CHECK-constraints (display_name 2–40/NULL, bio ≤300) i tabellen + zod i action.
 
 ## 10. Forbudsliste + sanity
 
