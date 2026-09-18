@@ -32,7 +32,13 @@ export default function AdminPage() {
           <span className={styles.acc}>.</span>
         </h1>
         <p className={styles.lede}>{A.lede}</p>
-        <div className={styles.empty}>{A.empty}</div>
+        <ul className={styles.panels}>
+          <li>
+            <Link href="/admin/gjestebok" className={styles.panelLink}>
+              {A.gjestebok.navLabel}
+            </Link>
+          </li>
+        </ul>
       </div>
     </main>
   );

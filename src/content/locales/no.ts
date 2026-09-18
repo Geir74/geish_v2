@@ -338,5 +338,31 @@ export const no = {
     heading: "ADMIN",
     lede: "Bakrommet. Her styres det som skal styres — når det finnes noe å styre.",
     empty: "Ingen paneler ennå. De dukker opp her etter hvert.",
+    // Gjestebok-moderering-panel (E5, task 4.1).
+    gjestebok: {
+      navLabel: "Gjestebok",
+      crumb: "GJESTEBOK",
+      heading: "GJESTEBOK",
+      lede: "Alle innlegg, nyeste øverst. Ventende trenger godkjenning før de vises.",
+      empty: "Ingen innlegg ennå.",
+      // Statusetiketter.
+      statusPending: "Venter",
+      statusPublished: "Publisert",
+      statusHidden: "Skjult",
+      // Handlinger.
+      show: "Vis",
+      hide: "Skjul",
+      delete: "Slett",
+      edit: "Rediger",
+      save: "Lagre",
+      cancel: "Avbryt",
+      // Rediger-avgrensning (D4): kun retting, aldri meningsendring.
+      editNote:
+        "Rediger kun for å rette skrivefeil eller fjerne sensitiv info — aldri endre meningen.",
+      editNameLabel: "Navn",
+      editBodyLabel: "Hilsen",
+      // Bekreftelse ved sletting.
+      confirmDelete: "Slette dette innlegget for godt?",
+    },
   },
 } as const;

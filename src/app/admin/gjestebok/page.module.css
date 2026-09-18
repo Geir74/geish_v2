@@ -1,0 +1,227 @@
+/*
+ * /admin/gjestebok — modererings-panel. Zine-stil, konsistent med /admin.
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+/* ── Brødsmule ─────────────────────────────────────────────── */
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.current {
+  color: var(--ink);
+}
+
+/* ── Innhold ───────────────────────────────────────────────── */
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-6) var(--sp-12);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 0.92;
+  margin: 0 0 var(--sp-4);
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.acc {
+  color: var(--stamp);
+}
+
+.lede {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0 0 var(--sp-8);
+  max-width: 50ch;
+}
+
+.empty {
+  border: var(--border);
+  padding: var(--sp-8) var(--sp-6);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  text-align: center;
+}
+
+/* ── Liste ─────────────────────────────────────────────────── */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.row {
+  border: var(--border);
+  padding: var(--sp-4);
+}
+
+/* Pending fremhevet (D4): venter godkjenning. */
+.rowPending {
+  border-left: 3px solid var(--stamp);
+  background: color-mix(in oklab, var(--stamp) 5%, transparent);
+}
+
+.rowHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: baseline;
+  margin-bottom: var(--sp-2);
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px var(--sp-2);
+  border: var(--border);
+}
+
+.badge_pending {
+  color: var(--stamp);
+  border-color: var(--stamp);
+}
+
+.badge_published {
+  color: var(--ink);
+}
+
+.badge_hidden {
+  color: var(--ink-fade);
+}
+
+.rowName {
+  font-weight: 600;
+}
+
+.rowDate {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-left: auto;
+}
+
+.rowBody {
+  margin: 0 0 var(--sp-3);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── Handlinger ────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.btn,
+.btnGhost,
+.btnDanger {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-3);
+  border: var(--border);
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn {
+  background: var(--ink);
+  color: var(--paper, #fff);
+}
+
+.btnGhost {
+  color: var(--ink-soft);
+}
+
+.btnDanger {
+  color: var(--stamp);
+  border-color: var(--stamp);
+}
+
+.btn:disabled,
+.btnGhost:disabled,
+.btnDanger:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ── Rediger-skjema (inline) ───────────────────────────────── */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.editNote {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin: 0;
+  padding: var(--sp-2);
+  border-left: 2px solid var(--ink-fade);
+}
+
+.editField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.editInput,
+.editTextarea {
+  font-family: var(--font-typewriter);
+  font-size: 14px;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ink);
+  background: transparent;
+  border: var(--border);
+  padding: var(--sp-2);
+  width: 100%;
+}
+
+.editTextarea {
+  resize: vertical;
+  min-height: 80px;
+}

@@ -72,3 +72,30 @@
   text-align: center;
   transform: rotate(-0.6deg);
 }
+
+/* ── Panel-lenker (E5: gjestebok, senere flere) ────────────── */
+.panels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.panelLink {
+  display: block;
+  border: var(--border);
+  padding: var(--sp-4) var(--sp-5);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.panelLink:hover {
+  background: var(--ink);
+  color: var(--paper, #fff);
+}
