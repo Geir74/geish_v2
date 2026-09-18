@@ -102,6 +102,33 @@ export const no = {
   guestbook: [] as ReadonlyArray<{ who: string; when: string; msg: string }>,
   guestbook_empty: "Gjesteboka er tom ennå — bli den første til å skrive noe pent.",
 
+  /* ── GJESTEBOK (E5) ─ full side + skjema ──────────────────── */
+  gjestebok: {
+    title: "Gjestebok",
+    intro:
+      "Legg igjen en hilsen. Ingen pålogging kreves — skriv navnet du vil gå under, og noen ord.",
+    empty: "Gjesteboka er tom ennå — bli den første til å skrive noe pent.",
+    form: {
+      nameLabel: "Navn",
+      namePlaceholder: "Hva vil du kalles?",
+      messageLabel: "Hilsen",
+      messagePlaceholder: "Skriv noen ord …",
+      submit: "Skriv i gjesteboka",
+      submitting: "Sender …",
+    },
+    // Anonyme innlegg havner i kø; innloggede vises umiddelbart (D1).
+    successPublished: "Takk! Hilsenen din er lagt til i gjesteboka.",
+    successPending:
+      "Takk! Hilsenen din er sendt inn og vises når den er godkjent.",
+    errors: {
+      nameRequired: "Skriv et navn (kan ikke være tomt).",
+      nameTooLong: "Navnet er for langt (maks 60 tegn).",
+      messageRequired: "Skriv en hilsen (kan ikke være tom).",
+      messageTooLong: "Hilsenen er for lang (maks 2000 tegn).",
+      generic: "Noe gikk galt. Prøv igjen.",
+    },
+  },
+
   /* ── BLOGG-POSTER ──────────────────────────────────────────
      Fjernet i e2-blog-engine. BlogStrip leser nå ekte poster
      fra MDX-pipelinen (src/content/posts/*.mdx) via getAllPosts(). */
