@@ -7,23 +7,23 @@
 - [x] 1.4 Kjørt mot Supabase (DIRECT_URL) + verifisert: RLS aktiv, kun published-SELECT-policy, anon/authenticated har kun SELECT (truncate-hull funnet+lukket)
 
 ## 2. Offentlig gjestebok
-- [ ] 2.1 `gjestebok`-slice i `src/content/locales/no.ts` (tittel, skjema-labels, feilmeldinger, tomtilstand)
-- [ ] 2.2 `getPublishedEntries()` i `src/lib/guestbook/` – leser published via Drizzle, nyest først
-- [ ] 2.3 `src/app/gjestebok/page.tsx` – server component, lister innlegg (navn/melding/dato), ingen e-post
-- [ ] 2.4 Skjema-client-component: navn + melding + usynlig honeypot, poster til server action
+- [x] 2.1 `gjestebok`-slice i `src/content/locales/no.ts` (tittel, skjema-labels, feilmeldinger, tomtilstand)
+- [x] 2.2 `getPublishedEntries()` i `src/lib/guestbook/` – leser published via Drizzle, nyest først
+- [x] 2.3 `src/app/gjestebok/page.tsx` – server component, lister innlegg (navn/melding/dato), ingen e-post
+- [x] 2.4 Skjema-client-component: navn + melding + usynlig honeypot, poster til server action
 
 ## 3. Innsending (server action)
-- [ ] 3.1 `submitEntry`-server-action: honeypot-sjekk → forkast stille ved utfylt
-- [ ] 3.2 Valider navn+melding (lengde), returner t()-feil ved feil
-- [ ] 3.3 getUser() → innlogget: status=published + author_id; anonym: status=pending + author_id NULL
-- [ ] 3.4 Skriv via Drizzle, revalider /gjestebok
+- [x] 3.1 `submitEntry`-server-action: honeypot-sjekk → forkast stille ved utfylt
+- [x] 3.2 Valider navn+melding (lengde), returner t()-feil ved feil
+- [x] 3.3 getUser() → innlogget: status=published + author_id; anonym: status=pending + author_id NULL
+- [x] 3.4 Skriv via Drizzle, revalider /gjestebok
 
 ## 4. Admin-moderering
-- [ ] 4.1 `admin`-copy utvides i no.ts (gjestebok-panel)
-- [ ] 4.2 `src/app/admin/gjestebok/page.tsx` – guardet, lister ALLE innlegg (nyest først, status synlig, pending fremhevet)
-- [ ] 4.3 Moderering-server-actions (vis/skjul/slett) – isAdmin()-sjekk FØR skriving, updated_at=now()
-- [ ] 4.3b Rediger-server-action (author_name/body, rører ikke status) + edit-UI – isAdmin()-sjekk FØR skriving
-- [ ] 4.4 Lenke fra /admin-landingssiden til /admin/gjestebok
+- [x] 4.1 `admin`-copy utvides i no.ts (gjestebok-panel)
+- [x] 4.2 `src/app/admin/gjestebok/page.tsx` – guardet, lister ALLE innlegg (nyest først, status synlig, pending fremhevet)
+- [x] 4.3 Moderering-server-actions (vis/skjul/slett) – isAdmin()-sjekk FØR skriving, updated_at=now()
+- [x] 4.3b Rediger-server-action (author_name/body, rører ikke status) + edit-UI – isAdmin()-sjekk FØR skriving
+- [x] 4.4 Lenke fra /admin-landingssiden til /admin/gjestebok
 
 ## 5. Verifisering
 - [ ] 5.1 `npx tsc --noEmit` rent
