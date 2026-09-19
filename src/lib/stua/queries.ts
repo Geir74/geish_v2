@@ -10,7 +10,7 @@
  * stua_threads(room_id, last_activity_at desc). Ingen N+1 — forfatter hentes via
  * left join mot profiles.
  */
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { profiles, stuaPosts, stuaRooms, stuaThreads } from "@/db/schema";
@@ -56,6 +56,49 @@ function authorName(
 ): string {
   if (!authorId) return "stormtrooper";
   return displayNameFor({ id: authorId, displayName });
+}
+
+/**
+ * Offentlig-trygge Stua-tall for forside-preview (E6 bolk 7). KUN aggregerte
+ * antall — ingen titler, ingen navn, ingen brukerdata. Trygt å vise til
+ * utloggede. Teller kun PUBLISHED tråder.
+ */
+export async function getStuaPublicStats(): Promise<{
+  roomCount: number;
+  threadCount: number;
+}> {
+  const [rooms] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(stuaRooms);
+  const [threads] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(stuaThreads)
+    .where(eq(stuaThreads.status, "published"));
+  return {
+    roomCount: rooms?.n ?? 0,
+    threadCount: threads?.n ?? 0,
+  };
+}
+
+/**
+ * Nyeste published tråder (titler + meta) for forside-preview — KALLES KUN for
+ * innloggede lesere (bolk 7). Aldri render til utloggede: titler er innhold bak
+ * døra. Nyeste aktivitet øverst.
+ */
+export async function getStuaRecentThreads(
+  limit = 4,
+): Promise<{ slug: string; title: string; replyCount: number }[]> {
+  const rows = await db
+    .select({
+      slug: stuaThreads.slug,
+      title: stuaThreads.title,
+      replyCount: stuaThreads.replyCount,
+    })
+    .from(stuaThreads)
+    .where(eq(stuaThreads.status, "published"))
+    .orderBy(desc(stuaThreads.lastActivityAt))
+    .limit(limit);
+  return rows;
 }
 
 /** Alle rom, admin-definert rekkefølge. */
@@ -178,14 +221,24 @@ export async function getThreadBySlug(
   };
 }
 
-/** Lazy blogg-tråd-oppslag via source_slug (for «Diskuter i Stua»-flyten). */
+/**
+ * Lazy blogg-tråd-oppslag via source_slug (for «Diskuter i Stua»-flyten).
+ * Kun PUBLISHED tråder returneres (Hugin bolk 2-3): en skjult/moderert blogg-
+ * tråd skal ikke lenkes til fra bloggen — da faller flyten tilbake til «start
+ * diskusjonen»-skjemaet i stedet for å peke mot en notFound.
+ */
 export async function getThreadBySourceSlug(
   sourceSlug: string,
 ): Promise<{ slug: string } | null> {
   const [thread] = await db
     .select({ slug: stuaThreads.slug })
     .from(stuaThreads)
-    .where(eq(stuaThreads.sourceSlug, sourceSlug))
+    .where(
+      and(
+        eq(stuaThreads.sourceSlug, sourceSlug),
+        eq(stuaThreads.status, "published"),
+      ),
+    )
     .limit(1);
   return thread ?? null;
 }

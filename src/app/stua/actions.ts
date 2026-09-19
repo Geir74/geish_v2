@@ -117,6 +117,120 @@ export async function createThread(
   }
 }
 
+/**
+ * Start (eller finn) blogg-diskusjonstråd for en bloggpost — lazy + race-sikret
+ * (E6 bolk 5). source_slug = bloggpost-slug, UNIQUE i DB → høyst én tråd per post.
+ *
+ * To brukere kan trykke «Start diskusjonen» samtidig; derfor INSERT ... ON
+ * CONFLICT (source_slug) DO NOTHING, deretter re-select vinnende tråd. Slug
+ * genereres fra posttittelen (unik pr. bolk 4-flyt); ved source_slug-kollisjon
+ * kastes vår rad og vi bruker den som allerede finnes. Legges alltid i
+ * Blogg-rommet.
+ */
+export async function startBlogThread(
+  bloggSlug: string,
+  title: string,
+  formData: FormData,
+): Promise<StuaActionResult> {
+  const S = t().stuaForum;
+  const userId = await currentUserId();
+  if (!userId) return { ok: false, message: S.errors.notLoggedIn };
+
+  const source = String(bloggSlug ?? "").trim();
+  if (!source) return { ok: false, message: S.errors.generic };
+
+  const titleP = titleSchema.safeParse(title ?? "");
+  if (!titleP.success) {
+    const k = titleP.error.issues[0]?.message as keyof typeof S.errors;
+    return { ok: false, message: S.errors[k] ?? S.errors.generic };
+  }
+  const bodyP = bodySchema.safeParse(formData.get("body") ?? "");
+  if (!bodyP.success) {
+    const k = bodyP.error.issues[0]?.message as keyof typeof S.errors;
+    return { ok: false, message: S.errors[k] ?? S.errors.generic };
+  }
+
+  // Finnes tråden allerede (published)? → rett dit, ingen skriving.
+  const existing = await getExistingBlogThreadSlug(source);
+  if (existing) return { ok: true, slug: existing };
+
+  const [room] = await db
+    .select({ id: stuaRooms.id })
+    .from(stuaRooms)
+    .where(eq(stuaRooms.slug, "blogg"))
+    .limit(1);
+  if (!room) return { ok: false, message: S.errors.generic };
+
+  const base = baseThreadSlug(titleP.data);
+  const slug = await uniqueThreadSlug(base, async (candidate) => {
+    const [hit] = await db
+      .select({ id: stuaThreads.id })
+      .from(stuaThreads)
+      .where(eq(stuaThreads.slug, candidate))
+      .limit(1);
+    return Boolean(hit);
+  });
+
+  let createdSlug: string | null = null;
+  try {
+    await db.transaction(async (tx) => {
+      // ON CONFLICT (source_slug) DO NOTHING: taper race → returning() tom.
+      const inserted = await tx
+        .insert(stuaThreads)
+        .values({
+          roomId: room.id,
+          authorId: userId,
+          title: titleP.data,
+          slug,
+          sourceSlug: source,
+        })
+        .onConflictDoNothing({ target: stuaThreads.sourceSlug })
+        .returning({ id: stuaThreads.id, slug: stuaThreads.slug });
+
+      if (inserted.length === 0) {
+        // Race tapt: en annen request opprettet tråden. La transaksjonen stå,
+        // vinneren re-selectes utenfor.
+        return;
+      }
+      createdSlug = inserted[0].slug;
+      await tx.insert(stuaPosts).values({
+        threadId: inserted[0].id,
+        authorId: userId,
+        body: bodyP.data,
+      });
+    });
+  } catch {
+    return { ok: false, message: S.errors.generic };
+  }
+
+  if (createdSlug) {
+    revalidatePath("/stua/blogg");
+    return { ok: true, slug: createdSlug };
+  }
+
+  // Race tapt → re-select vinnende tråd.
+  const winner = await getExistingBlogThreadSlug(source);
+  if (winner) return { ok: true, slug: winner };
+  return { ok: false, message: S.errors.generic };
+}
+
+/** Intern: published blogg-tråd for et source_slug, eller null. */
+async function getExistingBlogThreadSlug(
+  source: string,
+): Promise<string | null> {
+  const [hit] = await db
+    .select({ slug: stuaThreads.slug })
+    .from(stuaThreads)
+    .where(
+      and(
+        eq(stuaThreads.sourceSlug, source),
+        eq(stuaThreads.status, "published"),
+      ),
+    )
+    .limit(1);
+  return hit?.slug ?? null;
+}
+
 /** Svar i en tråd. Bump last_activity_at + reply_count. */
 export async function createReply(
   threadId: string,

@@ -147,6 +147,14 @@ export const no = {
       last: string;
       cat: string;
     }>,
+    preview: {
+      threadsWord: "tråder",
+      roomsWord: "rom",
+      threadsReplies: "svar",
+      locked: "Logg inn for å se hva som rører seg.",
+      loginCta: "Logg inn",
+      enterCta: "Inn i Stua",
+    },
     empty: "Stua åpner snart. Her blir det prat når døra er på plass.",
   },
 
@@ -352,6 +360,13 @@ export const no = {
     },
     hiddenBadge: "Skjult",
     hiddenPost: "[skjult]",
+    // «Diskuter i Stua»-flyten fra en bloggpost (E6 bolk 5).
+    blogThread: {
+      crumb: "Diskusjon",
+      heading: "Start diskusjonen",
+      intro:
+        "Ingen har tatt ordet om denne posten ennå. Skriv det første innlegget, så åpner du tråden.",
+    },
     errors: {
       titleRequired: "Skriv en tittel.",
       titleTooLong: "Tittelen er for lang (maks 160 tegn).",
@@ -394,6 +409,39 @@ export const no = {
       editBodyLabel: "Hilsen",
       // Bekreftelse ved sletting.
       confirmDelete: "Slette dette innlegget for godt?",
+    },
+    // Stua-moderering-panel (E6, bolk 6).
+    stua: {
+      navLabel: "Stua",
+      crumb: "STUA",
+      heading: "STUA",
+      lede: "Alle rom, tråder og innlegg — også skjulte. Moderer det som må modereres.",
+      emptyRoom: "Ingen tråder i dette rommet.",
+      // Statusetiketter.
+      statusPublished: "Publisert",
+      statusHidden: "Skjult",
+      openingPost: "åpningsinnlegg",
+      replies: "svar",
+      // Tråd-handlinger.
+      showThread: "Vis tråd",
+      hideThread: "Skjul tråd",
+      deleteThread: "Slett tråd",
+      editTitle: "Rediger tittel",
+      moveTo: "Flytt til",
+      selectRoom: "Velg rom …",
+      // Innlegg-handlinger.
+      showPost: "Vis",
+      hidePost: "Skjul",
+      editPost: "Rediger",
+      anonymize: "Anonymiser",
+      // Felles.
+      save: "Lagre",
+      cancel: "Avbryt",
+      // Bekreftelser (destruktivt).
+      confirmDeleteThread:
+        "Slette hele tråden inkl. alle svar for godt?",
+      confirmAnonymize:
+        "Anonymisere dette innlegget? Forfatteren kobles fra permanent.",
     },
   },
 } as const;
