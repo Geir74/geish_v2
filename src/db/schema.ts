@@ -9,6 +9,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import {
   check,
+  index,
   integer,
   pgSchema,
   pgTable,
@@ -169,6 +170,11 @@ export const stuaThreads = pgTable(
   (table) => [
     check("thread_title_len", sql`char_length(trim(${table.title})) between 1 and 160`),
     check("thread_status_valid", sql`${table.status} in ('published', 'hidden')`),
+    // Varmeste query: trådliste per rom sortert nyeste aktivitet (Hugin bolk 1).
+    index("stua_threads_room_activity_idx").on(
+      table.roomId,
+      table.lastActivityAt.desc(),
+    ),
   ],
 );
 
@@ -197,6 +203,11 @@ export const stuaPosts = pgTable(
   (table) => [
     check("post_body_len", sql`char_length(trim(${table.body})) between 1 and 10000`),
     check("post_status_valid", sql`${table.status} in ('published', 'hidden')`),
+    // Nest varmest: svar per tråd kronologisk (Hugin bolk 1).
+    index("stua_posts_thread_created_idx").on(
+      table.threadId,
+      table.createdAt,
+    ),
   ],
 );
 

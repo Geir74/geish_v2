@@ -1,0 +1,2 @@
+CREATE INDEX "stua_posts_thread_created_idx" ON "stua_posts" USING btree ("thread_id","created_at");--> statement-breakpoint
+CREATE INDEX "stua_threads_room_activity_idx" ON "stua_threads" USING btree ("room_id","last_activity_at" DESC NULLS LAST);
