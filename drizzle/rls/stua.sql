@@ -24,6 +24,9 @@ create policy "stua_rooms_select_auth"
 
 -- Ingen klient-skriving: rom er admin-styrt (seedet via server/SQL).
 revoke insert, update, delete, truncate on public.stua_rooms from anon, authenticated;
+-- Dybdeforsvar (Hugin bolk 1): eksplisitt revoke SELECT fra anon (RLS dekker
+-- allerede via `to authenticated`-policy, men fjern grant-en helt for sikkerhets skyld).
+revoke select on public.stua_rooms from anon;
 
 -- ══ stua_threads ════════════════════════════════════════════════════════════
 alter table public.stua_threads enable row level security;
@@ -37,6 +40,7 @@ create policy "stua_threads_select_auth_published"
   using (status = 'published');
 
 revoke insert, update, delete, truncate on public.stua_threads from anon, authenticated;
+revoke select on public.stua_threads from anon;
 
 -- ══ stua_posts ══════════════════════════════════════════════════════════════
 alter table public.stua_posts enable row level security;
@@ -51,6 +55,7 @@ create policy "stua_posts_select_auth_published"
   using (status = 'published');
 
 revoke insert, update, delete, truncate on public.stua_posts from anon, authenticated;
+revoke select on public.stua_posts from anon;
 
 -- ══ updated_at-trigger (gjenbruk public.set_updated_at fra profiles.sql) ══════
 create or replace function public.set_updated_at()

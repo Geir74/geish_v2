@@ -18,40 +18,40 @@
       eller idempotent SQL (sort_order styrer visning)
 
 ## 2. Slug + hjelpere
-- [ ] 2.1 `src/lib/stua/slugify.ts`: translitterering (æ→ae/ø→oe/å→aa),
+- [x] 2.1 `src/lib/stua/slugify.ts`: translitterering (æ→ae/ø→oe/å→aa),
       lowercase, ikke-alfanum→bindestrek, trim; tom → `traad-<kort-id>`
-- [ ] 2.2 `uniqueThreadSlug(base)`: sjekk mot eksisterende slugs, suffiks -2/-3
+- [x] 2.2 `uniqueThreadSlug(base)`: sjekk mot eksisterende slugs, suffiks -2/-3
       (server-side, i skrive-action-transaksjon)
-- [ ] 2.3 Enhetstest slugify: norsk tittel, kun-emoji-tittel, kollisjon
+- [x] 2.3 Enhetstest slugify: norsk tittel, kun-emoji-tittel, kollisjon
 
 ## 3. Tilgangsguard + lesing
-- [ ] 3.1 `src/app/stua/layout.tsx`: getUser-guard, utlogget →
+- [x] 3.1 `src/app/stua/layout.tsx`: getUser-guard, utlogget →
       redirect(`/logg-inn?next=<sti>`) (E3-mønster)
-- [ ] 3.2 `src/lib/stua/queries.ts`: getRooms(), getThreadsByRoom(roomSlug)
+- [x] 3.2 `src/lib/stua/queries.ts`: getRooms(), getThreadsByRoom(roomSlug)
       (sortert last_activity_at desc), getThreadBySlug(slug) + posts, med
       forfatter-join (displayNameFor, E4) — ingen N+1. Forfatter-visning:
       visningsnavn (displayNameFor) IKKE-klikkbart i 1.0 (offentlig profilrute
       finnes ikke ennå → klikkbart navn = Stua 1.1). author_id NULL →
       stormtrooper-fallback.
-- [ ] 3.3 `stua`-locale-slice i `no.ts` (romnavn/labels/skjema/feil/tomtilstand)
-- [ ] 3.4 `/stua/page.tsx` — romoversikt (fem rom + siste aktivitet)
-- [ ] 3.5 `/stua/[room]/page.tsx` — trådliste (nyeste aktivitet øverst),
+- [x] 3.3 `stua`-locale-slice i `no.ts` (romnavn/labels/skjema/feil/tomtilstand)
+- [x] 3.4 `/stua/page.tsx` — romoversikt (fem rom + siste aktivitet)
+- [x] 3.5 `/stua/[room]/page.tsx` — trådliste (nyeste aktivitet øverst),
       notFound ved ukjent rom
-- [ ] 3.6 `/stua/t/[slug]/page.tsx` — tråd (åpningsinnlegg + svar kronologisk) +
+- [x] 3.6 `/stua/t/[slug]/page.tsx` — tråd (åpningsinnlegg + svar kronologisk) +
       svarskjema; skjult tråd (status='hidden') → notFound for VANLIG bruker,
       men admin-gren (isAdmin → vis tråden med «skjult»-badge, så Geir kan
       re-vise). Skjulte enkeltsvar vises som «[skjult]» for vanlig, fullt for admin.
 
 ## 4. Skrive-server-actions (alle: getUser FØR skriving, Drizzle, revalidate)
-- [ ] 4.1 `createThread(roomId, title, body)`: slugify+unik, insert thread +
+- [x] 4.1 `createThread(roomId, title, body)`: slugify+unik, insert thread +
       første post (åpningsinnlegg) i transaksjon, sett last_activity_at
-- [ ] 4.2 `createReply(threadId, body)`: insert post (status='published'), bump
+- [x] 4.2 `createReply(threadId, body)`: insert post (status='published'), bump
       last_activity_at + øk reply_count. reply_count teller PUBLISHED svar utover
       åpningsinnlegget (autoritativ for «tom tråd»-sjekk).
-- [ ] 4.3 `editOwnPost(postId, body)`: `where author_id = user.id`, updated_at
-- [ ] 4.4 `moveOwnThread(threadId, newRoomId)`: `where author_id = user.id`,
+- [x] 4.3 `editOwnPost(postId, body)`: `where author_id = user.id`, updated_at
+- [x] 4.4 `moveOwnThread(threadId, newRoomId)`: `where author_id = user.id`,
       bytt room_id (slug/URL uendret)
-- [ ] 4.5 `deleteOwnThread(threadId)`: kun hvis `author_id = user.id` OG
+- [x] 4.5 `deleteOwnThread(threadId)`: kun hvis `author_id = user.id` OG
       `reply_count = 0` (tom); ellers nekt
 
 ## 5. Blogg-kobling (lazy, race-sikret) — RØRER E2

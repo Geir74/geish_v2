@@ -1,0 +1,250 @@
+/*
+ * Stua (E6) — lukket forum. Zine-stil, konsistent med /gjestebok og /admin.
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+/* ── Brødsmule ─────────────────────────────────────────────── */
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep { color: var(--ink-fade); }
+.current { color: var(--ink); }
+
+/* ── Overskrift ────────────────────────────────────────────── */
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 0.92;
+  margin: var(--sp-10) auto 0;
+  max-width: 720px;
+  padding: 0 var(--sp-6);
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.acc { color: var(--stamp); }
+
+.hiddenBadge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  border: 1px solid var(--stamp);
+  padding: 1px var(--sp-2);
+  margin-left: var(--sp-2);
+  vertical-align: middle;
+}
+
+.intro {
+  max-width: 720px;
+  margin: var(--sp-4) auto 0;
+  padding: 0 var(--sp-6);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* ── Romoversikt ───────────────────────────────────────────── */
+.rooms {
+  max-width: 720px;
+  margin: var(--sp-8) auto var(--sp-12);
+  padding: 0 var(--sp-6);
+}
+
+.roomsHeading {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 var(--sp-4);
+}
+
+.roomList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.roomLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  border: var(--border);
+  padding: var(--sp-4) var(--sp-5);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.roomLink:hover { background: var(--ink); color: var(--paper, #fff); }
+.roomName { font-weight: 600; font-size: 18px; }
+.roomDesc { font-size: 13px; color: var(--ink-soft); }
+.roomLink:hover .roomDesc { color: var(--paper, #fff); }
+
+/* ── Rom-handlinger ────────────────────────────────────────── */
+.roomActions {
+  max-width: 720px;
+  margin: var(--sp-6) auto 0;
+  padding: 0 var(--sp-6);
+}
+
+.newThreadBtn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper, #fff);
+  background: var(--ink);
+  border: var(--border);
+  padding: var(--sp-3) var(--sp-5);
+  text-decoration: none;
+}
+
+/* ── Trådliste ─────────────────────────────────────────────── */
+.threads {
+  max-width: 720px;
+  margin: var(--sp-6) auto var(--sp-12);
+  padding: 0 var(--sp-6);
+}
+
+.threadList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.threadRow { border-top: var(--border); }
+.threadRow:last-child { border-bottom: var(--border); }
+
+.threadLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-4) 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.threadTitle { font-weight: 600; font-size: 17px; }
+.threadMeta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.empty {
+  max-width: 720px;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* ── Tråddetalj: innlegg ───────────────────────────────────── */
+.posts {
+  max-width: 720px;
+  margin: var(--sp-6) auto 0;
+  padding: 0 var(--sp-6);
+}
+
+.postList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.post { border-top: var(--border); padding-top: var(--sp-4); }
+.postHidden { opacity: 0.55; }
+
+.postBody {
+  margin: 0 0 var(--sp-2);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.postMeta {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.postAuthor { font-weight: 600; color: var(--ink); }
+.postDot { color: var(--ink-fade); }
+
+/* ── Skjema (ny tråd + svar) ───────────────────────────────── */
+.form {
+  max-width: 720px;
+  margin: var(--sp-8) auto var(--sp-12);
+  padding: var(--sp-5) var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  border: var(--border-dashed);
+}
+
+.field { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.input,
+.textarea {
+  font-family: var(--font-typewriter);
+  font-size: 15px;
+  color: var(--ink);
+  background: transparent;
+  border: var(--border);
+  padding: var(--sp-3);
+  width: 100%;
+}
+
+.textarea { resize: vertical; min-height: 96px; }
+.input:focus,
+.textarea:focus { outline: 2px solid var(--stamp); outline-offset: 1px; }
+
+.submit {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper, #fff);
+  background: var(--ink);
+  border: var(--border);
+  padding: var(--sp-3) var(--sp-5);
+  cursor: pointer;
+}
+
+.submit:disabled { opacity: 0.6; cursor: default; }
+.error { font-family: var(--font-mono); font-size: 13px; color: var(--stamp); }

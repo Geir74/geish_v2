@@ -331,6 +331,37 @@ export const no = {
     errorBioTooLong: "«Om deg» kan være høyst 300 tegn.",
   },
 
+  /* ── STUA (E6) — lukket forum ─────────────────────────── */
+  stuaForum: {
+    title: "Stua",
+    intro: "Bak døra. Ønsker, bugs og prat om prosjektene — for de som er innom.",
+    roomsHeading: "Rom",
+    emptyRoom: "Ingen tråder her ennå. Start den første.",
+    newThread: "Ny tråd",
+    replies: "svar",
+    lastActivity: "siste aktivitet",
+    form: {
+      titleLabel: "Tittel",
+      titlePlaceholder: "Hva handler tråden om?",
+      bodyLabel: "Melding",
+      bodyPlaceholder: "Skriv …",
+      submitThread: "Start tråd",
+      submitReply: "Svar",
+      submitting: "Sender …",
+      startDiscussion: "Start diskusjonen",
+    },
+    hiddenBadge: "Skjult",
+    hiddenPost: "[skjult]",
+    errors: {
+      titleRequired: "Skriv en tittel.",
+      titleTooLong: "Tittelen er for lang (maks 160 tegn).",
+      bodyRequired: "Skriv en melding.",
+      bodyTooLong: "Meldingen er for lang.",
+      notLoggedIn: "Du må være innlogget.",
+      generic: "Noe gikk galt. Prøv igjen.",
+    },
+  },
+
   /* ── ADMIN (E4.5) ─────────────────────────── */
   // Nesten tomt admin-tak. Fylles på når E5/E6 lander paneler.
   admin: {
