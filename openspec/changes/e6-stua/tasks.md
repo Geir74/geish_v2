@@ -55,51 +55,55 @@
       `reply_count = 0` (tom); ellers nekt
 
 ## 5. Blogg-kobling (lazy, race-sikret) — RØRER E2
-- [ ] 5.1 «Diskuter i Stua»-flyt: `getThreadBySourceSlug(bloggSlug)` →
+- [x] 5.1 «Diskuter i Stua»-flyt: `getThreadBySourceSlug(bloggSlug)` →
       finnes: redirect `/stua/t/[slug]`; ellers → «start diskusjonen»-skjema
-      (forhåndsutfylt trådtittel = posttittel)
-- [ ] 5.2 `startBlogThread(bloggSlug, title, body)`: `INSERT ... ON CONFLICT
+      (forhåndsutfylt trådtittel = posttittel). Resolver: `/stua/blogg/[slug]`.
+      getThreadBySourceSlug status-filtrert (kun published) — Hugin bolk 2-3.
+- [x] 5.2 `startBlogThread(bloggSlug, title, body)`: `INSERT ... ON CONFLICT
       (source_slug) DO NOTHING` + re-select vinnende tråd (race-sikret), legg i
       Blogg-rommet, skriv åpningsinnlegg
-- [ ] 5.3 E2-endring: bygg om «Diskuter i Stua»-lenken i blog-motoren til
-      source_slug-oppslag; utlogget → `/logg-inn?next=`
-- [ ] 5.4 E2-endring: fjern `stua_thread` fra frontmatter-zod-skjema + fra
-      `hello-world.mdx`; verifiser at bloggen fortsatt bygger
+- [x] 5.3 E2-endring: bygg om «Diskuter i Stua»-lenken i blog-motoren til
+      source_slug-oppslag (footer → `/stua/blogg/[slug]`); utlogget →
+      `/logg-inn?next=` (via /stua-layout-guard)
+- [x] 5.4 E2-endring: fjern `stua_thread` fra frontmatter-zod-skjema (`hello-
+      world.mdx` hadde aldri feltet); verifisert at bloggen fortsatt bygger
 
 ## 6. Admin-moderering (`/admin/stua`, isAdmin() FØR hver skriving)
-- [ ] 6.1 `admin.stua`-locale + `/admin/stua/page.tsx` (guardet via /admin/layout),
-      lister rom → tråder (skjulte/pending synlige for admin)
-- [ ] 6.2 Admin-actions: hideThread/showThread, hidePost/showPost (soft),
-      deleteThread (også besvart, cascade), editThreadOrPost, moveThread.
-      Presiser: hidePost/deletePost på et PUBLISHED svar → dekrementer
-      reply_count (så «tom tråd»-sjekk forblir korrekt). moveThread bytter KUN
-      room_id — rører IKKE last_activity_at (ellers hopper gamle tråder til topp
-      i nytt rom) og IKKE slug/URL.
-- [ ] 6.3 anonymizePost: `author_id = NULL` (→ stormtrooper-fallback), evt. rediger body
-- [ ] 6.4 Lenke fra /admin-landingsside til /admin/stua
+- [x] 6.1 `admin.stua`-locale + `/admin/stua/page.tsx` (guardet via /admin/layout),
+      lister rom → tråder (skjulte synlige for admin, threadHidden-badge)
+- [x] 6.2 Admin-actions: hideThread/showThread, hidePost/showPost (soft),
+      deleteThread (også besvart, cascade), editThreadTitle/editPost, moveThread.
+      hidePost/showPost på et SVAR (ikke åpningsinnlegg) → dekrementer/
+      inkrementer reply_count (greatest(...,0)), så «tom tråd»-sjekk forblir
+      korrekt — Hugin bolk 2-3. moveThread bytter KUN room_id — rører IKKE
+      last_activity_at og IKKE slug/URL.
+- [x] 6.3 anonymizePost: `author_id = NULL` (→ stormtrooper-fallback), valgfri body-rewrite
+- [x] 6.4 Lenke fra /admin-landingsside til /admin/stua
 
 ## 7. Forside StuaPreview (ingen lekkasje)
-- [ ] 7.1 `getStuaPublicStats()` (kun antall rom/tråder) + `getStuaRecentThreads()`
-      (titler, kun kalt innlogget)
-- [ ] 7.2 Koble `StuaPreview`: utlogget → antall + «logg inn for å se»; innlogget
-      → nyeste tråder. Aldri titler til utloggede
+- [x] 7.1 `getStuaPublicStats()` (kun antall rom/tråder) + `getStuaRecentThreads()`
+      (titler, kun kalt innlogget via /api/stua/recent, getUser-guardet)
+- [x] 7.2 Koble `StuaPreview`: server-static viser antall + «logg inn» (i ISR-
+      HTML); client-boundary StuaPreviewLive henter titler KUN når innlogget.
+      Titler når aldri statisk HTML/utloggede; forsiden består som ISR.
 
 ## 8. (Identitet — slått sammen inn i 3.2; klikkbart navn/profilrute = Stua 1.1)
 
 ## 9. Verifisering
-- [ ] 9.1 `npx tsc --noEmit` rent
-- [ ] 9.2 `npm run lint` rent
-- [ ] 9.3 `npm run build` grønt
-- [ ] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published
-- [ ] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster)
+- [x] 9.1 `npx tsc --noEmit` rent (bolk 5-7, 2026-09-19)
+- [x] 9.2 `npm run lint`/eslint rent (fanget+fikset ubrukt import + setState-i-effekt)
+- [x] 9.3 `npm run build` grønt (alle nye ruter; `/` består som static ISR)
+- [ ] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published (LIVE, Geir)
+- [ ] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster) (LIVE, Geir)
 - [ ] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
       synlig; svar → tråd stiger; flytt egen tråd → URL består; slett tom tråd
       ok / besvart nektes; admin skjul tråd → hele tråden borte; anonymiser →
-      stormtrooper
+      stormtrooper (LIVE, Geir + dev-server + testbruker)
 - [ ] 9.7 Manuell: «Diskuter i Stua» lazy — uten tråd → skjema → tråd fødes;
       med tråd → dit; utlogget → logg-inn?next; bloggen bygger uten stua_thread
+      (LIVE, Geir)
 
 ## 10. OpenSpec + merge
-- [ ] 10.1 `openspec validate e6-stua --strict` grønt
+- [x] 10.1 `openspec validate e6-stua --strict` grønt (2026-09-19: «Change 'e6-stua' is valid»)
 - [ ] 10.2 PR mot master, Geirs review
 - [ ] 10.3 Etter merge: `openspec archive e6-stua --yes`
