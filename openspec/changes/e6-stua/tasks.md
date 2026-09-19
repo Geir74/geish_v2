@@ -1,20 +1,20 @@
 # Tasks – E6 Stua
 
 ## 1. Datamodell
-- [ ] 1.1 Legg `stua_rooms`, `stua_threads`, `stua_posts` i `src/db/schema.ts`
+- [x] 1.1 Legg `stua_rooms`, `stua_threads`, `stua_posts` i `src/db/schema.ts`
       (kolonner/FK/CHECK/UNIQUE per spec: slug UNIQUE global, source_slug UNIQUE,
       last_activity_at, reply_count, status-CHECK, trim-CHECK på title/body,
       room_id ON DELETE RESTRICT, thread_id ON DELETE CASCADE, author_id ON
       DELETE SET NULL)
-- [ ] 1.2 `npm run db:generate` → migrasjon under `drizzle/` + `db:push`
-- [ ] 1.3 Håndskriv `drizzle/rls/stua.sql`: RLS på alle tre; SELECT kun
+- [x] 1.2 `npm run db:generate` → migrasjon under `drizzle/` + `db:push`
+- [x] 1.3 Håndskriv `drizzle/rls/stua.sql`: RLS på alle tre; SELECT kun
       `authenticated` (rooms) / `authenticated`+status='published' (threads/posts);
       ingen klient-skrive-policy; revoke insert/update/delete/truncate fra
       anon+authenticated; set_updated_at-trigger (gjenbruk); idempotent
-- [ ] 1.4 Kjør RLS mot Supabase (apply-rls.mjs) + verifiser (verify-rls.mjs):
+- [x] 1.4 Kjør RLS mot Supabase (apply-rls.mjs) + verifiser (verify-rls.mjs):
       RLS aktiv, anon får 0 rader, authenticated kun published, ingen
       skrive-grants
-- [ ] 1.5 Seed fem rom (Geish.no, Reik.no, Prat, Annet, Blogg) via seed-script
+- [x] 1.5 Seed fem rom (Geish.no, Reik.no, Prat, Annet, Blogg) via seed-script
       eller idempotent SQL (sort_order styrer visning)
 
 ## 2. Slug + hjelpere
