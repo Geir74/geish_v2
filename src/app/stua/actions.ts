@@ -65,38 +65,56 @@ export async function createThread(
   if (!room) return { ok: false, message: S.errors.generic };
 
   const base = baseThreadSlug(titleP.data);
-  const slug = await uniqueThreadSlug(base, async (candidate) => {
+
+  async function slugExists(candidate: string): Promise<boolean> {
     const [hit] = await db
       .select({ id: stuaThreads.id })
       .from(stuaThreads)
       .where(eq(stuaThreads.slug, candidate))
       .limit(1);
     return Boolean(hit);
-  });
-
-  try {
-    await db.transaction(async (tx) => {
-      const [thread] = await tx
-        .insert(stuaThreads)
-        .values({
-          roomId: room.id,
-          authorId: userId,
-          title: titleP.data,
-          slug,
-        })
-        .returning({ id: stuaThreads.id });
-      await tx.insert(stuaPosts).values({
-        threadId: thread.id,
-        authorId: userId,
-        body: bodyP.data,
-      });
-    });
-  } catch {
-    return { ok: false, message: S.errors.generic };
   }
 
-  revalidatePath(`/stua/${roomSlug}`);
-  return { ok: true, slug };
+  // slug-race (Hugin bolk 2-3): mellom uniqueThreadSlug-sjekken og INSERT kan
+  // en annen request grabbe samme slug (UNIQUE-violation, Postgres 23505). Da
+  // ville brukerens innlegg gå tapt. Retry med fersk unik slug noen ganger før
+  // vi gir opp — kollisjon skal aldri koste brukeren teksten sin.
+  const MAX_ATTEMPTS = 5;
+  for (let attempt = 1; ; attempt++) {
+    const slug = await uniqueThreadSlug(base, slugExists);
+    try {
+      await db.transaction(async (tx) => {
+        const [thread] = await tx
+          .insert(stuaThreads)
+          .values({
+            roomId: room.id,
+            authorId: userId,
+            title: titleP.data,
+            slug,
+          })
+          .returning({ id: stuaThreads.id });
+        await tx.insert(stuaPosts).values({
+          threadId: thread.id,
+          authorId: userId,
+          body: bodyP.data,
+        });
+      });
+    } catch (err) {
+      // 23505 = unique_violation. Kun slug-kollisjon skal retryes; andre feil
+      // (og oppbrukte forsøk) → generic.
+      const code =
+        typeof err === "object" && err !== null && "code" in err
+          ? String((err as { code?: unknown }).code)
+          : undefined;
+      if (code === "23505" && attempt < MAX_ATTEMPTS) {
+        continue;
+      }
+      return { ok: false, message: S.errors.generic };
+    }
+
+    revalidatePath(`/stua/${roomSlug}`);
+    return { ok: true, slug };
+  }
 }
 
 /** Svar i en tråd. Bump last_activity_at + reply_count. */
