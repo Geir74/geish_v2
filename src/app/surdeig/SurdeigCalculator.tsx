@@ -60,29 +60,17 @@ export function SurdeigCalculator() {
   const [levain, setLevain] = useState("20");
   const [salt, setSalt] = useState("2");
 
-  // Beregn via motoren. Starter-vekt utledes fra levain-% av total mel;
-  // for fromFlour er baseValue tilsatt mel, for fromTotalWeight er det deigvekt.
+  // Beregn via motoren. Starter er en PROSENT av tilsatt mel — motoren løser
+  // alt lukket, ingen estimering. baseValue = tilsatt mel (fromFlour) eller
+  // ønsket deigvekt (fromTotalWeight).
   const result = useMemo(() => {
-    const levainPct = num(levain);
-    const baseValue =
-      mode === "fromFlour" ? num(addedFlour) : num(doughWeight);
-
-    // Startervekt = levain-% av tilsatt mel. I fromTotalWeight kjenner vi ikke
-    // tilsatt mel ennå, så vi løser iterativt: motoren tar starter som fast
-    // vekt. Vi estimerer tilsatt mel først, så justerer starter, så beregner.
-    const estimateFlour =
-      mode === "fromFlour"
-        ? num(addedFlour)
-        : num(doughWeight) / (1 + num(hydration) / 100 + num(salt) / 100 + levainPct / 100);
-    const starterWeight = estimateFlour * (levainPct / 100);
-
     const input: RecipeInput = {
       trueHydrationPct: num(hydration),
       saltPct: num(salt),
-      starter: { weight: starterWeight, hydrationPct: 100 },
+      starter: { percent: num(levain), hydrationPct: 100 },
       flours,
       mode,
-      baseValue,
+      baseValue: mode === "fromFlour" ? num(addedFlour) : num(doughWeight),
     };
     const r = calculate(input);
     const target = mode === "fromTotalWeight" ? num(doughWeight) : undefined;

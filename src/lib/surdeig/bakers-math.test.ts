@@ -8,54 +8,58 @@ import {
   type RecipeInput,
 } from "./bakers-math";
 
+// baseCore: starter = 20 % av tilsatt mel, 100 % hydrering.
 const baseCore = {
   trueHydrationPct: 75,
   saltPct: 2,
-  starter: { weight: 200, hydrationPct: 100 },
+  starter: { percent: 20, hydrationPct: 100 },
   flours: [{ name: "Hvetemel", percent: 100 }],
 };
 
 describe("splitStarter", () => {
-  it("100% hydrering deler 200g i 100g mel + 100g vann", () => {
-    const { flour, water } = splitStarter({ weight: 200, hydrationPct: 100 });
+  it("20% av 1000g @100% hydrering → 200g starter = 100g mel + 100g vann", () => {
+    const { weight, flour, water } = splitStarter(
+      { percent: 20, hydrationPct: 100 },
+      1000,
+    );
+    expect(weight).toBeCloseTo(200, 6);
     expect(flour).toBeCloseTo(100, 6);
     expect(water).toBeCloseTo(100, 6);
   });
 
-  it("50% hydrering (stiff starter) deler 150g i 100g mel + 50g vann", () => {
-    const { flour, water } = splitStarter({ weight: 150, hydrationPct: 50 });
+  it("stiff starter 50% hydrering: 15% av 1000g = 150g → 100g mel + 50g vann", () => {
+    const { flour, water } = splitStarter({ percent: 15, hydrationPct: 50 }, 1000);
     expect(flour).toBeCloseTo(100, 6);
     expect(water).toBeCloseTo(50, 6);
   });
 });
 
 describe("true hydration — Hugins kjernekrav", () => {
-  it("1000g tilsatt mel, 200g starter@100%, ønsket 75% → tilsatt vann = 725g", () => {
+  it("1000g tilsatt mel, 20% starter@100%, ønsket 75% → tilsatt vann = 725g", () => {
     const r = computeFromAddedFlour(1000, baseCore);
     expect(r.starterFlour).toBeCloseTo(100, 6);
     expect(r.starterWater).toBeCloseTo(100, 6);
     expect(r.totalFlour).toBeCloseTo(1100, 6);
     expect(r.totalWater).toBeCloseTo(825, 6);
-    expect(r.addedWater).toBeCloseTo(725, 6); // det brukeren heller i bollen
+    expect(r.addedWater).toBeCloseTo(725, 6);
   });
 
   it("true hydration vises som 75%, ikke naiv 72.5%", () => {
     const r = computeFromAddedFlour(1000, baseCore);
     expect(r.trueHydration).toBeCloseTo(75, 6);
-    // naiv ville vært 725/1000 = 72.5
-    expect(r.addedWater / r.addedFlour * 100).toBeCloseTo(72.5, 6);
+    expect((r.addedWater / r.addedFlour) * 100).toBeCloseTo(72.5, 6);
   });
 
-  it("starterhydrering ≠ 100% justerer tilsatt vann men holder true hydration", () => {
+  it("stiff starter (50% hydr) justerer tilsatt vann men holder true hydration", () => {
     const r = computeFromAddedFlour(1000, {
       ...baseCore,
-      starter: { weight: 150, hydrationPct: 50 }, // 100g mel + 50g vann
+      starter: { percent: 15, hydrationPct: 50 }, // 150g = 100g mel + 50g vann
     });
     expect(r.starterFlour).toBeCloseTo(100, 6);
     expect(r.starterWater).toBeCloseTo(50, 6);
     expect(r.totalFlour).toBeCloseTo(1100, 6);
     expect(r.totalWater).toBeCloseTo(825, 6);
-    expect(r.addedWater).toBeCloseTo(775, 6); // 825 - 50
+    expect(r.addedWater).toBeCloseTo(775, 6);
     expect(r.trueHydration).toBeCloseTo(75, 6);
   });
 });
@@ -69,7 +73,7 @@ describe("salt mot TOTAL mel — Hugins andre krav", () => {
   it("uten starter: 2% av 1000g = 20g", () => {
     const r = computeFromAddedFlour(1000, {
       ...baseCore,
-      starter: { weight: 0, hydrationPct: 100 },
+      starter: { percent: 0, hydrationPct: 100 },
     });
     expect(r.salt).toBeCloseTo(20, 6);
   });
@@ -89,11 +93,25 @@ describe("flere meltyper", () => {
   });
 });
 
-describe("toveis: fromTotalWeight løser mel bakover", () => {
-  it("deigvekt fra fromFlour kan løses tilbake til samme tilsatt mel", () => {
-    const forward = computeFromAddedFlour(1000, baseCore);
-    const solvedFlour = solveAddedFlourFromDough(forward.doughWeight, baseCore);
-    expect(solvedFlour).toBeCloseTo(1000, 4);
+describe("toveis: fromTotalWeight treffer deigvekt EKSAKT (Hugin-fiks)", () => {
+  it("solveAddedFlourFromDough → computeFromAddedFlour gir tilbake samme T", () => {
+    const T = 1800;
+    const solved = solveAddedFlourFromDough(T, baseCore);
+    const r = computeFromAddedFlour(solved, baseCore);
+    expect(r.doughWeight).toBeCloseTo(T, 4); // treffer på grammet, ingen divergens
+  });
+
+  it("høy starter + høy hydrering treffer også eksakt (der gammel bug var verst)", () => {
+    const core = {
+      trueHydrationPct: 85,
+      saltPct: 2.2,
+      starter: { percent: 35, hydrationPct: 100 },
+      flours: [{ name: "Hvete", percent: 100 }],
+    };
+    const T = 1000;
+    const solved = solveAddedFlourFromDough(T, core);
+    const r = computeFromAddedFlour(solved, core);
+    expect(r.doughWeight).toBeCloseTo(T, 4);
   });
 
   it("calculate() gir samme resultat i begge moduser for samme deig", () => {
@@ -114,25 +132,22 @@ describe("toveis: fromTotalWeight løser mel bakover", () => {
 });
 
 describe("skalering", () => {
-  it("dobling av mel dobler vann, salt og bevarer true hydration", () => {
+  it("dobling av mel dobler vann og salt, bevarer true hydration", () => {
     const single = computeFromAddedFlour(1000, baseCore);
-    const doubled = computeFromAddedFlour(2000, {
-      ...baseCore,
-      starter: { weight: 400, hydrationPct: 100 }, // starter skalerer også
-    });
+    const doubled = computeFromAddedFlour(2000, baseCore);
     expect(doubled.addedWater).toBeCloseTo(single.addedWater * 2, 4);
     expect(doubled.salt).toBeCloseTo(single.salt * 2, 4);
+    expect(doubled.starterWeight).toBeCloseTo(single.starterWeight * 2, 4);
     expect(doubled.trueHydration).toBeCloseTo(single.trueHydration, 6);
   });
 });
 
 describe("avrunding absorberes i vannet", () => {
   it("låst totalvekt: differansen havner i vann, mel+salt urørt", () => {
-    // Velg tall som gir brøkdeler
     const core = {
       trueHydrationPct: 72,
       saltPct: 2.1,
-      starter: { weight: 137, hydrationPct: 100 },
+      starter: { percent: 18, hydrationPct: 100 },
       flours: [{ name: "Hvete", percent: 100 }],
     };
     const target = 1000;
@@ -141,8 +156,7 @@ describe("avrunding absorberes i vannet", () => {
     const view = roundForDisplay(result, target);
 
     const sum = view.addedFlour + view.addedWater + view.salt + view.starterWeight;
-    expect(sum).toBe(target); // treffer eksakt
-    // mel og salt er rene avrundinger av de faktiske verdiene
+    expect(sum).toBe(target);
     expect(view.addedFlour).toBe(Math.round(result.addedFlour));
     expect(view.salt).toBe(Math.round(result.salt));
   });

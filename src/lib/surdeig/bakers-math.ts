@@ -25,8 +25,8 @@ export interface FlourType {
 }
 
 export interface StarterSpec {
-  /** Total startervekt i gram (mel + vann). */
-  weight: number;
+  /** Starterandel som prosent av tilsatt mel (f.eks. 20 = 20 %). */
+  percent: number;
   /** Starterens egen hydrering i prosent (default 100 = 50/50 mel/vann). */
   hydrationPct: number;
 }
@@ -82,12 +82,19 @@ export interface RecipeResult {
   flours: FlourResult[];
 }
 
-/** Del startervekt i mel + vann ut fra starterens hydrering. */
-export function splitStarter(starter: StarterSpec): { flour: number; water: number } {
+/**
+ * Del starter i mel + vann, gitt tilsatt mel. Starter = percent % av tilsatt
+ * mel; den vekten splittes i mel/vann ut fra starterens egen hydrering.
+ */
+export function splitStarter(
+  starter: StarterSpec,
+  addedFlour: number,
+): { weight: number; flour: number; water: number } {
+  const weight = addedFlour * (starter.percent / 100);
   const h = starter.hydrationPct;
-  const flour = starter.weight / (1 + h / 100);
-  const water = starter.weight - flour;
-  return { flour, water };
+  const flour = weight / (1 + h / 100);
+  const water = weight - flour;
+  return { weight, flour, water };
 }
 
 /**
@@ -98,14 +105,18 @@ export function computeFromAddedFlour(
   addedFlour: number,
   input: Omit<RecipeInput, "mode" | "baseValue">,
 ): RecipeResult {
-  const { flour: starterFlour, water: starterWater } = splitStarter(input.starter);
+  const {
+    weight: starterWeight,
+    flour: starterFlour,
+    water: starterWater,
+  } = splitStarter(input.starter, addedFlour);
 
   const totalFlour = addedFlour + starterFlour;
   const totalWater = totalFlour * (input.trueHydrationPct / 100);
   const addedWater = totalWater - starterWater;
   const salt = totalFlour * (input.saltPct / 100);
 
-  const doughWeight = addedFlour + addedWater + salt + input.starter.weight;
+  const doughWeight = addedFlour + addedWater + salt + starterWeight;
   const trueHydration = totalFlour > 0 ? (totalWater / totalFlour) * 100 : 0;
 
   const flours: FlourResult[] = input.flours.map((f) => ({
@@ -122,7 +133,7 @@ export function computeFromAddedFlour(
     addedWater,
     totalWater,
     salt,
-    starterWeight: input.starter.weight,
+    starterWeight,
     trueHydration,
     doughWeight,
     flours,
@@ -130,36 +141,28 @@ export function computeFromAddedFlour(
 }
 
 /**
- * Løs tilsatt mel bakover fra ønsket ferdig deigvekt T.
+ * Løs tilsatt mel bakover fra ønsket ferdig deigvekt T, med starter som
+ * prosent av tilsatt mel (ingen estimering — eksakt lukket form).
  *
- * doughWeight = addedFlour + addedWater + salt + starterWeight
- * der:
- *   totalFlour  = addedFlour + starterFlour
- *   totalWater  = totalFlour * H/100
- *   addedWater  = totalWater - starterWater
- *   salt        = totalFlour * saltPct/100
- *
- * Sett h = H/100, s = saltPct/100. Da:
- *   doughWeight = addedFlour
- *               + ((addedFlour + starterFlour)*h - starterWater)
- *               + (addedFlour + starterFlour)*s
- *               + starterWeight
- *
- * Isolér addedFlour:
- *   T = addedFlour*(1 + h + s) + starterFlour*(h + s) - starterWater + starterWeight
- *   addedFlour = (T - starterFlour*(h+s) + starterWater - starterWeight) / (1 + h + s)
+ * La A = addedFlour, L = starterPct/100, H = trueHydration/100,
+ *    S = saltPct/100, hs = starterHydration/100.
+ *   starterFlour = A*L / (1+hs)
+ *   totalFlour   = A * (1 + L/(1+hs))
+ *   totalWater   = totalFlour * H
+ *   salt         = totalFlour * S
+ *   doughWeight  = totalFlour + totalWater + salt = totalFlour * (1 + H + S)
+ * → A = T / ((1 + L/(1+hs)) * (1 + H + S))
  */
 export function solveAddedFlourFromDough(
   doughWeight: number,
   input: Omit<RecipeInput, "mode" | "baseValue">,
 ): number {
-  const { flour: starterFlour, water: starterWater } = splitStarter(input.starter);
-  const h = input.trueHydrationPct / 100;
-  const s = input.saltPct / 100;
-  const numerator =
-    doughWeight - starterFlour * (h + s) + starterWater - input.starter.weight;
-  const denominator = 1 + h + s;
-  return numerator / denominator;
+  const L = input.starter.percent / 100;
+  const hs = input.starter.hydrationPct / 100;
+  const H = input.trueHydrationPct / 100;
+  const S = input.saltPct / 100;
+  const flourFactor = 1 + L / (1 + hs);
+  return doughWeight / (flourFactor * (1 + H + S));
 }
 
 /** Hovedinngang: beregn oppskrift fra input (begge moduser). */
@@ -213,14 +216,9 @@ export function roundForDisplay(
   }
 
   const doughWeight = addedFlour + addedWater + salt + starterWeight;
-  const { water: starterWater } = splitStarter({
-    weight: starterWeight,
-    hydrationPct: result.totalWater > 0 ? result.starterWater !== 0
-      ? (result.starterWater / (result.starterWeight - result.starterWater)) * 100
-      : 100 : 100,
-  });
-  const totalWater = addedWater + starterWater;
-  const totalFlour = addedFlour + (starterWeight - starterWater);
+  // starterMel/-vann kommer direkte fra det uavrundede resultatet.
+  const totalWater = addedWater + result.starterWater;
+  const totalFlour = addedFlour + result.starterFlour;
   const trueHydration = totalFlour > 0 ? (totalWater / totalFlour) * 100 : 0;
 
   return {
