@@ -125,6 +125,30 @@ Reglene MÅ være eksplisitte i koden og synlige/forutsigbare for brukeren.
 Disse legges til i B1.5 uten å endre kjernemodellen (begge er avledninger oppå
 eksisterende vann-/temperaturtall).
 
+## Design-handoff (Claude Design, 2026-09-21)
+
+Design-referanse ligger i `design-handoff/` (surdeig-reference.html + README.md
++ dc-source/). Retning: «E · Kvittering» — zine/fanzine, kvittering-metafor for
+resultatvisning. Bruker husets tokens. Tre nye LOKALE tokens (scoped til sidens
+CSS Module, ikke global): `--card: oklch(98.5% 0.008 85)`, `--tape` (=highlight
+60% alpha), `--touch: 44px`. Rotasjoner via `calc(Xdeg * var(--chaos))`.
+
+**Komponentkart:** SurdeigHeader, CalcCard (DoughInput, FlourMix, IngredientRow,
+RatioField), Receipt, + (bak auth-flagg) StarRating, Steps, Comments, TempField.
+
+**VIKTIG scope-avgrensning:** Designet tegner HELE visjonen (B1→B4) på ett
+lerret. B1 implementerer KUN: SurdeigHeader + CalcCard (deigvekt, melblanding,
+andre ingredienser, forhold hydrering/surdeig/salt) + Receipt koblet på
+`bakers-math`. Følgende rendres bak et `false`-flagg (finnes i markup, skjult til
+senere epic):
+- **TempField (deig/rom/ovn °C)** → B1.5 (DDT)
+- **Steps (fremgangsmåte)** → B2 (krever lagring)
+- **StarRating + Comments** → B3/B4 (krever auth E3 + profiler E4)
+
+README foreskriver eksplisitt at stjerner/kommentarer skjules bak flagg til
+E3/E4. IngredientRow er én delt komponent (props `marker: swatch|plus`).
+Ikke kopier `:root`-blokka fra referansefilen (kun for standalone-visning).
+
 ## Bevisst UTE av B1 (→ senere epics)
 
 - Lagring, oppskrifter, auth (B2). Bake-logg (B3). Sosialt (B4).
