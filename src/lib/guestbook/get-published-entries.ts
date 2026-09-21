@@ -21,14 +21,23 @@ export type PublishedEntry = Pick<
 >;
 
 export async function getPublishedEntries(): Promise<PublishedEntry[]> {
-  return db
-    .select({
-      id: guestbookEntries.id,
-      authorName: guestbookEntries.authorName,
-      body: guestbookEntries.body,
-      createdAt: guestbookEntries.createdAt,
-    })
-    .from(guestbookEntries)
-    .where(eq(guestbookEntries.status, "published"))
-    .orderBy(desc(guestbookEntries.createdAt));
+  // Feiltolerant: ved DB-feil (f.eks. ingen DB-tilgang under CI/Vercel-build,
+  // eller DB nede i prod) returneres tom liste i stedet for å kræsje prerender.
+  // I prod bevarer ISR forrige fungerende HTML hvis en revalidering feiler, så
+  // brukere ser fortsatt siste innlegg til DB er oppe igjen. Feilen logges.
+  try {
+    return await db
+      .select({
+        id: guestbookEntries.id,
+        authorName: guestbookEntries.authorName,
+        body: guestbookEntries.body,
+        createdAt: guestbookEntries.createdAt,
+      })
+      .from(guestbookEntries)
+      .where(eq(guestbookEntries.status, "published"))
+      .orderBy(desc(guestbookEntries.createdAt));
+  } catch (error) {
+    console.error("getPublishedEntries: DB-lesing feilet, faller tilbake til tom liste:", error);
+    return [];
+  }
 }
