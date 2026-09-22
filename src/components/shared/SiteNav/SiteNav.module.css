@@ -1,0 +1,103 @@
+/*
+ * SiteNav — «avrevne papirlapper» på rad. Cut & Paste-zine: mono, caps,
+ * dashed border, stempel-rød på hover. Aktiv rute = tapet/uthevet lapp.
+ * Mobil: flex-wrap til flere rader, ingen hamburger. Kun eksisterende
+ * designtokens — ingen nye magiske verdier, ingen eksterne CSS-bibliotek.
+ */
+
+.siteNav {
+  position: fixed;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  left: var(--sp-2);
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  pointer-events: none; /* la mellomrom slippe klikk gjennom til siden */
+}
+
+.rooms {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  /* Reserver plass så auth-delen ikke forskyver lappene under loading. */
+  min-width: 96px;
+  min-height: 30px;
+  justify-content: flex-end;
+}
+
+/* Reservert placeholder mens useUser() laster (ingen layout-shift/blink). */
+.authPlaceholder {
+  display: inline-block;
+  width: 72px;
+  height: 18px;
+}
+
+/* En «avrevet lapp». */
+.tab {
+  pointer-events: auto;
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--paper);
+  border: var(--border-dashed);
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tab:hover {
+  color: var(--stamp);
+}
+
+/* Aktiv rute: uthevet/tapet lapp. */
+.active {
+  color: var(--stamp);
+  border-style: solid;
+  font-weight: 700;
+}
+
+.logoutForm {
+  display: inline-flex;
+  pointer-events: auto;
+}
+
+.logout {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stamp);
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logout:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .siteNav {
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+}
