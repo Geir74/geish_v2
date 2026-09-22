@@ -43,9 +43,9 @@ export const no = {
   /* ── PROSJEKTER (subdomener) ───────────────────────────── */
   projects: [
     {
-      name: "bake.geish.no",
-      href: "https://bake.geish.no",
-      desc: "Bakeapp — surdeigslogg, oppskrifter, hydrasjon",
+      name: "geish.no/surdeig",
+      href: "/surdeig",
+      desc: "Surdeigskalkulator — baker's prosent, true hydration",
       status: "live",
       tag: "#brød",
     },
