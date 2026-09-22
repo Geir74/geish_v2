@@ -300,6 +300,17 @@ export const no = {
     },
   },
 
+  /* ── GLOBAL NAV (SiteNav) ──────────────────────────── */
+  /* Kun visningsnavn (labels). Rute-stiene ligger som statisk array i
+     SiteNav-komponenten — kun rom som faktisk finnes lenkes. */
+  nav: {
+    hjem: "HJEM",
+    blogg: "BLOGG",
+    surdeig: "SURDEIG",
+    gjestebok: "GJESTEBOK",
+    manifest: "MANIFEST",
+  },
+
   /* ── PROFIL — vis/rediger egen profil på /konto (E4) ─────
    * UTKAST: alle disse tekstene skal godkjennes av Geir. Lavmælt zine-tone.
    */

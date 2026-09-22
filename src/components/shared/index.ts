@@ -11,7 +11,7 @@ export { Stamp } from "./Stamp";
 export { ImagePlaceholder } from "./ImagePlaceholder";
 export { HalftoneBlock } from "./HalftoneBlock";
 export { Pullquote } from "./Pullquote";
-export { AuthNav } from "./AuthNav";
+export { SiteNav } from "./SiteNav";
 
 export type {
   VisitorCounterProps,
