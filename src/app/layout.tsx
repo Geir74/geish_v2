@@ -7,7 +7,7 @@ import {
   Newsreader,
 } from "next/font/google";
 import "./globals.css";
-import { AuthNav } from "@/components/shared";
+import { SiteNav } from "@/components/shared";
 
 /*
  * De 5 fontene som tokens.css forventer. next/font/google self-hoster dem ved
@@ -75,7 +75,7 @@ export default function RootLayout({
       <body>
         {/* Client component: hydreres oppå statisk HTML, leser aldri cookies
             server-side — statiske ruter forblir statiske (e3-auth D5). */}
-        <AuthNav />
+        <SiteNav />
         {children}
       </body>
     </html>

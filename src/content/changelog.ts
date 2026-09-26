@@ -25,6 +25,13 @@ export type ChangelogEntry = {
 /** Nyeste først. Hold sorteringen ved innsetting — rendering stoler på den. */
 export const changelog: ReadonlyArray<ChangelogEntry> = [
   {
+    date: "2026-09-22",
+    title: "Surdeigskalkulator",
+    description:
+      "Ny kalkulator på /surdeig: still inn deigen med baker's prosent og true hydration, så skriver kvitteringen seg selv. Åpen for alle — ingen innlogging.",
+    prNummer: 16,
+  },
+  {
     date: "2026-09-19",
     title: "Gjestebok",
     description:

@@ -1,0 +1,600 @@
+/*
+ * Surdeigskalkulator (B1) — CSS Module. Portert fra Claude Design-referansen
+ * (design-handoff/surdeig-reference.html). Bruker husets tokens fra tokens.css.
+ * :root-blokka fra referansen er BEVISST utelatt (den var kun for standalone).
+ * 3 nye lokale tokens er scopet til .surdeig.
+ */
+
+.surdeig {
+  --card: oklch(98.5% 0.008 85);
+  --tape: oklch(86% 0.16 95 / 0.6);
+  --touch: 44px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+  font-size: var(--t-body);
+  line-height: 1.5;
+}
+.surdeig *,
+.surdeig *::before,
+.surdeig *::after {
+  box-sizing: border-box;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 18px 20px 34px;
+}
+.heroMeta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.heroMeta a {
+  color: var(--paper);
+  text-decoration: none;
+}
+.heroMeta a:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.heroRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: 14px;
+}
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-poster);
+  font-weight: 400;
+  font-size: 76px;
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+}
+.heroTag {
+  font-size: 15px;
+  color: var(--highlight);
+}
+.heroSub {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--paper-dark);
+}
+.stampRound {
+  position: absolute;
+  right: 16px;
+  top: 52px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid var(--stamp-fade);
+  color: var(--stamp-fade);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--t-meta);
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  transform: rotate(calc(14deg * var(--chaos)));
+}
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-8);
+  padding: 22px var(--sp-4) var(--sp-6);
+}
+
+/* ── CalcCard ───────────────────────────────────────────────── */
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--paper-edge);
+  box-shadow: 0 10px 22px -14px oklch(20% 0.015 60 / 0.4);
+  padding: 20px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  transform: rotate(calc(0.3deg * var(--chaos)));
+}
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  height: 22px;
+  background: var(--tape);
+}
+.card::before {
+  left: 30px;
+  width: 72px;
+  transform: rotate(-4deg);
+}
+.card::after {
+  right: 36px;
+  width: 58px;
+  transform: rotate(5deg);
+}
+.sec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.secHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+.secTitle {
+  font-family: var(--font-display);
+  font-size: 14px;
+  text-transform: uppercase;
+  margin: 0;
+}
+.secHint {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--ink-soft);
+}
+.btnStep {
+  width: var(--touch);
+  height: var(--touch);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+}
+.btnStep:active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btnAdd {
+  height: var(--touch);
+  border: 2px dashed var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  font-family: var(--font-display);
+  font-size: var(--t-small);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.btnRemove {
+  width: var(--touch);
+  height: var(--touch);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+}
+
+/* DoughInput */
+.dough {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.dough .btnStep {
+  width: 48px;
+  height: 64px;
+  border: 2px solid var(--ink);
+}
+.doughField {
+  flex-grow: 1;
+  height: 64px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  background: var(--ink);
+  color: var(--highlight);
+  padding: 0 12px;
+}
+.doughField input {
+  width: 150px;
+  height: 64px;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 42px;
+  color: var(--highlight);
+  padding: 0;
+}
+.doughField span {
+  font-family: var(--font-mono);
+  font-size: 18px;
+}
+
+/* IngredientRow */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.rowSwatch {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+}
+.rowPlus {
+  width: 18px;
+  flex-shrink: 0;
+  font-family: var(--font-poster);
+  color: var(--stamp);
+}
+.rowName {
+  flex-grow: 1;
+  min-width: 0;
+  height: var(--touch);
+  border: none;
+  border-bottom: 1px dashed var(--ink-soft);
+  background: transparent;
+  font-family: var(--font-typewriter);
+  font-size: 17px;
+  padding: 0 2px;
+}
+.pct {
+  width: 76px;
+  height: var(--touch);
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+.pct input {
+  width: 44px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 20px;
+  padding: 0;
+}
+.pct span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.surdeig ::placeholder {
+  color: oklch(45% 0.012 60);
+}
+
+/* FlourBar */
+.flourbar {
+  display: flex;
+  height: 22px;
+  border: 2px solid var(--ink);
+}
+.flourbar > i {
+  border-right: 2px solid var(--ink);
+}
+.flourbar > i:last-child {
+  border-right: none;
+}
+.pat0 {
+  background: var(--card);
+}
+.pat1 {
+  background: repeating-linear-gradient(45deg, var(--ink) 0 2px, var(--card) 2px 7px);
+}
+.pat2 {
+  background: var(--highlight);
+}
+.pat3 {
+  background: radial-gradient(var(--ink) 1.2px, var(--card) 1.4px) 0 0 / 6px 6px;
+}
+.pat4 {
+  background: var(--stamp-fade);
+}
+.pat5 {
+  background: var(--ink-soft);
+}
+
+/* RatioField */
+.ratios {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+.ratio {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+.ratio label {
+  padding: 6px 8px 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ratioVal {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px 6px 4px;
+}
+.ratioVal input {
+  width: 64px;
+  height: var(--touch);
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 30px;
+  padding: 0;
+}
+.ratioVal span {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.ratioBtns {
+  display: flex;
+  border-top: 2px solid var(--ink);
+}
+.ratioBtns .btnStep {
+  flex-grow: 1;
+}
+.ratioBtns .btnStep + .btnStep {
+  border-left: 2px solid var(--ink);
+}
+
+/* ── Receipt ────────────────────────────────────────────────── */
+.receiptWrap {
+  position: relative;
+  margin: var(--sp-5) 12px 0;
+  transform: rotate(calc(-1.2deg * var(--chaos)));
+}
+.stampLabel {
+  position: absolute;
+  top: -16px;
+  right: -8px;
+  z-index: 1;
+  background: var(--card);
+  color: var(--stamp);
+  border: 2px solid var(--stamp);
+  padding: 4px 12px 3px;
+  font-family: var(--font-poster);
+  font-size: 17px;
+  line-height: 1.1;
+  transform: rotate(7deg);
+}
+.receipt {
+  background: oklch(99% 0.006 85);
+  padding: 20px 18px 32px;
+  box-shadow: 0 16px 26px -16px oklch(20% 0.015 60 / 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.receiptHead {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--ink-soft);
+}
+.receiptList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding: 8px 0 3px;
+  font-size: 17px;
+}
+.lineDots {
+  flex-grow: 1;
+  border-bottom: 2px dotted oklch(35% 0.012 60 / 0.6);
+  transform: translateY(-4px);
+}
+.lineG {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 22px;
+}
+.sum {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 2px solid var(--ink);
+}
+.sumLabel {
+  font-family: var(--font-display);
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.sumG {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 28px;
+  background: var(--highlight);
+  padding: 0 10px;
+  transform: rotate(1deg);
+}
+.receiptFoot {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  padding-top: 14px;
+}
+.hydNote {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--ink-soft);
+  padding-top: 8px;
+}
+
+/* ── DESKTOP ≥1024px ────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 22px 64px 48px;
+  }
+  .heroMeta {
+    font-size: 12px;
+  }
+  .heroRow {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 40px;
+    margin-top: 18px;
+  }
+  .heroTitle {
+    font-size: 150px;
+    line-height: 0.8;
+  }
+  .heroTag {
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .heroSub {
+    display: block;
+  }
+  .heroText {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 6px;
+    max-width: 280px;
+  }
+  .stampRound {
+    right: 72px;
+    top: 54px;
+    width: 128px;
+    height: 128px;
+    border-width: 4px;
+    font-size: 14px;
+  }
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 420px;
+    column-gap: 72px;
+    row-gap: 64px;
+    padding: 40px 64px 48px;
+    align-items: start;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .card {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    row-gap: 28px;
+    align-items: start;
+    padding: 28px 26px 24px;
+  }
+  .secFull {
+    grid-column: 1 / -1;
+  }
+  .secTitle {
+    font-size: 15px;
+  }
+  .dough .btnStep {
+    width: 64px;
+    height: 76px;
+  }
+  .doughField {
+    height: 76px;
+    padding: 0 16px;
+  }
+  .doughField input {
+    width: 220px;
+    height: 76px;
+    font-size: 54px;
+  }
+  .doughField span {
+    font-size: 22px;
+  }
+  .ratios {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ratio {
+    flex-direction: row;
+    align-items: center;
+  }
+  .ratio label {
+    flex-grow: 1;
+    padding: 0 12px;
+    font-size: var(--t-meta);
+  }
+  .ratioVal {
+    padding: 0 8px;
+  }
+  .ratioVal input {
+    height: 52px;
+    font-size: 28px;
+  }
+  .ratioBtns {
+    border-top: none;
+  }
+  .ratioBtns .btnStep {
+    height: 52px;
+    border-left: 2px solid var(--ink);
+  }
+  .receiptWrap {
+    margin: 8px 0 0;
+    transform: rotate(calc(-1.4deg * var(--chaos)));
+  }
+  .receipt {
+    padding: 26px 26px 40px;
+  }
+  .line {
+    font-size: 19px;
+  }
+  .lineG {
+    font-size: 26px;
+  }
+  .sumG {
+    font-size: 34px;
+  }
+  .stampLabel {
+    top: -20px;
+    right: -14px;
+    border-width: 3px;
+    font-size: 22px;
+  }
+}

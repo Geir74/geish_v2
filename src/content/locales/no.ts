@@ -43,9 +43,9 @@ export const no = {
   /* ── PROSJEKTER (subdomener) ───────────────────────────── */
   projects: [
     {
-      name: "bake.geish.no",
-      href: "https://bake.geish.no",
-      desc: "Bakeapp — surdeigslogg, oppskrifter, hydrasjon",
+      name: "geish.no/surdeig",
+      href: "/surdeig",
+      desc: "Surdeigskalkulator — baker's prosent, true hydration",
       status: "live",
       tag: "#brød",
     },
@@ -306,6 +306,17 @@ export const no = {
       konto: "KONTO",
       logout: "LOGG UT",
     },
+  },
+
+  /* ── GLOBAL NAV (SiteNav) ──────────────────────────── */
+  /* Kun visningsnavn (labels). Rute-stiene ligger som statisk array i
+     SiteNav-komponenten — kun rom som faktisk finnes lenkes. */
+  nav: {
+    hjem: "HJEM",
+    blogg: "BLOGG",
+    surdeig: "SURDEIG",
+    gjestebok: "GJESTEBOK",
+    manifest: "MANIFEST",
   },
 
   /* ── PROFIL — vis/rediger egen profil på /konto (E4) ─────
