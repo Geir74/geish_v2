@@ -6,6 +6,33 @@ Sikkerhetsflaten (RLS + policyer) lever som håndskrevet SQL **utenfor** både
 Drizzle-skjemaet og enhver automatisk kontroll, og kan derfor fjernes uten at
 noe verktøy protesterer.
 
+## Eksperiment: årsaken er bevist (2026-09-26)
+
+Oppgave 1.1 er utført. `drizzle-kit push` sletter håndskrevet RLS — reprodusert
+to av to ganger i isolert Postgres 16-container (aldri mot prod).
+
+Fremgangsmåte: tabell opprettet via drizzle-kit → håndskrevet
+`enable row level security` + SELECT-policy → `push` på nytt → mål tilstanden.
+Begge kjøringer: RLS=på/1 policy før, RLS=av/0 policyer etter.
+
+**Tre ting dette endrer i designet:**
+
+1. **Det kreves ingen skjemaendring.** Vi antok at push måtte ha noe å gjøre for
+   å rive policyer. Nei — en ren no-op-push, der Drizzle selv melder at alt er i
+   sync, fjerner dem. Enhver kjøring av `db:push` er derfor farlig, ikke bare
+   de som migrerer noe. Tiltak 2.3 må gjelde ubetinget.
+2. **Feilen er usynlig.** Dataene overlever. Tabeller, rader og app fungerer
+   som før; det eneste som endrer seg er at tilgangskontrollen er borte. Derfor
+   kan ingen «ser det ut til å virke?»-sjekk fange dette — bare en eksplisitt
+   spørring mot `pg_class`/`pg_policies`.
+3. **Vinduet er hele tiden.** Siden en no-op-push holder, kan flaten forsvinne
+   når som helst noen kjører en rutinesjekk. En vakt som kjører sjelden er ikke
+   nok; frekvensen må velges med dette i minnet.
+
+Gjenstår av oppgave 1: sjekke om `db:generate` + manuell migrasjon har samme
+effekt (1.3). Forventning ut fra mekanismen: nei, fordi generate skriver SQL-filer
+og rører ikke databasen — men det er en forventning, ikke et måleresultat.
+
 ## Datamodell
 
 Ingen endring. Denne changen rører ikke tabeller, kolonner eller policy-innhold

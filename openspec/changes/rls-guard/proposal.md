@@ -20,18 +20,30 @@ minst noen dager uten at et eneste signal gikk.
 
 Dette er derfor ikke en «rydde opp»-change. Den lukker selve hullet.
 
-## Ledende hypotese (IKKE bevist)
+## Årsak — BEVIST eksperimentelt 2026-09-26
 
-`drizzle-kit push` (`npm run db:push`) reconcilerer databasen mot
-`src/db/schema.ts`. RLS-policyene våre er per konvensjon **håndskrevet SQL
-utenfor** skjemaet (`drizzle/rls/<tabell>.sql`). Et push kjenner dem derfor
-ikke, og kan fjerne dem som «drift».
+`drizzle-kit push` (`npm run db:push`) **sletter håndskrevet RLS**. Dette er
+ikke lenger en hypotese; det er reprodusert to ganger i isolert miljø.
 
-Indisier: `db:push` finnes som script; RLS ligger utenfor Drizzle-skjemaet;
-tidslinjen sammenfaller med E6 bolk 1-arbeidet (ny datamodell + seed).
+**Oppsett:** engangs-Postgres 16 i Docker (aldri prod), tabell opprettet via
+drizzle-kit, deretter håndskrevet `enable row level security` + én SELECT-policy
+— nøyaktig mønsteret repoet bruker.
 
-**Å bevise eller avkrefte dette er første oppgave i changen** — tiltakene under
-er riktige uansett årsak, men vi skal ikke bygge på en gjetning.
+**Resultat:**
+
+| Kjøring | Før push | Etter push |
+|---|---|---|
+| 1 | RLS=på, 1 policy | RLS=av, 0 policyer |
+| 2 | RLS=på, 1 policy | RLS=av, 0 policyer |
+
+**Det alvorligste funnet:** dette skjedde ved push **uten én eneste
+skjemaendring**. Drizzle rapporterte «Changes applied» og fjernet
+sikkerhetsflaten i samme åndedrag. Vi antok at det krevde en modellendring —
+det gjør det ikke. Et rutinemessig «sjekk at skjemaet er i sync» er nok.
+
+**Dataene overlevde** (raden lå der etterpå). Det er nettopp derfor feilen er
+farlig: ingenting ser ødelagt ut. Tabellene er der, appen virker, og den eneste
+forskjellen er at døra står åpen.
 
 ## Beslutninger (Geir, 2026-09-26)
 

@@ -2,11 +2,14 @@
 
 ## 1. Bevis eller avkreft årsaken
 
-- [ ] 1.1 Reproduser mistanken i et trygt miljø: opprett en tabell med
+- [x] 1.1 Reproduser mistanken i et trygt miljø: opprett en tabell med
       håndskrevet RLS-policy, kjør `drizzle-kit push`, og observer om policyen
       og RLS-flagget overlever. IKKE mot produksjon.
-- [ ] 1.2 Dokumenter resultatet i `design.md` — hypotesen bekreftes eller
+      **BEVIST 2026-09-26** (Postgres 16 i Docker, 2/2 kjøringer): RLS=på/1 policy
+      → RLS=av/0 policyer. Skjedde uten skjemaendring; data overlevde.
+- [x] 1.2 Dokumenter resultatet i `design.md` — hypotesen bekreftes eller
       forkastes eksplisitt. Forkastes den, let videre før tiltak 2 låses.
+      Bekreftet; tre designkonsekvenser notert i `design.md`.
 - [ ] 1.3 Sjekk om andre operasjoner i repoet kan ha samme effekt
       (`db:generate` + manuell anvendelse, Supabase-migreringer, dashboard-reset).
 
