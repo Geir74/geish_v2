@@ -1,0 +1,101 @@
+/*
+ * /admin — nesten tom landingsside i zine-stil (E4.5). Gjenbruker
+ * design-tokens; ingen border-radius/blur/gradient/emoji.
+ */
+
+.page {
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+}
+
+/* ── Brødsmule ─────────────────────────────────────────────── */
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-8);
+  border-bottom: var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sep {
+  color: var(--ink-fade);
+}
+
+.current {
+  color: var(--ink);
+}
+
+/* ── Innhold ───────────────────────────────────────────────── */
+.wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-6) var(--sp-12);
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 0.92;
+  margin: 0 0 var(--sp-6);
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.acc {
+  color: var(--stamp);
+}
+
+.lede {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0 0 var(--sp-8);
+  max-width: 44ch;
+}
+
+/* ── Tom-tilstand (fanzine-stemplet notat) ─────────────────── */
+.empty {
+  border: var(--border);
+  padding: var(--sp-8) var(--sp-6);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-fade);
+  text-align: center;
+  transform: rotate(-0.6deg);
+}
+
+/* ── Panel-lenker (E5: gjestebok, senere flere) ────────────── */
+.panels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.panelLink {
+  display: block;
+  border: var(--border);
+  padding: var(--sp-4) var(--sp-5);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.panelLink:hover {
+  background: var(--ink);
+  color: var(--paper, #fff);
+}

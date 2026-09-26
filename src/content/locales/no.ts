@@ -43,9 +43,9 @@ export const no = {
   /* ── PROSJEKTER (subdomener) ───────────────────────────── */
   projects: [
     {
-      name: "bake.geish.no",
-      href: "https://bake.geish.no",
-      desc: "Bakeapp — surdeigslogg, oppskrifter, hydrasjon",
+      name: "geish.no/surdeig",
+      href: "/surdeig",
+      desc: "Surdeigskalkulator — baker's prosent, true hydration",
       status: "live",
       tag: "#brød",
     },
@@ -101,6 +101,33 @@ export const no = {
   // gjesteboka (egen epic) er live.
   guestbook: [] as ReadonlyArray<{ who: string; when: string; msg: string }>,
   guestbook_empty: "Gjesteboka er tom ennå — bli den første til å skrive noe pent.",
+
+  /* ── GJESTEBOK (E5) ─ full side + skjema ──────────────────── */
+  gjestebok: {
+    title: "Gjestebok",
+    intro:
+      "Legg igjen en hilsen. Ingen pålogging kreves — skriv navnet du vil gå under, og noen ord.",
+    empty: "Gjesteboka er tom ennå — bli den første til å skrive noe pent.",
+    form: {
+      nameLabel: "Navn",
+      namePlaceholder: "Hva vil du kalles?",
+      messageLabel: "Hilsen",
+      messagePlaceholder: "Skriv noen ord …",
+      submit: "Skriv i gjesteboka",
+      submitting: "Sender …",
+    },
+    // Anonyme innlegg havner i kø; innloggede vises umiddelbart (D1).
+    successPublished: "Takk! Hilsenen din er lagt til i gjesteboka.",
+    successPending:
+      "Takk! Hilsenen din er sendt inn og vises når den er godkjent.",
+    errors: {
+      nameRequired: "Skriv et navn (kan ikke være tomt).",
+      nameTooLong: "Navnet er for langt (maks 60 tegn).",
+      messageRequired: "Skriv en hilsen (kan ikke være tom).",
+      messageTooLong: "Hilsenen er for lang (maks 2000 tegn).",
+      generic: "Noe gikk galt. Prøv igjen.",
+    },
+  },
 
   /* ── BLOGG-POSTER ──────────────────────────────────────────
      Fjernet i e2-blog-engine. BlogStrip leser nå ekte poster
@@ -273,6 +300,17 @@ export const no = {
     },
   },
 
+  /* ── GLOBAL NAV (SiteNav) ──────────────────────────── */
+  /* Kun visningsnavn (labels). Rute-stiene ligger som statisk array i
+     SiteNav-komponenten — kun rom som faktisk finnes lenkes. */
+  nav: {
+    hjem: "HJEM",
+    blogg: "BLOGG",
+    surdeig: "SURDEIG",
+    gjestebok: "GJESTEBOK",
+    manifest: "MANIFEST",
+  },
+
   /* ── PROFIL — vis/rediger egen profil på /konto (E4) ─────
    * UTKAST: alle disse tekstene skal godkjennes av Geir. Lavmælt zine-tone.
    */
@@ -302,5 +340,40 @@ export const no = {
     errorNameTooShort: "Visningsnavnet må være minst 2 tegn (eller la det stå tomt).",
     errorNameTooLong: "Visningsnavnet kan være høyst 40 tegn.",
     errorBioTooLong: "«Om deg» kan være høyst 300 tegn.",
+  },
+
+  /* ── ADMIN (E4.5) ─────────────────────────── */
+  // Nesten tomt admin-tak. Fylles på når E5/E6 lander paneler.
+  admin: {
+    crumb: "ADMIN",
+    heading: "ADMIN",
+    lede: "Bakrommet. Her styres det som skal styres — når det finnes noe å styre.",
+    empty: "Ingen paneler ennå. De dukker opp her etter hvert.",
+    // Gjestebok-moderering-panel (E5, task 4.1).
+    gjestebok: {
+      navLabel: "Gjestebok",
+      crumb: "GJESTEBOK",
+      heading: "GJESTEBOK",
+      lede: "Alle innlegg, nyeste øverst. Ventende trenger godkjenning før de vises.",
+      empty: "Ingen innlegg ennå.",
+      // Statusetiketter.
+      statusPending: "Venter",
+      statusPublished: "Publisert",
+      statusHidden: "Skjult",
+      // Handlinger.
+      show: "Vis",
+      hide: "Skjul",
+      delete: "Slett",
+      edit: "Rediger",
+      save: "Lagre",
+      cancel: "Avbryt",
+      // Rediger-avgrensning (D4): kun retting, aldri meningsendring.
+      editNote:
+        "Rediger kun for å rette skrivefeil eller fjerne sensitiv info — aldri endre meningen.",
+      editNameLabel: "Navn",
+      editBodyLabel: "Hilsen",
+      // Bekreftelse ved sletting.
+      confirmDelete: "Slette dette innlegget for godt?",
+    },
   },
 } as const;

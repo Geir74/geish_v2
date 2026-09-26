@@ -58,3 +58,51 @@ export const profiles = pgTable(
 );
 
 export type Profile = InferSelectModel<typeof profiles>;
+
+/*
+ * guestbook_entries — gjesteboka (E5). Lavterskel hilsener fra besøkende.
+ *
+ * author_name: FRITT navn (D2), PÅKREVD, 1–60 tegn — ingen identitetsvalidering.
+ * body: hilsenen, påkrevd 1–2000 tegn. INGEN e-post lagres (personvern-regelen D2).
+ * status: pending/published/hidden (D1). Innlogget → published umiddelbart; anonym
+ * → pending, må godkjennes i /admin. Default pending (tryggest — anonyme er normen).
+ * author_id: NULL for anonyme; FK til auth.users for innloggede, ON DELETE SET NULL
+ * (behold hilsenen om brukeren slettes, bare løsne koblingen).
+ *
+ * RLS (håndskrevet SQL, task 1.3): alle leser KUN published; ingen klient-skriving.
+ * Admin-stien skriver via Drizzle server (omgår RLS), aldri via Supabase JS.
+ */
+export const guestbookEntries = pgTable(
+  "guestbook_entries",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    authorName: text("author_name").notNull(),
+    body: text("body").notNull(),
+    status: text("status").notNull().default("pending"),
+    authorId: uuid("author_id").references(() => authUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    check(
+      "author_name_len",
+      sql`char_length(trim(${table.authorName})) between 1 and 60`,
+    ),
+    check(
+      "body_len",
+      sql`char_length(trim(${table.body})) between 1 and 2000`,
+    ),
+    check(
+      "status_valid",
+      sql`${table.status} in ('pending', 'published', 'hidden')`,
+    ),
+  ],
+);
+
+export type GuestbookEntry = InferSelectModel<typeof guestbookEntries>;

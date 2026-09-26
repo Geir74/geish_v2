@@ -45,7 +45,7 @@
 - [x] 7.6 `focal` styrer `object-position` (minst `center` vs. `top` verifisert).
 - [x] 7.7 Ingen synlig layout-hopp (CLS) ved bildelast.
 - [x] 7.8 Poster uten cover uendret fra før (HalftoneBlock i hero, enkeltpost, kort).
-- [ ] 7.9 Visuell sammenligning på flere bredder — utføres av Geir i nettleser.
+- [x] 7.9 Visuell sammenligning på flere bredder — Geir bekreftet i nettleser 2026-09-11 («e2 ok»).
 
 ## 8. Forbudsliste + sanity
 
