@@ -67,17 +67,28 @@ export async function getStuaPublicStats(): Promise<{
   roomCount: number;
   threadCount: number;
 }> {
-  const [rooms] = await db
-    .select({ n: sql<number>`count(*)::int` })
-    .from(stuaRooms);
-  const [threads] = await db
-    .select({ n: sql<number>`count(*)::int` })
-    .from(stuaThreads)
-    .where(eq(stuaThreads.status, "published"));
-  return {
-    roomCount: rooms?.n ?? 0,
-    threadCount: threads?.n ?? 0,
-  };
+  // Forsiden prerendres (static ISR). Uten DB-tilgang under build (CI, preview
+  // uten env) SKAL dette degradere pent, ikke felle hele bygget — samme mønster
+  // som getPublishedEntries. Null-tall skjuler seksjonen, lekker ingenting.
+  try {
+    const [rooms] = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(stuaRooms);
+    const [threads] = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(stuaThreads)
+      .where(eq(stuaThreads.status, "published"));
+    return {
+      roomCount: rooms?.n ?? 0,
+      threadCount: threads?.n ?? 0,
+    };
+  } catch (error) {
+    console.error(
+      "getStuaPublicStats: DB-lesing feilet, faller tilbake til null-tall:",
+      error,
+    );
+    return { roomCount: 0, threadCount: 0 };
+  }
 }
 
 /**
