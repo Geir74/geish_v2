@@ -114,15 +114,22 @@ oppslag. E6 endrer E2-blog-koden:
   kan feilaktig lekke — to separate funksjoner, member-varianten kalles aldri
   utlogget.
 
-## Åpne valg (design-nivå, rører IKKE grunn-skjema)
+## Avgjorte valg (Geir 2026-09-26 — tidligere åpne)
 
-1. **Rediger eget innlegg: fritt eller tidsvindu?** Forslag: fritt (lavtrafikk,
-   tillit; admin kan alltid). Avgjøres ved implementering.
-2. **Trådlås 1.0 eller 1.1?** Admin låser tråd mot nye svar. Kolonne `locked
-   boolean DEFAULT false` er billig å ta med i skjema nå; UI/action kan vente.
-   Forslag: ta kolonnen nå, bygg lås-action hvis trivielt, ellers 1.1.
-3. **StuaPreview til utloggede:** antall + «logg inn», eller skjul seksjonen
-   helt? Forslag: vis antall (viser at Stua finnes/lever), aldri innhold.
+1. **Rediger eget innlegg: FRITT.** Ingen tidsvindu. Lavtrafikk, innloggede folk
+   man kjenner, og admin kan alltid overstyre. Forkastet: tidsvindu — ekstra
+   tilstand som bare skaper spørsmålet «hvorfor får jeg ikke redigere?».
+   *Implementasjon stemmer: ingen tidssjekk i rediger-action.*
+2. **Trådlås: 1.1, ikke 1.0.** Låsing er et konfliktverktøy for konflikter som
+   ikke finnes i en lukket stue med venner og kjente brukere. Forkastet: ta
+   `locked`-kolonnen «siden den er billig» — scope-disiplin veier tyngre.
+   *Implementasjon stemmer: ingen `locked`-kolonne i `src/db/schema.ts`.*
+3. **StuaPreview til utloggede: VIS ANTALL.** Et tall viser at Stua lever og
+   inviterer til innlogging; titler er selv privat info og vises aldri utlogget.
+   Antallet SKAL være globale totaler for hele Stua — aldri per rom, som ville
+   avslørt hvor og når det er aktivitet (Hugin 2026-09-26).
+   *Implementasjon stemmer: `getStuaPublicStats()` gir aggregat server-side i
+   ISR-HTML; titler hentes av client-boundary bak sesjonssjekk.*
 
 ## Ikke-mål (fase 1)
 
