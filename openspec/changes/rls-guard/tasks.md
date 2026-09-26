@@ -15,15 +15,21 @@
 
 ## 2. Gjør skriptlaget trygt
 
-- [ ] 2.1 Generaliser `scripts/verify-rls.mjs`: sjekk ALLE tabeller i `public`
+- [x] 2.1 Generaliser `scripts/verify-rls.mjs`: sjekk ALLE tabeller i `public`
       (i dag kun `guestbook_entries`), rapporter per tabell RLS-status +
       antall policyer, exit ikke-null ved avvik.
-- [ ] 2.2 Legg til `scripts/apply-all-rls.mjs` (eller tilsvarende) som anvender
-      alle filer i `drizzle/rls/` i dokumentert rekkefølge. Idempotent.
+      Kjørt mot prod: alle 5 tabeller grønne, og fanget grant-funnet i 2.5.
+- [x] 2.2 Legg til `scripts/apply-all-rls.mjs` som anvender alle filer i
+      `drizzle/rls/` i dokumentert rekkefølge (profiles først pga. trigger/FK),
+      og verifiserer til slutt. Idempotent. Leser mappa dynamisk, så `stua.sql`
+      plukkes opp automatisk når E6 merges.
 - [ ] 2.3 Koble `db:push` slik at RLS re-anvendes etter push, og at
       verifiseringen kjøres til slutt. Push som etterlater naken DB skal ikke
       kunne fullføre stille.
 - [ ] 2.4 Verifiser lokalt: kjør kjeden og bekreft at RLS står etterpå.
+- [ ] 2.5 Stram inn tabell-grants: `anon`/`authenticated` SKAL ikke ha
+      INSERT/UPDATE/DELETE direkte (funnet på `profiles` 2026-09-26). Skriving
+      går via server actions. Reduserer skaden hvis RLS faller igjen.
 
 ## 3. Bygg vakten
 

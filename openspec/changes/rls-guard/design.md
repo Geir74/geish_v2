@@ -96,3 +96,28 @@ ikke bare en exit-kode i en logg.
 Hvilken varslingskanal vakten skal bruke ved rødt (GitHub-notifikasjon alene,
 eller push videre til Telegram) avgjøres i oppgave 4 — etter at vi vet om
 GitHubs egen varsling faktisk når fram.
+
+## Funn 2026-09-26: grants gjør skadeomfanget større enn antatt
+
+Det generaliserte verifiseringsskriptet (oppgave 2.1) avdekket med en gang noe
+vi ikke visste: `anon` og `authenticated` har **INSERT, UPDATE og DELETE-grants**
+på `profiles` på tabellnivå.
+
+**Dette er ikke et åpent hull i dag.** RLS står på, og det finnes ingen INSERT-
+eller DELETE-policy, så Postgres nekter som standard. Empirisk bekreftet: et
+anon-INSERT mot `profiles` ble avvist med
+`42501: new row violates row-level security policy`.
+
+(Ærlighet om testdekning: et tilsvarende DELETE-forsøk ga HTTP 204, men det
+matchet null rader og er derfor inkonklusivt. DELETE hviler på samme
+default-deny-mekanisme som INSERT, der blokkeringen ER bevist.)
+
+**Hvorfor det likevel betyr noe:** grants er laget under RLS. Da RLS sto av
+tidligere i dag, var det bare `SELECT`-lekkasjen vi målte — men med disse
+grantene ville en angriper i samme vindu også kunne **skrive og slette**
+profiler, ikke bare lese dem. Blast-radiusen ved neste RLS-tap er altså
+vesentlig større enn hendelsen 2026-09-26 viste.
+
+Tiltak: stram inn grantene så skrivestien går via server actions (Drizzle
+server-rollen), slik konvensjonen allerede forutsetter. Da er ikke RLS siste
+forsvarslinje alene.
