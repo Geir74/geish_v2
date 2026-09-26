@@ -82,7 +82,8 @@ export const postFrontmatterSchema = z.object({
   draft: z.boolean().optional().default(false),
   readTimeMin: z.number().int().positive().optional(),
   coverImage: coverImageSchema,
-  stua_thread: z.string().optional(),
+  // stua_thread fjernet i E6 bolk 5: blogg↔Stua-kobling skjer nå automatisk via
+  // bloggpostens slug (source_slug på Stua-tråden), ikke via manuelt frontmatter.
 });
 
 export type PostFrontmatter = z.infer<typeof postFrontmatterSchema>;

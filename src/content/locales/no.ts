@@ -147,6 +147,14 @@ export const no = {
       last: string;
       cat: string;
     }>,
+    preview: {
+      threadsWord: "tråder",
+      roomsWord: "rom",
+      threadsReplies: "svar",
+      locked: "Logg inn for å se hva som rører seg.",
+      loginCta: "Logg inn",
+      enterCta: "Inn i Stua",
+    },
     empty: "Stua åpner snart. Her blir det prat når døra er på plass.",
   },
 
@@ -342,6 +350,44 @@ export const no = {
     errorBioTooLong: "«Om deg» kan være høyst 300 tegn.",
   },
 
+  /* ── STUA (E6) — lukket forum ─────────────────────────── */
+  stuaForum: {
+    title: "Stua",
+    intro: "Bak døra. Ønsker, bugs og prat om prosjektene — for de som er innom.",
+    roomsHeading: "Rom",
+    emptyRoom: "Ingen tråder her ennå. Start den første.",
+    newThread: "Ny tråd",
+    replies: "svar",
+    lastActivity: "siste aktivitet",
+    form: {
+      titleLabel: "Tittel",
+      titlePlaceholder: "Hva handler tråden om?",
+      bodyLabel: "Melding",
+      bodyPlaceholder: "Skriv …",
+      submitThread: "Start tråd",
+      submitReply: "Svar",
+      submitting: "Sender …",
+      startDiscussion: "Start diskusjonen",
+    },
+    hiddenBadge: "Skjult",
+    hiddenPost: "[skjult]",
+    // «Diskuter i Stua»-flyten fra en bloggpost (E6 bolk 5).
+    blogThread: {
+      crumb: "Diskusjon",
+      heading: "Start diskusjonen",
+      intro:
+        "Ingen har tatt ordet om denne posten ennå. Skriv det første innlegget, så åpner du tråden.",
+    },
+    errors: {
+      titleRequired: "Skriv en tittel.",
+      titleTooLong: "Tittelen er for lang (maks 160 tegn).",
+      bodyRequired: "Skriv en melding.",
+      bodyTooLong: "Meldingen er for lang.",
+      notLoggedIn: "Du må være innlogget.",
+      generic: "Noe gikk galt. Prøv igjen.",
+    },
+  },
+
   /* ── ADMIN (E4.5) ─────────────────────────── */
   // Nesten tomt admin-tak. Fylles på når E5/E6 lander paneler.
   admin: {
@@ -374,6 +420,39 @@ export const no = {
       editBodyLabel: "Hilsen",
       // Bekreftelse ved sletting.
       confirmDelete: "Slette dette innlegget for godt?",
+    },
+    // Stua-moderering-panel (E6, bolk 6).
+    stua: {
+      navLabel: "Stua",
+      crumb: "STUA",
+      heading: "STUA",
+      lede: "Alle rom, tråder og innlegg — også skjulte. Moderer det som må modereres.",
+      emptyRoom: "Ingen tråder i dette rommet.",
+      // Statusetiketter.
+      statusPublished: "Publisert",
+      statusHidden: "Skjult",
+      openingPost: "åpningsinnlegg",
+      replies: "svar",
+      // Tråd-handlinger.
+      showThread: "Vis tråd",
+      hideThread: "Skjul tråd",
+      deleteThread: "Slett tråd",
+      editTitle: "Rediger tittel",
+      moveTo: "Flytt til",
+      selectRoom: "Velg rom …",
+      // Innlegg-handlinger.
+      showPost: "Vis",
+      hidePost: "Skjul",
+      editPost: "Rediger",
+      anonymize: "Anonymiser",
+      // Felles.
+      save: "Lagre",
+      cancel: "Avbryt",
+      // Bekreftelser (destruktivt).
+      confirmDeleteThread:
+        "Slette hele tråden inkl. alle svar for godt?",
+      confirmAnonymize:
+        "Anonymisere dette innlegget? Forfatteren kobles fra permanent.",
     },
   },
 } as const;
