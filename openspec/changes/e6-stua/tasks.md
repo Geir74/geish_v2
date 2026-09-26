@@ -93,8 +93,8 @@
 - [x] 9.1 `npx tsc --noEmit` rent (bolk 5-7, 2026-09-19)
 - [x] 9.2 `npm run lint`/eslint rent (fanget+fikset ubrukt import + setState-i-effekt)
 - [x] 9.3 `npm run build` grønt (alle nye ruter; `/` består som static ISR)
-- [ ] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published (LIVE, Geir)
-- [ ] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster) (LIVE, Geir)
+- [x] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published (LIVE, verifisert 2026-09-26: anon får 401 på alle tre stua-tabeller)
+- [x] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster) (LIVE, verifisert 2026-09-26: ser hidden/pending/published)
 - [ ] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
       synlig; svar → tråd stiger; flytt egen tråd → URL består; slett tom tråd
       ok / besvart nektes; admin skjul tråd → hele tråden borte; anonymiser →
