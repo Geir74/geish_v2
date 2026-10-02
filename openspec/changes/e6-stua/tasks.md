@@ -95,14 +95,13 @@
 - [x] 9.3 `npm run build` grønt (alle nye ruter; `/` består som static ISR)
 - [x] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published (LIVE, verifisert 2026-09-26: anon får 401 på alle tre stua-tabeller)
 - [x] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster) (LIVE, verifisert 2026-09-26: ser hidden/pending/published)
-- [ ] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
+- [x] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
       synlig; svar → tråd stiger; flytt egen tråd → URL består; slett tom tråd
       ok / besvart nektes; admin skjul tråd → hele tråden borte; anonymiser →
       stormtrooper (LIVE, Geir + dev-server + testbruker)
-      BLOKKERT 2026-10-02: port + svar + admin-del verifisert OK, men bruker-UI
-      for egne handlinger MANGLER. editOwnPost/moveOwnThread/deleteOwnThread
-      finnes i src/app/stua/actions.ts (linje 282/305/329) men er ikke koblet til
-      noen knapp i src/app/stua/t/[slug]/. Se ny oppgave 11.1.
+      VERIFISERT 2026-10-02: port + svar + admin-del OK i foerste runde. Bruker-UI
+      manglet da (actions fantes, knapper ikke) -> bygget som bolk 11, og hele
+      9.6 reverifisert live av Geir etterpaa.
 - [x] 9.7 Manuell: «Diskuter i Stua» lazy — uten tråd → skjema → tråd fødes;
       med tråd → dit; utlogget → logg-inn?next; bloggen bygger uten stua_thread
       (LIVE, Geir) — VERIFISERT 2026-10-02
