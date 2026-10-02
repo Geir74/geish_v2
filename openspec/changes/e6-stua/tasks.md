@@ -95,13 +95,13 @@
 - [x] 9.3 `npm run build` grønt (alle nye ruter; `/` består som static ISR)
 - [x] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published (LIVE, verifisert 2026-09-26: anon får 401 på alle tre stua-tabeller)
 - [x] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster) (LIVE, verifisert 2026-09-26: ser hidden/pending/published)
-- [ ] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
+- [x] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
       synlig; svar → tråd stiger; flytt egen tråd → URL består; slett tom tråd
       ok / besvart nektes; admin skjul tråd → hele tråden borte; anonymiser →
-      stormtrooper (LIVE, Geir + dev-server + testbruker)
-- [ ] 9.7 Manuell: «Diskuter i Stua» lazy — uten tråd → skjema → tråd fødes;
+      stormtrooper (LIVE, Geir + dev-server + testbruker) — VERIFISERT 2026-10-02
+- [x] 9.7 Manuell: «Diskuter i Stua» lazy — uten tråd → skjema → tråd fødes;
       med tråd → dit; utlogget → logg-inn?next; bloggen bygger uten stua_thread
-      (LIVE, Geir)
+      (LIVE, Geir) — VERIFISERT 2026-10-02
 
 ## 10. OpenSpec + merge
 - [x] 10.1 `openspec validate e6-stua --strict` grønt (2026-09-19: «Change 'e6-stua' is valid»)
