@@ -30,6 +30,7 @@ export function SiteNav() {
     { href: "/blogg", label: C.nav.blogg },
     { href: "/surdeig", label: C.nav.surdeig },
     { href: "/gjestebok", label: C.nav.gjestebok },
+    { href: "/stua", label: C.nav.stua },
     { href: "/manifest", label: C.nav.manifest },
   ];
 

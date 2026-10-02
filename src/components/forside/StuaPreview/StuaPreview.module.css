@@ -45,11 +45,28 @@
   margin-bottom: var(--sp-1);
 }
 
+.stats {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 6px 0;
+  border-bottom: var(--border-dashed);
+}
+
 .thread {
+  display: block;
   font-family: var(--font-typewriter);
   font-size: 13px;
   padding: 6px 0;
   border-bottom: var(--border-dashed);
+  color: inherit;
+  text-decoration: none;
+}
+
+a.thread:hover {
+  color: var(--stamp);
 }
 
 .thread:last-child {

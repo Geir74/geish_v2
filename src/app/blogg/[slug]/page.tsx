@@ -2,7 +2,9 @@
  * /blogg/[slug] — enkeltpost. Static (force-static) via generateStaticParams.
  * Newsreader-typografi for brødtekst, drop-cap på første paragraf,
  * MDX-komponenter (Stamp, HalftoneBlock, Pullquote) tilgjengelig.
- * Bunn-blokk lenker til Stua-tråd hvis stua_thread satt.
+ * Bunn-blokk lenker til Stua-resolver (/stua/blogg/[slug]) som lazy slår opp/
+ * føder diskusjonstråden via source_slug (E6 bolk 5) — ikke lenger et manuelt
+ * stua_thread-frontmatter-felt.
  */
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -65,7 +67,9 @@ export default async function BlogPostPage({ params }: PageParams) {
 
   const { post, mdxSource } = result;
   const C = t();
-  const stuaHref = post.stua_thread ? `/stua/${post.stua_thread}` : "/stua";
+  // Diskusjonslenke går til resolver-ruten som (bak innloggings-guard) slår opp
+  // eksisterende tråd via source_slug eller viser «start diskusjonen»-skjemaet.
+  const stuaHref = `/stua/blogg/${post.slug}`;
 
   return (
     <main className={`${styles.page} paper`}>

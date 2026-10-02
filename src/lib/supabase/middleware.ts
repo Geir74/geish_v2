@@ -13,7 +13,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { authCookieDomain } from "./cookie-domain";
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  // Eksponer forespørselens sti til server components (Stua-guarden bruker den
+  // til ?next=-redirect). Next App Router gir ikke pathname til layouts ellers.
+  const forwardHeaders = new Headers(request.headers);
+  forwardHeaders.set("x-pathname", request.nextUrl.pathname);
+  let supabaseResponse = NextResponse.next({
+    request: { headers: forwardHeaders },
+  });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -33,7 +39,9 @@ export async function updateSession(request: NextRequest) {
         for (const { name, value } of cookiesToSet) {
           request.cookies.set(name, value);
         }
-        supabaseResponse = NextResponse.next({ request });
+        supabaseResponse = NextResponse.next({
+          request: { headers: forwardHeaders },
+        });
         for (const { name, value, options } of cookiesToSet) {
           supabaseResponse.cookies.set(name, value, options);
         }

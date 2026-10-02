@@ -38,6 +38,11 @@ export default function AdminPage() {
               {A.gjestebok.navLabel}
             </Link>
           </li>
+          <li>
+            <Link href="/admin/stua" className={styles.panelLink}>
+              {A.stua.navLabel}
+            </Link>
+          </li>
         </ul>
       </div>
     </main>

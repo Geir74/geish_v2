@@ -20,10 +20,21 @@ import styles from "./page.module.css";
 
 type Phase = "form" | "sending" | "sent";
 
+// Trygg intern retur-sti: kun same-origin relative stier (start med én "/",
+// aldri "//" eller "/\" som kan bli protokoll-relativ open-redirect). Speiler
+// callbackens safeNext. Ugyldig/utelatt → /konto (default).
+function safeNextPath(raw: string | null): string {
+  if (!raw) return "/konto";
+  if (!raw.startsWith("/")) return "/konto";
+  if (raw.startsWith("//") || raw.startsWith("/\\")) return "/konto";
+  return raw;
+}
+
 function LoginFormInner() {
   const C = t();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const nextPath = safeNextPath(searchParams.get("next"));
   const [phase, setPhase] = useState<Phase>("form");
   const [email, setEmail] = useState("");
   const [sendError, setSendError] = useState(false);
@@ -44,7 +55,7 @@ function LoginFormInner() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback?next=/konto`,
+        emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     });
 
@@ -79,7 +90,7 @@ function LoginFormInner() {
       setOtpBusy(false);
       return;
     }
-    router.push("/konto");
+    router.push(nextPath);
     router.refresh();
   }
 

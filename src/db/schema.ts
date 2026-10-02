@@ -9,6 +9,8 @@ import type { InferSelectModel } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import {
   check,
+  index,
+  integer,
   pgSchema,
   pgTable,
   text,
@@ -106,3 +108,109 @@ export const guestbookEntries = pgTable(
 );
 
 export type GuestbookEntry = InferSelectModel<typeof guestbookEntries>;
+
+/*
+ * ── Stua (E6) — lukket forum: rom → tråder → svar ──────────────────────────
+ *
+ * Bygget på E5-mønsteret (uuid PK, trim-CHECK, timestamptz, RLS i egen SQL,
+ * Drizzle-server-bypass for skriving). Hele Stua er bak innlogging (D2).
+ */
+
+// stua_rooms — admin-styrt (seedet: Geish.no/Reik.no/Prat/Annet/Blogg). Ingen
+// bruker-skriving. sort_order styrer visningsrekkefølge.
+export const stuaRooms = pgTable(
+  "stua_rooms",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    description: text("description"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    check("room_slug_len", sql`char_length(trim(${table.slug})) between 1 and 60`),
+    check("room_name_len", sql`char_length(trim(${table.name})) between 1 and 80`),
+  ],
+);
+
+// stua_threads — brukeropprettet. slug er GLOBALT unik + immutabel (kanonisk
+// rute /stua/t/[slug], room-agnostisk oppslag → trådflytting brekker ikke
+// blogg-lenker). source_slug = bloggpost-slug for lazy blogg-tråder (UNIQUE der
+// satt → én tråd per post). last_activity_at driver «nyeste aktivitet»-sortering
+// (denormalisert, settes av skrive-actions → unngår N+1). reply_count = antall
+// PUBLISHED svar utover åpningsinnlegget («tom tråd»-sjekk uten count-query).
+export const stuaThreads = pgTable(
+  "stua_threads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    roomId: uuid("room_id")
+      .notNull()
+      .references(() => stuaRooms.id, { onDelete: "restrict" }),
+    authorId: uuid("author_id").references(() => authUsers.id, {
+      onDelete: "set null",
+    }),
+    title: text("title").notNull(),
+    slug: text("slug").notNull().unique(),
+    sourceSlug: text("source_slug").unique(),
+    lastActivityAt: timestamp("last_activity_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    replyCount: integer("reply_count").notNull().default(0),
+    status: text("status").notNull().default("published"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    check("thread_title_len", sql`char_length(trim(${table.title})) between 1 and 160`),
+    check("thread_status_valid", sql`${table.status} in ('published', 'hidden')`),
+    // Varmeste query: trådliste per rom sortert nyeste aktivitet (Hugin bolk 1).
+    index("stua_threads_room_activity_idx").on(
+      table.roomId,
+      table.lastActivityAt.desc(),
+    ),
+  ],
+);
+
+// stua_posts — svar (og åpningsinnlegg = første rad). author_id NULL =
+// anonymisert → stormtrooper-fallback (E4). thread_id CASCADE (hard-delete av
+// tråd rydder svar). Soft-hide (status='hidden') er normal moderering.
+export const stuaPosts = pgTable(
+  "stua_posts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    threadId: uuid("thread_id")
+      .notNull()
+      .references(() => stuaThreads.id, { onDelete: "cascade" }),
+    authorId: uuid("author_id").references(() => authUsers.id, {
+      onDelete: "set null",
+    }),
+    body: text("body").notNull(),
+    status: text("status").notNull().default("published"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    check("post_body_len", sql`char_length(trim(${table.body})) between 1 and 10000`),
+    check("post_status_valid", sql`${table.status} in ('published', 'hidden')`),
+    // Nest varmest: svar per tråd kronologisk (Hugin bolk 1).
+    index("stua_posts_thread_created_idx").on(
+      table.threadId,
+      table.createdAt,
+    ),
+  ],
+);
+
+export type StuaRoom = InferSelectModel<typeof stuaRooms>;
+export type StuaThread = InferSelectModel<typeof stuaThreads>;
+export type StuaPost = InferSelectModel<typeof stuaPosts>;
