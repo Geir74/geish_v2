@@ -11,8 +11,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { t } from "@/content/i18n";
 import { isAdmin } from "@/lib/admin/is-admin";
-import { getThreadBySlug } from "@/lib/stua/queries";
+import { getRooms, getThreadBySlug } from "@/lib/stua/queries";
+import { createClient } from "@/lib/supabase/server";
+import { OwnPostEditor } from "./OwnPostEditor";
 import { ReplyForm } from "./ReplyForm";
+import { ThreadOwnerControls } from "./ThreadOwnerControls";
 import styles from "../../page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -41,8 +44,25 @@ export default async function StuaThreadPage({
   const S = C.stuaForum;
 
   const admin = await isAdmin();
-  const thread = await getThreadBySlug(slug, admin);
+
+  // Eierskap avgjøres server-side: viewerId sendes inn i spørringen, som
+  // returnerer isOwn-flagg. authorId krysser aldri til klienten.
+  let viewerId: string | null = null;
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    viewerId = user?.id ?? null;
+  } catch {
+    viewerId = null;
+  }
+
+  const thread = await getThreadBySlug(slug, admin, viewerId);
   if (!thread) notFound();
+
+  // Rom-liste trengs kun til flytt-nedtrekket for egen tråd.
+  const rooms = thread.isOwn ? await getRooms() : [];
 
   return (
     <main className={`${styles.page} paper`}>
@@ -82,6 +102,12 @@ export default async function StuaThreadPage({
                 {post.status === "hidden" && admin ? (
                   <span className={styles.hiddenBadge}> {S.hiddenBadge}</span>
                 ) : null}
+                {post.isOwn && post.status !== "hidden" ? (
+                  <>
+                    <span className={styles.postDot}>·</span>
+                    <OwnPostEditor postId={post.id} body={post.body} />
+                  </>
+                ) : null}
               </p>
             </li>
           ))}
@@ -89,6 +115,15 @@ export default async function StuaThreadPage({
       </section>
 
       <ReplyForm threadId={thread.id} />
+
+      {thread.isOwn ? (
+        <ThreadOwnerControls
+          threadId={thread.id}
+          currentRoomSlug={thread.roomSlug}
+          replyCount={thread.replyCount}
+          rooms={rooms.map((r) => ({ slug: r.slug, name: r.name }))}
+        />
+      ) : null}
     </main>
   );
 }

@@ -113,9 +113,12 @@
 - [ ] 10.3 Etter merge: `openspec archive e6-stua --yes`
 
 ## 11. Manglende overflate (funnet under manuell test 2026-10-02)
-- [ ] 11.1 Bruker-UI på trådsiden for egne handlinger: rediger eget innlegg,
+- [x] 11.1 Bruker-UI på trådsiden for egne handlinger: rediger eget innlegg,
       flytt egen tråd, slett egen tråd (kun når tom). Server actions finnes
       allerede — kun UI mangler. Eierskap sjekkes server-side som før.
-- [ ] 11.2 Lenk Stua i SiteNav. `rooms`-arrayet i
+      BYGGET 2026-10-02: OwnPostEditor + ThreadOwnerControls. isOwn avgjøres i
+      getThreadBySlug(viewerId) — authorId krysser aldri til klienten.
+- [x] 11.2 Lenk Stua i SiteNav. `rooms`-arrayet i
       src/components/shared/SiteNav/index.tsx mangler /stua, så funksjonen har
       ingen vei inn fra menyen. Krever i18n-nøkkel nav.stua.
+      BYGGET 2026-10-02: /stua lagt inn mellom gjestebok og manifest.

@@ -316,6 +316,7 @@ export const no = {
     blogg: "BLOGG",
     surdeig: "SURDEIG",
     gjestebok: "GJESTEBOK",
+    stua: "STUA",
     manifest: "MANIFEST",
   },
 
@@ -371,6 +372,19 @@ export const no = {
     },
     hiddenBadge: "Skjult",
     hiddenPost: "[skjult]",
+    // Egne handlinger på trådsiden (E6 bolk 11.1). Fri redigering per D9.
+    owner: {
+      edit: "Rediger",
+      save: "Lagre",
+      cancel: "Avbryt",
+      moveHeading: "Flytt tråden",
+      moveSubmit: "Flytt",
+      deleteHeading: "Slett tråden",
+      deleteSubmit: "Slett",
+      deleteOnlyEmpty:
+        "Tråden har svar og kan ikke slettes. Be admin om hjelp hvis den må bort.",
+      deleteConfirm: "Slette tråden? Dette kan ikke angres.",
+    },
     // «Diskuter i Stua»-flyten fra en bloggpost (E6 bolk 5).
     blogThread: {
       crumb: "Diskusjon",

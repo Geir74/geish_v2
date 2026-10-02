@@ -38,6 +38,9 @@ export type ThreadPost = {
   authorName: string;
   createdAt: Date;
   status: "published" | "hidden";
+  /** Eier dette innlegget den innloggede? Avgjort server-side — authorId
+   *  sendes aldri til klienten (samme prinsipp som F3 i StuaPreview). */
+  isOwn: boolean;
 };
 
 export type ThreadDetail = {
@@ -46,6 +49,10 @@ export type ThreadDetail = {
   title: string;
   roomSlug: string;
   status: "published" | "hidden";
+  /** PUBLISHED svar utover åpningsinnlegget. Autoritativ for «tom tråd». */
+  replyCount: number;
+  /** Eier den innloggede tråden? Styrer om flytt/slett-UI vises. */
+  isOwn: boolean;
   posts: ThreadPost[];
 };
 
@@ -181,6 +188,7 @@ export async function getThreadsByRoom(
 export async function getThreadBySlug(
   slug: string,
   includeHidden = false,
+  viewerId: string | null = null,
 ): Promise<ThreadDetail | null> {
   const [thread] = await db
     .select({
@@ -189,6 +197,8 @@ export async function getThreadBySlug(
       title: stuaThreads.title,
       status: stuaThreads.status,
       roomSlug: stuaRooms.slug,
+      authorId: stuaThreads.authorId,
+      replyCount: stuaThreads.replyCount,
     })
     .from(stuaThreads)
     .innerJoin(stuaRooms, eq(stuaRooms.id, stuaThreads.roomId))
@@ -220,6 +230,7 @@ export async function getThreadBySlug(
       status: p.status as "published" | "hidden",
       createdAt: p.createdAt,
       authorName: authorName(p.authorId, p.displayName),
+      isOwn: viewerId !== null && p.authorId === viewerId,
     }));
 
   return {
@@ -228,6 +239,8 @@ export async function getThreadBySlug(
     title: thread.title,
     roomSlug: thread.roomSlug,
     status: thread.status as "published" | "hidden",
+    replyCount: thread.replyCount,
+    isOwn: viewerId !== null && thread.authorId === viewerId,
     posts,
   };
 }
