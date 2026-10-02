@@ -37,7 +37,8 @@ Hver post SHALL ha YAML-frontmatter som matcher schema:
 | `draft` | boolean | nei (default `false`) | Hvis `true`, skjules i prod-lista |
 | `readTimeMin` | number | nei (auto-utledes) | Lese-tid i minutter; default = `ceil(ord / 200)` |
 | `coverImage` | string \| objekt | nei | Cover-bilde; fall til HalftoneBlock-dekor når utelatt |
-| `stua_thread` | string | nei | Slug for spesifikk Stua-tråd; fall til `/stua` |
+
+Feltet `stua_thread` SHALL IKKE lenger være del av skjemaet. Blogg↔Stua-kobling skjer nå automatisk via bloggpostens slug (`source_slug` på Stua-tråden, E6), ikke via et manuelt frontmatter-felt.
 
 `coverImage` SHALL aksepteres i to former:
 - **Ren string** (bakoverkompat) — en relativ sti. Normaliseres internt til `{ src, alt: "", focal: "center" }` med en byggetids-**advarsel** om manglende `alt`.
@@ -58,6 +59,10 @@ Slug utledes fra filnavnet (`hvorfor-jeg-sluttet-aa-scrolle.mdx` → `hvorfor-je
 #### Scenario: ugyldig frontmatter feiler build-time
 - **WHEN** en `.mdx`-fil mangler `tag`-feltet eller har `published: "ikke-en-dato"`
 - **THEN** `getAllPosts()` kaster en `Error` med melding som inkluderer filnavnet og hvilket felt som er ugyldig
+
+#### Scenario: stua_thread-feltet er fjernet
+- **WHEN** frontmatter-skjemaet og eksisterende poster (f.eks. `hello-world.mdx`) inspiseres
+- **THEN** finnes ikke lenger noe `stua_thread`-felt, og bygget lykkes
 
 #### Scenario: slug utledes fra filnavn
 - **WHEN** fila `src/content/posts/elgjakta-2025.mdx` parses
@@ -150,7 +155,7 @@ Tom-tilstand: hvis `getAllPosts().length === 0`, vis en stor `<UnderConstruction
 1. **Brødsmule-strip**: `geish.no / BLOGGEN / [slug]`.
 2. **Post-header**: meta-linje (publisert-dato · readtime · tag i stempel-rød), h1 (`post.title`, Newsreader/Display, clamp(36px, 6vw, 64px)), excerpt-deck (Newsreader italic 19px).
 3. **MDX-brødtekst**: rendres via `<MDXRemote source={mdxSource} components={mdxComponents} />`. Newsreader 18px line-height 1.6. Drop-cap på første paragraf (`.prose > p:first-of-type::first-letter`). Designsystem-komponenter (`Stamp`, `HalftoneBlock`, `Pullquote`) er tilgjengelige.
-4. **Bunn-blokk**: "Diskuter i Stua →"-lenke. Hvis `post.stua_thread` satt, lenker til `/stua/${post.stua_thread}`; ellers `/stua`. (Begge ruter 404-er inntil E4 lander Stua.)
+4. **Bunn-blokk**: "Diskuter i Stua →"-lenke. Lenken SHALL rute til Stua-diskusjonen for posten via automatisk oppslag på bloggpostens slug (`source_slug` på Stua-tråden), IKKE via et manuelt `stua_thread`-frontmatter-felt. Oppførsel: utlogget → `/logg-inn?next=<sti>`; innlogget med eksisterende tråd → `/stua/t/[slug]`; innlogget uten tråd → «start diskusjonen»-flyten (tråden fødes lazy ved første innlegg, koblet via `source_slug`).
 
 Ugyldig slug → `notFound()`.
 
@@ -164,13 +169,29 @@ Layout: enkel sentrert kolonne (`max-width: 720px`, `margin: 0 auto`). Responsiv
 - **WHEN** GET sendes til `/blogg/finnes-ikke`
 - **THEN** Next.js returnerer 404 via `notFound()`
 
+#### Scenario: Diskuter i Stua ruter via source_slug for innlogget uten tråd
+- **WHEN** en innlogget leser klikker "Diskuter i Stua" på en post uten eksisterende tråd
+- **THEN** vises «start diskusjonen»-skjemaet forhåndsutfylt med posttittelen, og tråden opprettes først ved innsending (koblet via `source_slug`)
+
+#### Scenario: Diskuter i Stua for innlogget med eksisterende tråd
+- **WHEN** en innlogget leser klikker "Diskuter i Stua" på en post som allerede har en tråd
+- **THEN** redirectes hun til `/stua/t/[slug]` for den tråden
+
+#### Scenario: Diskuter i Stua for utlogget
+- **WHEN** en utlogget leser klikker "Diskuter i Stua"
+- **THEN** redirectes hun til `/logg-inn?next=<sti>` uten å se Stua-innhold
+
 #### Scenario: stua-lenke med stua_thread
-- **WHEN** posten har `stua_thread: "elgjakta-2025-tradd"` i frontmatter
-- **THEN** bunn-blokken har en lenke til `/stua/elgjakta-2025-tradd`
+- **WHEN** en post rendres og bunn-blokken bygger "Diskuter i Stua"-lenken
+- **THEN** bygges lenken fra automatisk oppslag på bloggpostens slug
+  (`source_slug` på Stua-tråden), IKKE fra et manuelt `stua_thread`-frontmatter-felt
+  (feltet er fjernet i E6)
 
 #### Scenario: stua-lenke uten stua_thread defaultes
-- **WHEN** posten ikke har `stua_thread` i frontmatter
-- **THEN** bunn-blokken har en lenke til `/stua`
+- **WHEN** en post ikke har noen Stua-tråd ennå og en innlogget leser klikker
+  "Diskuter i Stua"
+- **THEN** vises «start diskusjonen»-flyten (tråden fødes lazy ved første innlegg)
+  i stedet for en død `/stua`-lenke
 
 #### Scenario: generateStaticParams genererer alle non-draft slugs
 - **WHEN** Next.js bygger appen
