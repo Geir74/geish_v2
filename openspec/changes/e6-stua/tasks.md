@@ -95,10 +95,14 @@
 - [x] 9.3 `npm run build` grønt (alle nye ruter; `/` består som static ISR)
 - [x] 9.4 RLS: anon PostgREST → 0 rader; authenticated → kun published (LIVE, verifisert 2026-09-26: anon får 401 på alle tre stua-tabeller)
 - [x] 9.5 Bypass: Drizzle server ser hidden (verify-bypass-mønster) (LIVE, verifisert 2026-09-26: ser hidden/pending/published)
-- [x] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
+- [ ] 9.6 Manuell: lukket tilgang (utlogget → logg-inn?next); start tråd →
       synlig; svar → tråd stiger; flytt egen tråd → URL består; slett tom tråd
       ok / besvart nektes; admin skjul tråd → hele tråden borte; anonymiser →
-      stormtrooper (LIVE, Geir + dev-server + testbruker) — VERIFISERT 2026-10-02
+      stormtrooper (LIVE, Geir + dev-server + testbruker)
+      BLOKKERT 2026-10-02: port + svar + admin-del verifisert OK, men bruker-UI
+      for egne handlinger MANGLER. editOwnPost/moveOwnThread/deleteOwnThread
+      finnes i src/app/stua/actions.ts (linje 282/305/329) men er ikke koblet til
+      noen knapp i src/app/stua/t/[slug]/. Se ny oppgave 11.1.
 - [x] 9.7 Manuell: «Diskuter i Stua» lazy — uten tråd → skjema → tråd fødes;
       med tråd → dit; utlogget → logg-inn?next; bloggen bygger uten stua_thread
       (LIVE, Geir) — VERIFISERT 2026-10-02
@@ -107,3 +111,11 @@
 - [x] 10.1 `openspec validate e6-stua --strict` grønt (2026-09-19: «Change 'e6-stua' is valid»)
 - [ ] 10.2 PR mot master, Geirs review
 - [ ] 10.3 Etter merge: `openspec archive e6-stua --yes`
+
+## 11. Manglende overflate (funnet under manuell test 2026-10-02)
+- [ ] 11.1 Bruker-UI på trådsiden for egne handlinger: rediger eget innlegg,
+      flytt egen tråd, slett egen tråd (kun når tom). Server actions finnes
+      allerede — kun UI mangler. Eierskap sjekkes server-side som før.
+- [ ] 11.2 Lenk Stua i SiteNav. `rooms`-arrayet i
+      src/components/shared/SiteNav/index.tsx mangler /stua, så funksjonen har
+      ingen vei inn fra menyen. Krever i18n-nøkkel nav.stua.
